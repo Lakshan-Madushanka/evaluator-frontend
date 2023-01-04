@@ -1,7 +1,7 @@
 <template>
   <Menubar :model="mainItems">
     <template #start>
-      <div class="pr-4">
+      <div class="sm:pr-4 md:ml-8">
         <img class="w-8" src="../assets/images/evaluator.png" alt="evaluator" />
       </div>
     </template>
@@ -28,7 +28,7 @@
     </template>
     <template #end>
       <i
-        class="pi pi-user hover:cursor-pointer"
+        class="pi pi-user hover:cursor-pointer md:mr-8"
         style="font-size: 1.5rem"
         aria-haspopup="true"
         aria-controls="overlay_menu"
@@ -75,7 +75,7 @@ export default {
       {
         label: "Dashboard",
         icon: "pi pi-fw pi-th-large",
-        to: { name: "dashboard" },
+        to: { name: "home" },
       },
       { separator: true },
       {
