@@ -1,12 +1,12 @@
 <template>
-  <MenuBar />
+  <NavBar />
   <RouterView />
 </template>
 
 <script>
-import MenuBar from "@/components/MenuBar.vue";
+import NavBar from "@/components/NavBar.vue";
 export default {
-  components: { MenuBar },
+  components: { NavBar },
   setup() {},
 };
 </script>

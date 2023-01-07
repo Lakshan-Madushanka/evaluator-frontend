@@ -27,6 +27,8 @@
       </router-link>
     </template>
     <template #end>
+      <router-link :to="{ name: 'login' }">Login</router-link>
+
       <i
         class="pi pi-user hover:cursor-pointer md:mr-8"
         style="font-size: 1.5rem"
@@ -64,6 +66,7 @@ export default {
         icon: "pi pi-fw pi-file",
         to: { name: "home" },
       },
+
       {
         label: "About",
         icon: "pi pi-fw pi-file",
