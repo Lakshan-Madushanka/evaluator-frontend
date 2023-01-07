@@ -1,20 +1,74 @@
 <template>
-  <section class="awsom-login-section mt-28 mb-32">
+  <section class="awsom-login-section mt-16 mb-22">
     <div class="sign-in">
       <div class="content">
         <h2>Sign In</h2>
+        <template v-if="authStore.errors.email">
+          <p
+            v-for="(error, index) in authStore.errors.email"
+            :key="index"
+            class="text-red-500"
+          >
+            {{ error }}
+          </p>
+        </template>
         <div class="form">
           <div class="input-box">
-            <input type="text" required />
-            <i>User Name</i>
+            <input v-model="state.email" type="email" required />
+            <i>Email</i>
+            <template v-if="v$.email.$invalid">
+              <div class="mt-1">
+                <p
+                  v-for="(error, index) in v$.email.$errors"
+                  :key="index"
+                  class="text-red-500"
+                >
+                  {{ error.$message.replace("Value", "Email") }}
+                </p>
+              </div>
+            </template>
           </div>
           <div class="input-box">
-            <input type="password" required />
+            <input v-model="state.password" type="password" required />
             <i>Password</i>
+            <template v-if="v$.password.$invalid">
+              <div class="mt-1">
+                <p
+                  v-for="(error, index) in v$.password.$errors"
+                  :key="index"
+                  class="text-red-500"
+                >
+                  {{ error.$message.replace("Value", "Password") }}
+                </p>
+              </div>
+            </template>
           </div>
 
-          <div class="input-box mt-8" @click="login">
-            <input type="submit" value="Login" />
+          <div>
+            <label for="remember_me" class="mr-2 text-white">
+              Remember me</label
+            >
+            <Checkbox
+              v-model="state.remember"
+              input-id="remember_me"
+              :binary="true"
+            />
+          </div>
+
+          <div class="input-box mt-6 relative" @click="login">
+            <input
+              type="submit"
+              value="Login"
+              :disabled="authStore.loading"
+              :class="{
+                '!bg-lime-700, !cursor-not-allowed': authStore.loading,
+              }"
+            />
+            <i
+              v-if="authStore.loading"
+              class="pi pi-spin pi-spinner absolute top-[4px] !text-white"
+              style="font-size: 1.5rem"
+            ></i>
           </div>
         </div>
       </div>
@@ -24,16 +78,41 @@
 
 <script>
 import { useAuthStore } from "../stores/auth";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+import { reactive } from "vue";
+import Checkbox from "primevue/checkbox";
+
 export default {
+  components: { Checkbox },
   setup() {
     const authStore = useAuthStore();
 
+    const state = reactive({
+      email: "",
+      password: "",
+      remember: false,
+    });
+
+    const rules = {
+      email: { required, email },
+      password: { required },
+    };
+
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+
     function login() {
-      authStore.login("alsk");
+      v$.value.$touch();
+
+      if (!v$.value.$invalid && !authStore.loading) {
+        authStore.login(state);
+      }
     }
 
     return {
       authStore,
+      state,
+      v$,
       login,
     };
   },
