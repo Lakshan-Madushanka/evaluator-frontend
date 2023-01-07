@@ -12,7 +12,7 @@ const instance = axios.create({
 
 instance.interceptors.response.use(
   function (response) {
-    return response;
+    return response.data && response.data.data ? response.data.data : response;
   },
   function (error) {
     if (error.response) {
@@ -43,7 +43,6 @@ function handleServerSideErrors(errorResponse) {
   let message =
     response.data && response.data.message ? response.data.message : "";
 
-  console.log("response", response);
   // Setup message if not exists
   if (message === "") {
     switch (status) {
