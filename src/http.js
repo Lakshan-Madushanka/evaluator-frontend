@@ -2,12 +2,12 @@ import axios from "axios";
 import moment from "moment/moment";
 import router from "./router/index";
 
-export const baseURL = "http://127.0.0.1:8000/";
-export const baseApiURL = "http://127.0.0.1:8000/api/v1/";
+export const baseURL = "http://localhost:8000/";
+export const baseApiURL = "http://localhost:8000/api/v1/";
 
 const instance = axios.create({
   baseURL: baseApiURL,
-  headers: { withCredentials: true },
+  withCredentials: true,
 });
 
 instance.interceptors.response.use(
@@ -40,8 +40,10 @@ function handleServerSideErrors(errorResponse) {
   const response = errorResponse.response;
 
   let status = parseInt(response.status);
-  let message = response.data ? response.data.message : "";
+  let message =
+    response.data && response.data.message ? response.data.message : "";
 
+  console.log("response", response);
   // Setup message if not exists
   if (message === "") {
     switch (status) {
