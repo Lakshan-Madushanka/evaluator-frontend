@@ -1,5 +1,5 @@
 <template>
-  <section class="awsom-login-section mt-16 mb-22">
+  <section class="awsom-login-section my-8 sm:my-16 mx-4">
     <div class="sign-in">
       <div class="content">
         <h2>Sign In</h2>
@@ -14,7 +14,12 @@
         </template>
         <div class="form">
           <div class="input-box">
-            <input v-model="state.email" type="email" required />
+            <input
+              v-model="state.email"
+              type="email"
+              required
+              @keyup.enter="login"
+            />
             <i>Email</i>
             <template v-if="v$.email.$invalid">
               <div class="mt-1">
@@ -29,7 +34,12 @@
             </template>
           </div>
           <div class="input-box">
-            <input v-model="state.password" type="password" required />
+            <input
+              v-model="state.password"
+              type="password"
+              required
+              @keyup.enter="login"
+            />
             <i>Password</i>
             <template v-if="v$.password.$invalid">
               <div class="mt-1">
