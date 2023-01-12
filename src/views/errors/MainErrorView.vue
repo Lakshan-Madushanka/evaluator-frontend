@@ -141,7 +141,6 @@
 
       <div class="flex m-6 justify-around">
         <Button
-          class="p-button-info"
           label="Home"
           icon="pi pi-home"
           @click="() => router.push({ name: 'home' })"
