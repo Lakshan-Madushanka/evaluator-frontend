@@ -3,12 +3,13 @@
 #app {
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 a,
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: rgb(9, 9, 9);
   transition: 0.4s;
 }
 
