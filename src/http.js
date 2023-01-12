@@ -1,6 +1,8 @@
 import axios from "axios";
 import moment from "moment/moment";
 import router from "./router/index";
+import { useAppStore } from "./stores/app";
+import { useAuthStore } from "./stores/auth";
 
 export const baseURL = "http://localhost:8000/";
 export const baseApiURL = "http://localhost:8000/api/v1/";
@@ -20,8 +22,10 @@ instance.interceptors.response.use(
         return Promise.reject(error.response.data);
       }
       handleServerSideErrors(error);
+      throw error.response;
     } else {
       handleClientSideErrors(error);
+      throw error;
     }
   }
 );
@@ -37,6 +41,9 @@ function handleClientSideErrors(errorResponse) {
   });
 }
 function handleServerSideErrors(errorResponse) {
+  const appStore = useAppStore();
+  const authStore = useAuthStore();
+
   const response = errorResponse.response;
 
   let status = parseInt(response.status);
@@ -59,8 +66,17 @@ function handleServerSideErrors(errorResponse) {
   }
 
   if (status === 401) {
-    router.push({ name: "login" });
-    return;
+    if (appStore.initialized) {
+      if (appStore.authenticated) {
+        appStore.status = "SESSION_EXPIRED";
+        appStore.authenticated = false;
+        authStore.resetState();
+      }
+
+      router.push({ name: "login" });
+    }
+
+    throw errorResponse;
   }
 
   let query = {
