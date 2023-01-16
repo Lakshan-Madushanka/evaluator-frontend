@@ -19,6 +19,13 @@ const home = { icon: "pi pi-th-large", to: { name: "admin.dashboard" } };
 
 function getItems() {
   switch (route.name) {
+    case "admin.users.index":
+      return [
+        {
+          label: "users",
+          to: { name: "admin.users.index" },
+        },
+      ];
     default:
       return null;
   }

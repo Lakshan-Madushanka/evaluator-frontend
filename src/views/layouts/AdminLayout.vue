@@ -3,7 +3,7 @@
     <div>
       <sidebar-menu
         :menu="menu"
-        class="shadow-lg"
+        class="shadow-2xl"
         theme="white-theme"
         @update:collapsed="onToggleCollapse"
       >
@@ -65,6 +65,12 @@ export default {
       },
       {
         component: Divider,
+      },
+      {
+        href: { name: "admin.users.index" },
+        title: "Users",
+        icon: "pi pi-fw pi-users",
+        exact: true,
       },
     ];
 
