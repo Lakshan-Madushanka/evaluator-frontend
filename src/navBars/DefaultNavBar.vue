@@ -34,23 +34,7 @@
       </template>
 
       <template v-else>
-        <i
-          class="pi pi-user hover:cursor-pointer md:mr-8"
-          style="font-size: 1.5rem"
-          aria-haspopup="true"
-          aria-controls="overlay_menu"
-          @click="toggle"
-        >
-          <span class="ml-2 text-sm hidden sm:inline">{{
-            formatText(authStore.user.name)
-          }}</span>
-        </i>
-        <MenuComponent
-          id="overlay_menu"
-          ref="authMenu"
-          :model="authItems"
-          :popup="true"
-        />
+        <AuthUserMenu />
       </template>
     </template>
   </Menubar>
@@ -60,15 +44,13 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import Menubar from "primevue/menubar";
-import MenuComponent from "primevue/menu";
 import { useAppStore } from "@/stores/app";
 import { useAuthStore } from "@/stores/auth";
-import { formatText } from "@/helpers";
-
+import AuthUserMenu from "@/components/AuthUserMenu.vue";
 export default {
   components: {
     Menubar,
-    MenuComponent,
+    AuthUserMenu,
   },
 
   setup() {
@@ -98,29 +80,23 @@ export default {
         icon: "pi pi-fw pi-user-edit",
         to: { name: "home" },
         command: () => {
-          console.log("executing commad");
           router.push({ name: "profile" });
         },
       },
       {
         label: "Dashboard",
         icon: "pi pi-fw pi-th-large",
-        to: { name: "home" },
+        to: { name: "admin.dashboard" },
       },
       { separator: true },
       {
         label: "Sign Out",
         icon: "pi pi-fw pi-sign-out",
         command: () => {
-          console.log("executing commad");
           authStore.logOut();
         },
       },
     ];
-
-    const toggle = (event) => {
-      authMenu.value.toggle(event);
-    };
 
     return {
       appStore,
@@ -128,8 +104,6 @@ export default {
       mainItems,
       authItems,
       authMenu,
-      toggle,
-      formatText,
     };
   },
 };

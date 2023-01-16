@@ -6,10 +6,6 @@
   </template>
 
   <template v-else>
-    <Message v-if="appStore.status === 'SESSION_EXPIRED'" severity="warn"
-      >Your session has expired. Please login again !</Message
-    >
-    <NavBar />
     <RouterView />
   </template>
 </template>
@@ -20,12 +16,10 @@ import { useAuthStore } from "./stores/auth";
 import { useAppStore } from "./stores/app";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
-import Message from "primevue/message";
 
-import NavBar from "@/components/NavBar.vue";
 import AppInitializingComponent from "./components/AppInitializingComponent.vue";
 export default {
-  components: { NavBar, AppInitializingComponent, Toast, Message },
+  components: { AppInitializingComponent, Toast },
   setup() {
     const appStore = useAppStore();
     const authStore = useAuthStore();
@@ -58,11 +52,13 @@ export default {
 </script>
 
 <style>
-a.router-link-exact-active {
+a.router-link-exact-active,
+.router-link-active-exact {
   color: rgb(7, 210, 40);
 }
 
-a.router-link-exact-active:hover {
+a.router-link-exact-active:hover,
+.router-link-active-exact:hover {
   background-color: transparent;
 }
 </style>

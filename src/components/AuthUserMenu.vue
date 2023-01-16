@@ -1,0 +1,70 @@
+<template>
+  <i
+    class="pi pi-user hover:cursor-pointer md:mr-8"
+    style="font-size: 1.5rem"
+    aria-haspopup="true"
+    aria-controls="overlay_menu"
+    @click="toggle"
+  >
+    <span class="ml-2 text-sm hidden sm:inline">{{
+      formatText(authStore.user.name)
+    }}</span>
+  </i>
+  <MenuComponent
+    id="overlay_menu"
+    ref="authMenu"
+    :model="authItems"
+    :popup="true"
+  />
+</template>
+
+<script>
+import MenuComponent from "primevue/menu";
+import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
+import { formatText } from "@/helpers";
+
+export default {
+  components: {
+    MenuComponent,
+  },
+
+  setup() {
+    const authStore = useAuthStore();
+
+    const authMenu = ref();
+
+    const authItems = [
+      {
+        label: "Profile",
+        icon: "pi pi-fw pi-user-edit",
+        to: { name: "profile" },
+      },
+      {
+        label: "Dashboard",
+        icon: "pi pi-fw pi-th-large",
+        to: { name: "admin.dashboard" },
+      },
+      { separator: true },
+      {
+        label: "Sign Out",
+        icon: "pi pi-fw pi-sign-out",
+        command: () => {
+          authStore.logOut();
+        },
+      },
+    ];
+
+    const toggle = (event) => {
+      authMenu.value.toggle(event);
+    };
+    return {
+      authStore,
+      authItems,
+      authMenu,
+      toggle,
+      formatText,
+    };
+  },
+};
+</script>
