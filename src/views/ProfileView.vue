@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col justify-center items-center p-12">
+  <div
+    class="flex flex-col justify-center items-center p-4 md:px-[10rem] sm:p-12"
+  >
     <div class="mb-8">
       <i class="pi pi-user-edit" style="font-size: 6rem"></i>
     </div>
@@ -178,8 +180,9 @@
 
       <PrimeButton
         :label="authStore.status === 'updating' ? 'Updating' : 'Update'"
-        class="w-full"
+        :class="['w-full', { '!cursor-not-allowed': v$.$invalid }]"
         :loading="authStore.status === 'updating'"
+        :disabled="v$.$invalid"
         @click="update"
       />
     </div>
