@@ -42,7 +42,7 @@ export const useAuthStore = defineStore("auth", () => {
         user.id,
         newPayload
       );
-      setUser(response);
+      setUser(response.data);
       errors.value = {};
       appStore.setToast("success", "Profile updated successfully");
     } catch (data) {
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const response = await authRequests.loadAuthUserRequest();
 
-      setUser(response);
+      setUser(response.data);
     } catch (error) {
       return Promise.reject(error);
     }
