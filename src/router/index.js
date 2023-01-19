@@ -12,7 +12,7 @@ const LoginView = () => import("../views/LoginView.vue");
 const ProfileView = () => import("../views/ProfileView.vue");
 const AdminLayout = () => import("../views/layouts/AdminLayout.vue");
 const DefaultLayout = () => import("../views/layouts/DefaultLayout.vue");
-const AdminDashboard = () => import("../views//admin/dashboard.vue");
+const AdminDashboard = () => import("../views//admin/DashboardView.vue");
 
 /*
  Admin routes

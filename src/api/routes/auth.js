@@ -1,4 +1,4 @@
-import { baseURL } from "../../http";
+import { baseURL } from "@/http.js";
 
 export const csrf_route = `${baseURL}sanctum/csrf-cookie`;
 export const login_route = `administrative/login`;

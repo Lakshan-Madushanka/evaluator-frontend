@@ -14,7 +14,6 @@ const instance = axios.create({
 
 instance.interceptors.response.use(
   function (response) {
-    console.log("heet", response.data);
     return response.data ? response.data : response;
   },
   function (error) {

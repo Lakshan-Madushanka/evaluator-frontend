@@ -89,7 +89,7 @@
 <script>
 import { useAuthStore } from "../stores/auth";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email } from "@vuelidate/validators";
+import { email, required } from "@vuelidate/validators";
 import { reactive } from "vue";
 import Checkbox from "primevue/checkbox";
 

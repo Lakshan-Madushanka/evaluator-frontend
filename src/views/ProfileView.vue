@@ -180,9 +180,12 @@
 
       <PrimeButton
         :label="authStore.status === 'updating' ? 'Updating' : 'Update'"
-        :class="['w-full', { '!cursor-not-allowed': v$.$invalid }]"
+        :class="[
+          'w-full',
+          { '!cursor-not-allowed': v$.$invalid && updateButtonClicked },
+        ]"
         :loading="authStore.status === 'updating'"
-        :disabled="v$.$invalid"
+        :disabled="v$.$invalid && updateButtonClicked"
         @click="update"
       />
     </div>
@@ -190,9 +193,9 @@
 </template>
 
 <script>
-import { toRef } from "vue";
+import { ref, toRef } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, sameAs, requiredIf } from "@vuelidate/validators";
+import { email, required, requiredIf, sameAs } from "@vuelidate/validators";
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import PrimeButton from "primevue/button";
@@ -204,6 +207,8 @@ export default {
   components: { InputText, Password, PrimeButton, Divider },
   setup() {
     const authStore = useAuthStore();
+
+    const updateButtonClicked = ref(false);
 
     const profile = reactive({
       name: authStore.user.name,
@@ -241,16 +246,18 @@ export default {
     }
 
     function update() {
+      updateButtonClicked.value = true;
+
       v$.value.$touch();
 
       if (v$.value.$invalid) {
         return;
       }
-      console.log("password ref", passwordRef);
+
       authStore.update(getProfileData());
     }
 
-    return { authStore, profile, v$, customRules, update };
+    return { authStore, profile, v$, customRules, update, updateButtonClicked };
   },
 };
 </script>

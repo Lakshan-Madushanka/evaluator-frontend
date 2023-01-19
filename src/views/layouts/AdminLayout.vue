@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex">
+  <div class="relative flex bg-gray-100 min-h-screen">
     <div>
       <sidebar-menu
         :menu="menu"
@@ -17,7 +17,7 @@
     >
       <SessionTimeoutMessage />
       <NavBar />
-      <div class="p-4">
+      <div :class="['p-4', 'lg:p-4', { 'lg:p-12': sideBarCollapse }]">
         <router-view></router-view>
       </div>
     </div>

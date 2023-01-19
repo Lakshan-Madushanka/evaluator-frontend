@@ -21,7 +21,7 @@ export const useAuthStore = defineStore("auth", () => {
     loading.value = true;
     try {
       const response = await authRequests.loginRequest(payload);
-      setUser(response);
+      setUser(response.data);
       appStore.status = "";
       appStore.authenticated = true;
       errors.value = {};
