@@ -8,6 +8,7 @@
           :loading="usersStore.loading"
           striped-rows
           data-key="id"
+          filter-display="row"
         >
           <template #empty>
             <p
@@ -21,7 +22,22 @@
           <template #header>
             <div class="flex justify-between items-center text-2xl uppercase">
               <p>Users</p>
-              <PrimeButton icon="pi pi-refresh" class="!w-12" />
+              <div>
+                <PrimeButton
+                  icon="pi pi-filter"
+                  class="!mr-4 !py-1"
+                  icon-pos="right"
+                  label="Apply Filters"
+                  :disabled="Object.keys(filters).length === 0"
+                  @click="applyFilters"
+                />
+                <PrimeButton
+                  icon="pi pi-refresh"
+                  icon-pos="right"
+                  class="!w-12 !py-1"
+                  @click="reset"
+                />
+              </div>
             </div>
           </template>
           <Column field="no" header="No">
@@ -30,17 +46,46 @@
           <Column field="id" header="Id">
             <template #body="slotProps"> {{ slotProps.data.id }}</template>
           </Column>
-          <Column field="name" header="Name">
+          <Column field="name" header="Name" :show-filter-menu="false">
+            <template #filter>
+              <span class="p-input-icon-right">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters.name"
+                  type="text"
+                  placeholder="Search"
+                  @keyup.enter="applyFilters"
+                />
+              </span>
+            </template>
             <template #body="slotProps">
               {{ slotProps.data.attributes.name }}</template
             >
           </Column>
-          <Column field="email" header="Email">
+          <Column field="email" header="Email" :show-filter-menu="false">
+            <template #filter>
+              <span class="p-input-icon-right">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters.email"
+                  type="text"
+                  placeholder="Search"
+                  @keyup.enter="applyFilters"
+                />
+              </span>
+            </template>
             <template #body="slotProps">
               {{ slotProps.data.attributes.email }}</template
             >
           </Column>
-          <Column field="role">
+          <Column field="role" :show-filter-menu="false">
+            <template #filter
+              ><Dropdown
+                v-model="filters.role"
+                :options="roles"
+                option-label="name"
+              />
+            </template>
             <template #header>
               <div class="flex justify-between w-full items-center">
                 <p>Role</p>
@@ -56,7 +101,7 @@
                   '!bg-blue-400': slotProps.data.attributes.role === 'REGULAR',
                 }"
               >
-                {{ slotProps.data.attributes.role }}
+                {{ ROLES[slotProps.data.attributes.role]["name"] }}
               </Tag>
             </template>
           </Column>
@@ -80,7 +125,7 @@
 
           <template #footer>
             <Paginator
-              v-if="usersStore.users"
+              v-if="usersStore.users && showPaginator"
               :rows="usersStore.users && usersStore.users.meta.per_page"
               :total-records="usersStore.users && usersStore.users.meta.total"
               @page="onPage"
@@ -100,7 +145,7 @@
 </template>
 
 <script>
-import { onMounted, reactive, watch } from "vue";
+import { onMounted, ref, reactive, watch } from "vue";
 import Paginator from "@/components/PaginatorComponent.vue";
 
 import { useUsersStore } from "@/stores/users";
@@ -112,8 +157,12 @@ import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import PrimeButton from "primevue/button";
 import Tag from "primevue/tag";
+import InputText from "primevue/inputtext";
+import Dropdown from "primevue/dropdown";
 
 import SortComponent from "@/components/SortComponent.vue";
+
+import { ROLES } from "@/constants";
 
 export default {
   components: {
@@ -124,6 +173,8 @@ export default {
     Tag,
     Paginator,
     SortComponent,
+    InputText,
+    Dropdown,
   },
   setup() {
     onMounted(() => {
@@ -134,20 +185,73 @@ export default {
 
     const usersStore = useUsersStore();
 
-    const query = reactive({ sort: {}, pagination: { number: 1, size: 10 } });
+    const query = reactive({
+      sort: {},
+      pagination: { number: 1, size: 10 },
+    });
+    const filters = ref({ role: { name: "All", value: "" } });
+    const showPaginator = ref(true);
+
+    const roles = [
+      { name: "All", value: "" },
+      { name: "Super Admin", value: "SUPER_ADMIN" },
+      { name: "Admin", value: "ADMIN" },
+      { name: "Regular", value: "REGULAR" },
+    ];
 
     watch(query, (newQuery) => {
-      console.log("query changed", query);
-      usersStore.getAll({ query: newQuery });
+      usersStore.getAll({ query: { ...newQuery, filters: filters.value } });
     });
+
+    // We need to reset show paginator if it is disabled
+    watch(
+      () => usersStore.loading,
+      (loading) => {
+        if (!loading) {
+          showPaginator.value = true;
+        }
+      }
+    );
 
     function onPage(event) {
       query.pagination.number = event.page + 1;
       query.pagination.size = event.rows;
-      console.log("event", event);
     }
 
-    return { usersStore, onPage, moment, query };
+    function applyFilters() {
+      showPaginator.value = false; // Reset the pagination
+
+      usersStore.getAll({ query: { filters: filters.value, ...query } });
+    }
+
+    function reset() {
+      //Reset pagnator
+      showPaginator.value = false;
+      query.pagination = { number: 1, size: 10 };
+
+      //Reser filters
+      filters.value = { role: { name: "All", value: "" } };
+
+      //Reser sort
+      query.sort = {};
+
+      usersStore.getAll({
+        query: { pagination: { number: 1, size: 10 } },
+      });
+    }
+
+    return {
+      usersStore,
+      onPage,
+      moment,
+      query,
+      filters,
+      applyFilters,
+      roles,
+      showPaginator,
+      reset,
+      ROLES,
+    };
   },
 };
 </script>

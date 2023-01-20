@@ -13,7 +13,11 @@ export function buildQueryString(payload) {
   }
 
   if (queryString.sort) {
-    query += buildSorts(queryString.sort);
+    query += buildSorts(queryString.sort) + "&";
+  }
+
+  if (queryString.filters && Object.keys(queryString.filters).length !== 0) {
+    query += buildFilters(queryString.filters) + "&";
   }
 
   return query;
@@ -47,6 +51,24 @@ function buildSorts(sorts) {
   }
 
   params.set("sort", tmpSorts.join(","));
+
+  return params.toString();
+}
+
+function buildFilters(filters) {
+  const params = new URLSearchParams();
+
+  for (const filter in filters) {
+    if (filters[filter] === null || filters[filter] === "") {
+      continue;
+    }
+    let filterValue = filters[filter];
+    if (typeof filterValue === "object") {
+      filterValue = filterValue.value;
+    }
+
+    params.set(`filter[${filter}]`, filterValue);
+  }
 
   return params.toString();
 }
