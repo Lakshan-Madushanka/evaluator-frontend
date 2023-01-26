@@ -58,6 +58,7 @@ export default {
     const toggle = (event) => {
       authMenu.value.toggle(event);
     };
+
     return {
       authStore,
       authItems,

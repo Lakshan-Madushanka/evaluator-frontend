@@ -1,8 +1,17 @@
 <template>
+  <ConfirmDialog></ConfirmDialog>
+  <BulkDeleteComponent
+    :display-component="displayBulkDeleteComponent"
+    :value="bulkDeleteValue"
+    :status="usersStore.status"
+    @on-dialog-hidden="displayBulkDeleteComponent = $event"
+    @bulk-delete-confirmed="onBulkDeleteConfirmed"
+  />
   <AdminTableLayout>
     <template #table>
       <div>
         <DataTable
+          v-model:selection="selectedUsers"
           :value="usersStore.users && usersStore.users.data"
           responsive-layout="scroll"
           :loading="usersStore.loading"
@@ -10,6 +19,25 @@
           data-key="id"
           filter-display="row"
         >
+          <Column selection-mode="multiple">
+            <template #header>
+              <i
+                v-if="showBulkActions"
+                class="pi pi-ellipsis-v hover:cursor-pointer"
+                @click="toggleBulkActions"
+              >
+                <span class="font-bold">{{ selectedUsers.length }}</span>
+                records selected
+              </i>
+              <MenuComponent
+                id="overlay_menu"
+                ref="bulkActionMenu"
+                :model="bulkActions"
+                :popup="true"
+              />
+            </template>
+          </Column>
+
           <template #empty>
             <p
               v-if="!usersStore.loading"
@@ -21,16 +49,59 @@
 
           <template #header>
             <div class="flex justify-between items-center text-2xl uppercase">
-              <p>Users</p>
-              <div>
-                <PrimeButton
-                  icon="pi pi-filter"
-                  class="!mr-4 !py-1"
-                  icon-pos="right"
-                  label="Apply Filters"
-                  :disabled="Object.keys(filters).length === 0"
-                  @click="applyFilters"
-                />
+              <div class="flex">
+                <p class="mr-2">Users</p>
+                <i
+                  class="pi pi-eye text-blue-600 hover:cursor-pointer"
+                  style="font-size: 2rem"
+                  @click="toggleColumnsMenu"
+                ></i>
+                <MenuComponent
+                  v-if="authStore.user.role === 'SUPER_ADMIN'"
+                  ref="columnsMenuRef"
+                  :model="columns"
+                  :popup="true"
+                >
+                  <template #item="slotProps">
+                    <div class="flex items-center p-2 hover:cursor-pointer">
+                      <i
+                        :class="
+                          columnVisibility[
+                            snake(
+                              lowercaseFirstLetter(slotProps['item']['label'])
+                            )
+                          ]
+                            ? 'pi pi-eye'
+                            : 'pi pi-eye-slash'
+                        "
+                        class="mr-2"
+                      ></i>
+                      <p>{{ slotProps.item.label }}</p>
+                    </div>
+                  </template>
+                </MenuComponent>
+              </div>
+
+              <div class="flex">
+                <div class="mr-4 hidden sm:block">
+                  <PrimeButton
+                    icon="pi pi-filter"
+                    class="!mr-4 !py-1"
+                    icon-pos="right"
+                    label="Apply Filters"
+                    :disabled="Object.keys(filters).length === 0"
+                    @click="applyFilters"
+                  />
+                </div>
+                <div class="mr-1 block sm:hidden">
+                  <PrimeButton
+                    icon="pi pi-filter"
+                    class="!py-1"
+                    icon-pos="right"
+                    :disabled="Object.keys(filters).length === 0"
+                    @click="applyFilters"
+                  />
+                </div>
                 <PrimeButton
                   icon="pi pi-refresh"
                   icon-pos="right"
@@ -40,13 +111,19 @@
               </div>
             </div>
           </template>
+
           <Column field="no" header="No">
             <template #body="slotProps"> {{ slotProps.index + 1 }}</template>
           </Column>
-          <Column field="id" header="Id">
+          <Column field="id" header="Id" :hidden="!columnVisibility.id">
             <template #body="slotProps"> {{ slotProps.data.id }}</template>
           </Column>
-          <Column field="name" header="Name" :show-filter-menu="false">
+          <Column
+            field="name"
+            header="Name"
+            :show-filter-menu="false"
+            :hidden="!columnVisibility.name"
+          >
             <template #filter>
               <span class="p-input-icon-right">
                 <i class="pi pi-search" />
@@ -62,7 +139,12 @@
               {{ slotProps.data.attributes.name }}</template
             >
           </Column>
-          <Column field="email" header="Email" :show-filter-menu="false">
+          <Column
+            field="email"
+            header="Email"
+            :show-filter-menu="false"
+            :hidden="!columnVisibility.email"
+          >
             <template #filter>
               <span class="p-input-icon-right">
                 <i class="pi pi-search" />
@@ -78,7 +160,12 @@
               {{ slotProps.data.attributes.email }}</template
             >
           </Column>
-          <Column field="role" :show-filter-menu="false">
+          <Column
+            v-if="authStore.user.role === 'SUPER_ADMIN'"
+            field="role"
+            :show-filter-menu="false"
+            :hidden="!columnVisibility.role"
+          >
             <template #filter
               ><Dropdown
                 v-model="filters.role"
@@ -95,17 +182,17 @@
             <template #body="slotProps">
               <Tag
                 :class="{
-                  '!bg-blue-800':
+                  '!bg-green-800':
                     slotProps.data.attributes.role === 'SUPER_ADMIN',
-                  '!bg-blue-600': slotProps.data.attributes.role === 'ADMIN',
-                  '!bg-blue-400': slotProps.data.attributes.role === 'REGULAR',
+                  '!bg-green-600': slotProps.data.attributes.role === 'ADMIN',
+                  '!bg-green-400': slotProps.data.attributes.role === 'REGULAR',
                 }"
               >
                 {{ ROLES[slotProps.data.attributes.role]["name"] }}
               </Tag>
             </template>
           </Column>
-          <Column field="created_at">
+          <Column field="created_at" :hidden="!columnVisibility.created_at">
             <template #header>
               <div class="flex justify-between items-center w-full">
                 <p>Created at</p>
@@ -121,6 +208,28 @@
                 )
               }}</template
             >
+          </Column>
+
+          <Column
+            field="Actions"
+            header="Actions"
+            :hidden="!columnVisibility.actions"
+          >
+            <template #body="slotProps">
+              <span class="p-buttonset">
+                <PrimeButton
+                  class="p-button-sm"
+                  icon="pi pi-file-edit"
+                  title="Edit"
+                />
+                <PrimeButton
+                  class="p-button-danger p-button-sm"
+                  icon="pi pi-trash "
+                  title="Delete"
+                  @click="deleteUser(slotProps.data.id)"
+                />
+              </span>
+            </template>
           </Column>
 
           <template #footer>
@@ -149,6 +258,7 @@ import { onMounted, ref, reactive, watch } from "vue";
 import Paginator from "@/components/PaginatorComponent.vue";
 
 import { useUsersStore } from "@/stores/users";
+import { useAuthStore } from "@/stores/auth";
 
 import moment from "moment/moment";
 
@@ -157,12 +267,17 @@ import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import PrimeButton from "primevue/button";
 import Tag from "primevue/tag";
+import MenuComponent from "primevue/menu";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
+import ConfirmDialog from "primevue/confirmdialog";
+import { useConfirm } from "primevue/useconfirm";
 
+import BulkDeleteComponent from "@/components/BulkDeleteComponent.vue";
 import SortComponent from "@/components/SortComponent.vue";
 
 import { ROLES } from "@/constants";
+import { lowercaseFirstLetter, snake } from "@/helpers";
 
 export default {
   components: {
@@ -175,6 +290,9 @@ export default {
     SortComponent,
     InputText,
     Dropdown,
+    MenuComponent,
+    ConfirmDialog,
+    BulkDeleteComponent,
   },
   setup() {
     onMounted(() => {
@@ -183,12 +301,71 @@ export default {
       });
     });
 
+    const confirm = useConfirm();
+
     const usersStore = useUsersStore();
+    const authStore = useAuthStore();
 
     const query = reactive({
       sort: {},
       pagination: { number: 1, size: 10 },
     });
+
+    const columnVisibility = reactive({
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      created_at: true,
+      actions: true,
+    });
+    const columnsMenuRef = ref();
+    const columns = ref([
+      {
+        label: "Id",
+        command: () => {
+          columnVisibility.id = !columnVisibility.id;
+        },
+      },
+      {
+        label: "Name",
+        command: () => {
+          columnVisibility.name = !columnVisibility.name;
+        },
+      },
+      {
+        label: "Email",
+        command: () => {
+          columnVisibility.email = !columnVisibility.email;
+        },
+      },
+      {
+        label: "Role",
+        command: () => {
+          columnVisibility.role = !columnVisibility.role;
+        },
+      },
+      {
+        label: "Created at",
+        command: () => {
+          columnVisibility.created_at = !columnVisibility.created_at;
+        },
+      },
+      {
+        label: "Actions",
+        command: () => {
+          columnVisibility.actions = !columnVisibility.actions;
+        },
+        visible: authStore.user.role === "SUPER_ADMIN",
+      },
+    ]);
+
+    const showBulkActions = ref(false);
+    const bulkActionMenu = ref();
+    const displayBulkDeleteComponent = ref(false);
+    const bulkDeleteValue = ref("");
+
+    const selectedUsers = ref();
     const filters = ref({ role: { name: "All", value: "" } });
     const showPaginator = ref(true);
 
@@ -199,19 +376,44 @@ export default {
       { name: "Regular", value: "REGULAR" },
     ];
 
+    const bulkActions = [
+      {
+        label: "Delete selected",
+        icon: "pi pi-trash",
+        command: () => {
+          let value = selectedUsers.value[0]["attributes"]["email"];
+          if (selectedUsers.value.length > 1) {
+            value = selectedUsers.value.length + " " + "records";
+          }
+          bulkDeleteValue.value = value;
+          displayBulkDeleteComponent.value = true;
+        },
+      },
+    ];
+
     watch(query, (newQuery) => {
       usersStore.getAll({ query: { ...newQuery, filters: filters.value } });
     });
 
     // We need to reset show paginator if it is disabled
-    watch(
-      () => usersStore.loading,
-      (loading) => {
-        if (!loading) {
-          showPaginator.value = true;
-        }
+    watch(usersStore, (newUsersStore) => {
+      if (!newUsersStore.loading) {
+        showPaginator.value = true;
       }
-    );
+
+      if (newUsersStore.status === "deleted") {
+        displayBulkDeleteComponent.value = false;
+        usersStore.getAll({ query: { ...query, filters: filters.value } });
+      }
+    });
+
+    watch(selectedUsers, (newSelectedUsers) => {
+      if (newSelectedUsers && newSelectedUsers.length > 0) {
+        showBulkActions.value = true;
+        return;
+      }
+      showBulkActions.value = false;
+    });
 
     function onPage(event) {
       query.pagination.number = event.page + 1;
@@ -240,6 +442,49 @@ export default {
       });
     }
 
+    function toggleBulkActions(event) {
+      bulkActionMenu.value.toggle(event);
+    }
+
+    function toggleColumnsMenu(event) {
+      columnsMenuRef.value.toggle(event);
+    }
+
+    function getColumnMenuIcon(column) {
+      return columnVisibility[column] ? "pi pi-eye" : "pi pi-eye-slash";
+    }
+
+    function deleteUser(id) {
+      confirm.require({
+        message:
+          "Do you want to delete this record? [This action cannot be undone !]",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        iconClass: "bg-red-500",
+        acceptClass: "p-button-danger",
+        acceptLabel: "Yes Delete",
+        accept: () => {
+          usersStore.deleteUser(id);
+        },
+        reject: () => {},
+      });
+    }
+
+    function onBulkDeleteConfirmed() {
+      getSelectedUsersIds();
+      usersStore.bulkDeleteUsers({ ids: getSelectedUsersIds() });
+    }
+
+    function getSelectedUsersIds() {
+      let ids = [];
+
+      selectedUsers.value.forEach((element) => {
+        ids.push(element.id);
+      });
+
+      return ids;
+    }
+
     return {
       usersStore,
       onPage,
@@ -251,6 +496,23 @@ export default {
       showPaginator,
       reset,
       ROLES,
+      selectedUsers,
+      showBulkActions,
+      bulkActionMenu,
+      bulkActions,
+      toggleBulkActions,
+      deleteUser,
+      displayBulkDeleteComponent,
+      bulkDeleteValue,
+      onBulkDeleteConfirmed,
+      columns,
+      columnsMenuRef,
+      toggleColumnsMenu,
+      columnVisibility,
+      getColumnMenuIcon,
+      lowercaseFirstLetter,
+      snake,
+      authStore,
     };
   },
 };

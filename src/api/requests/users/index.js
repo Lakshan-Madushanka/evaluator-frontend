@@ -9,3 +9,15 @@ export async function getAllRequest(payload) {
 
   return response;
 }
+
+export async function deleteUserRequest(id) {
+  const response = await http.delete(userRoutes.get_delete_route(id));
+
+  return response;
+}
+
+export async function bulkDeleteUsersRequest(payload) {
+  const response = await http.post(userRoutes.get_bulk_delete_route(), payload);
+
+  return response;
+}
