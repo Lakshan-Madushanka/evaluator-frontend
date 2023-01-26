@@ -83,7 +83,23 @@
               </div>
 
               <div class="flex">
-                <div class="mr-4 hidden sm:block">
+                <i
+                  class="pi pi-align-justify hover:cursor-pointer lg:!hidden"
+                  @click="toggleActionsMenu"
+                ></i>
+                <MenuComponent
+                  ref="actionsMenuRef"
+                  :model="actions"
+                  :popup="true"
+                />
+                <div class="hidden lg:flex">
+                  <PrimeButton
+                    icon="pi pi-user-plus"
+                    label="New User"
+                    class="!py-1 !mr-4"
+                    icon-pos="right"
+                    @click="applyFilters"
+                  />
                   <PrimeButton
                     icon="pi pi-filter"
                     class="!mr-4 !py-1"
@@ -92,22 +108,13 @@
                     :disabled="Object.keys(filters).length === 0"
                     @click="applyFilters"
                   />
-                </div>
-                <div class="mr-1 block sm:hidden">
                   <PrimeButton
-                    icon="pi pi-filter"
-                    class="!py-1"
+                    icon="pi pi-refresh"
                     icon-pos="right"
-                    :disabled="Object.keys(filters).length === 0"
-                    @click="applyFilters"
+                    class="!w-12 !py-1"
+                    @click="reset"
                   />
                 </div>
-                <PrimeButton
-                  icon="pi pi-refresh"
-                  icon-pos="right"
-                  class="!w-12 !py-1"
-                  @click="reset"
-                />
               </div>
             </div>
           </template>
@@ -311,6 +318,25 @@ export default {
       pagination: { number: 1, size: 10 },
     });
 
+    const actionsMenuRef = ref();
+    const actions = ref([
+      {
+        label: "Refresh",
+        icon: "pi pi-refresh",
+        command: () => reset(),
+      },
+      {
+        label: "Apply Filters",
+        icon: "pi pi-filter",
+        command: () => applyFilters(),
+      },
+      {
+        label: "Add User",
+        icon: "pi pi-user-plus",
+        command: () => applyFilters(),
+      },
+    ]);
+
     const columnVisibility = reactive({
       id: true,
       name: true,
@@ -450,6 +476,10 @@ export default {
       columnsMenuRef.value.toggle(event);
     }
 
+    function toggleActionsMenu(event) {
+      actionsMenuRef.value.toggle(event);
+    }
+
     function getColumnMenuIcon(column) {
       return columnVisibility[column] ? "pi pi-eye" : "pi pi-eye-slash";
     }
@@ -513,6 +543,9 @@ export default {
       lowercaseFirstLetter,
       snake,
       authStore,
+      actionsMenuRef,
+      actions,
+      toggleActionsMenu,
     };
   },
 };
