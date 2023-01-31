@@ -10,6 +10,12 @@ export async function getAllRequest(payload) {
   return response;
 }
 
+export async function createUserRequest(payload) {
+  const response = await http.post(userRoutes.get_create_route, payload);
+
+  return response;
+}
+
 export async function deleteUserRequest(id) {
   const response = await http.delete(userRoutes.get_delete_route(id));
 

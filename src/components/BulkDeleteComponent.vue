@@ -2,6 +2,7 @@
   <PrimeDialog
     v-model:visible="display"
     class="w-[90%] lg:w-[60%]"
+    modal
     @after-hide="afterDialogHidden"
   >
     <template #header>

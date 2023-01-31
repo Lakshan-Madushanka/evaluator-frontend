@@ -92,13 +92,13 @@
                   :model="actions"
                   :popup="true"
                 />
+
                 <div class="hidden lg:flex">
                   <PrimeButton
-                    icon="pi pi-user-plus"
-                    label="New User"
-                    class="!py-1 !mr-4"
+                    icon="pi pi-refresh"
                     icon-pos="right"
-                    @click="applyFilters"
+                    class="!w-12 !py-1 !mr-4"
+                    @click="reset"
                   />
                   <PrimeButton
                     icon="pi pi-filter"
@@ -109,10 +109,11 @@
                     @click="applyFilters"
                   />
                   <PrimeButton
-                    icon="pi pi-refresh"
+                    icon="pi pi-user-plus"
+                    label="New User"
+                    class="!py-1 !mr-4"
                     icon-pos="right"
-                    class="!w-12 !py-1"
-                    @click="reset"
+                    @click="() => router.push({ name: 'admin.users.create' })"
                   />
                 </div>
               </div>
@@ -267,6 +268,8 @@ import Paginator from "@/components/PaginatorComponent.vue";
 import { useUsersStore } from "@/stores/users";
 import { useAuthStore } from "@/stores/auth";
 
+import { useRouter } from "vue-router";
+
 import moment from "moment/moment";
 
 import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
@@ -312,6 +315,8 @@ export default {
 
     const usersStore = useUsersStore();
     const authStore = useAuthStore();
+
+    const router = useRouter();
 
     const query = reactive({
       sort: {},
@@ -429,6 +434,7 @@ export default {
 
       if (newUsersStore.status === "deleted") {
         displayBulkDeleteComponent.value = false;
+        selectedUsers.value = [];
         usersStore.getAll({ query: { ...query, filters: filters.value } });
       }
     });
@@ -457,10 +463,10 @@ export default {
       showPaginator.value = false;
       query.pagination = { number: 1, size: 10 };
 
-      //Reser filters
+      //Reset filters
       filters.value = { role: { name: "All", value: "" } };
 
-      //Reser sort
+      //Reset sort
       query.sort = {};
 
       usersStore.getAll({
@@ -546,6 +552,7 @@ export default {
       actionsMenuRef,
       actions,
       toggleActionsMenu,
+      router,
     };
   },
 };

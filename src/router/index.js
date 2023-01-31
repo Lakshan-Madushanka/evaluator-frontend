@@ -19,8 +19,9 @@ const AdminDashboard = () => import("../views//admin/DashboardView.vue");
 */
 
 //users
-
 const AdminUsersIndexView = () => import("../views/admin/users/IndexView.vue");
+const AdminCreateUsersView = () =>
+  import("../views/admin/users/CreateView.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,11 @@ const router = createRouter({
           path: "users",
           name: "admin.users.index",
           component: AdminUsersIndexView,
+        },
+        {
+          path: "users/create",
+          name: "admin.users.create",
+          component: AdminCreateUsersView,
         },
       ],
     },
