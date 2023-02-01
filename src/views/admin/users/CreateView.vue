@@ -269,7 +269,6 @@ export default {
     ];
 
     const passwordRef = toRef(state, "password");
-    //const roleRef = toRef(state, "role");
 
     const rules = {
       name: { required },

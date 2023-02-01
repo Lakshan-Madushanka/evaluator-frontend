@@ -25,8 +25,12 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, toRefs, reactive, watch } from "vue";
+
+import { useRoute } from "vue-router";
+
 import { formatText } from "@/helpers";
+
 import { SidebarMenu } from "vue-sidebar-menu";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import NavBar from "@/navBars/AdminNavBar.vue";
@@ -34,14 +38,21 @@ import { useAppStore } from "@/stores/app";
 import { useAuthStore } from "@/stores/auth";
 import Divider from "primevue/divider";
 import SessionTimeoutMessage from "@/components/SessionTimeoutMessage.vue";
+
 export default {
   components: { SidebarMenu, NavBar, SessionTimeoutMessage },
   setup() {
+    const route = useRoute();
+
     const appStore = useAppStore();
     const authStore = useAuthStore();
+
     const sideBarCollapse = ref(false);
 
-    const menu = [
+    const activeClasses = reactive({ users: "" });
+    const activeClassesRef = toRefs(activeClasses);
+
+    const menu = ref([
       {
         header: formatText(`😊 Hello ${authStore.user.name}`, 20),
         hiddenOnCollapse: true,
@@ -69,16 +80,31 @@ export default {
       {
         href: { name: "admin.users.index" },
         title: "Users",
+        class: activeClassesRef.users,
         icon: "pi pi-fw pi-users",
         exact: true,
       },
-    ];
+    ]);
+
+    watch(
+      route,
+      (newRoute) => {
+        const routeName = newRoute.name;
+
+        if (routeName.includes("users")) {
+          activeClasses.users = "vsm--link_active";
+        } else {
+          activeClasses.users = "";
+        }
+      },
+      { immediate: true }
+    );
 
     function onToggleCollapse(event) {
       sideBarCollapse.value = event;
     }
 
-    return { appStore, menu, onToggleCollapse, sideBarCollapse };
+    return { activeClasses, appStore, menu, onToggleCollapse, sideBarCollapse };
   },
 };
 </script>
