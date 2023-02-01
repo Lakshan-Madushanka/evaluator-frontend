@@ -1,5 +1,6 @@
 <template>
   <ConfirmDialog></ConfirmDialog>
+
   <BulkDeleteComponent
     :display-component="displayBulkDeleteComponent"
     :value="bulkDeleteValue"
@@ -224,17 +225,40 @@
             :hidden="!columnVisibility.actions"
           >
             <template #body="slotProps">
-              <span class="p-buttonset">
+              <span
+                v-if="slotProps.data.attributes.role !== 'SUPER_ADMIN'"
+                class="p-buttonset"
+              >
                 <PrimeButton
                   class="p-button-sm"
                   icon="pi pi-file-edit"
                   title="Edit"
+                  @click="
+                    () =>
+                      router.push({
+                        name: 'admin.users.edit',
+                        params: { id: slotProps.data.id },
+                      })
+                  "
                 />
                 <PrimeButton
                   class="p-button-danger p-button-sm"
                   icon="pi pi-trash "
                   title="Delete"
                   @click="deleteUser(slotProps.data.id)"
+                />
+              </span>
+
+              <span v-else class="p-buttonset">
+                <PrimeButton
+                  v-tooltip="'Use profile section to edit super admin.'"
+                  class="p-button-sm opacity-60"
+                  icon="pi pi-info-circle"
+                />
+                <PrimeButton
+                  v-tooltip="'Super admin cannot be deleted !'"
+                  class="p-button-sm p-button-danger opacity-60"
+                  icon="pi pi-info-circle"
                 />
               </span>
             </template>
@@ -282,6 +306,7 @@ import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 
 import BulkDeleteComponent from "@/components/BulkDeleteComponent.vue";
 import SortComponent from "@/components/SortComponent.vue";
@@ -312,6 +337,7 @@ export default {
     });
 
     const confirm = useConfirm();
+    const toast = useToast();
 
     const usersStore = useUsersStore();
     const authStore = useAuthStore();
@@ -412,10 +438,23 @@ export default {
         label: "Delete selected",
         icon: "pi pi-trash",
         command: () => {
-          let value = selectedUsers.value[0]["attributes"]["email"];
-          if (selectedUsers.value.length > 1) {
+          let value = "";
+          if (selectedUsers.value.length === 1) {
+            if (
+              selectedUsers.value[0]["attributes"]["role"] === "SUPER_ADMIN"
+            ) {
+              toast.add({
+                severity: "warn",
+                summary: "Super Admin cannot be deleted !",
+                life: 5000,
+              });
+              return;
+            }
+            value = selectedUsers.value[0]["attributes"]["email"];
+          } else {
             value = selectedUsers.value.length + " " + "records";
           }
+
           bulkDeleteValue.value = value;
           displayBulkDeleteComponent.value = true;
         },
@@ -459,6 +498,9 @@ export default {
     }
 
     function reset() {
+      // Reser selected users
+      selectedUsers.value = [];
+
       //Reset pagnator
       showPaginator.value = false;
       query.pagination = { number: 1, size: 10 };
@@ -515,7 +557,9 @@ export default {
       let ids = [];
 
       selectedUsers.value.forEach((element) => {
-        ids.push(element.id);
+        if (element.attributes.role !== "SUPER_ADMIN") {
+          ids.push(element.id);
+        }
       });
 
       return ids;
