@@ -37,6 +37,17 @@ function getItems() {
           to: { name: "admin.users.create" },
         },
       ];
+    case "admin.users.edit":
+      return [
+        {
+          label: "users",
+          to: { name: "admin.users.index" },
+        },
+        {
+          label: "edit",
+          to: { name: "admin.users.edit" },
+        },
+      ];
     default:
       return null;
   }

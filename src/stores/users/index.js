@@ -10,11 +10,27 @@ export const useUsersStore = defineStore("users", () => {
 
   const loading = ref(false);
   const status = ref("");
-  const users = ref(null);
   const errors = ref({});
+  const users = ref(null);
+  const user = ref(null);
+
+  async function getOne(id) {
+    resetStatus(true, "", {});
+    errors.value = {};
+
+    try {
+      const response = await userRequests.getOneRequest(id);
+      user.value = response;
+    } catch (data) {
+      //
+    } finally {
+      loading.value = false;
+    }
+  }
 
   async function getAll(payload) {
     resetStatus(true, "");
+    errors.value = {};
 
     try {
       const response = await userRequests.getAllRequest(payload);
@@ -27,7 +43,8 @@ export const useUsersStore = defineStore("users", () => {
   }
 
   async function createUser(payload) {
-    resetStatus(false, "creating", {});
+    resetStatus(false, "creating");
+    errors.value = {};
 
     try {
       const response = await userRequests.createUserRequest(payload);
@@ -38,8 +55,32 @@ export const useUsersStore = defineStore("users", () => {
       );
       errors.value = {};
     } catch (data) {
-      errors.value = data.errors;
-      appStore.setToast("error", data.message);
+      if (data.errors) {
+        errors.value = data.errors;
+        appStore.setToast("error", data.message);
+      }
+    } finally {
+      resetStatus(false, "");
+    }
+  }
+
+  async function editUser(id, payload) {
+    resetStatus(false, "updating");
+    errors.value = {};
+
+    try {
+      const response = await userRequests.editUserRequest(id, payload);
+
+      appStore.setToast(
+        "success",
+        "User with id " + response.data.id + " updated successfully"
+      );
+      errors.value = {};
+    } catch (data) {
+      if (data.errors) {
+        errors.value = data.errors;
+        appStore.setToast("error", data.message);
+      }
     } finally {
       resetStatus(false, "");
     }
@@ -47,6 +88,7 @@ export const useUsersStore = defineStore("users", () => {
 
   async function deleteUser(id) {
     resetStatus(true, "");
+    errors.value = {};
 
     try {
       await userRequests.deleteUserRequest(id);
@@ -54,7 +96,6 @@ export const useUsersStore = defineStore("users", () => {
       status.value = "deleted";
       appStore.setToast("success", "User deleted successfully");
     } catch (data) {
-      //
       appStore.setToast(
         "error",
         "Error occurred while deleting user please try again"
@@ -66,6 +107,7 @@ export const useUsersStore = defineStore("users", () => {
 
   async function bulkDeleteUsers(payload) {
     resetStatus(true, "deleting");
+    errors.value = {};
 
     try {
       await userRequests.bulkDeleteUsersRequest(payload);
@@ -95,8 +137,11 @@ export const useUsersStore = defineStore("users", () => {
     status,
     errors,
     users,
+    user,
+    getOne,
     getAll,
     createUser,
+    editUser,
     deleteUser,
     bulkDeleteUsers,
   };

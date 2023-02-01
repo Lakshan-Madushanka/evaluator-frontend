@@ -1,6 +1,18 @@
 <template>
-  <FormLayout>
-    <template #header> Create User </template>
+  <FormLayout v-if="usersStore.loading">
+    <template #header> Edit User </template>
+    <template #content>
+      <FormSkeleton />
+    </template>
+  </FormLayout>
+
+  <FormLayout v-else>
+    <template #header>
+      <div class="flex space-x-4 items-center">
+        <p>Edit User</p>
+        <PrimeButton class="h-10" icon="pi pi-refresh" @click="refresh" />
+      </div>
+    </template>
     <template #content>
       <div class="md:flex md:flex-wrap">
         <!-- name -->
@@ -202,12 +214,12 @@
       >
         <PrimeButton
           class=""
-          :label="usersStore.status === 'creating' ? 'Creating' : 'Create'"
+          :label="usersStore.status === 'updating' ? 'Updating' : 'Update'"
           icon="pi pi-user-plus"
           icon-pos="right"
-          :disabled="v$.$invalid && createUserButtonClicked"
-          :loading="usersStore.status === 'creating'"
-          @click="createUser"
+          :disabled="v$.$invalid && updateUserButtonClicked"
+          :loading="usersStore.status === 'updating'"
+          @click="updateUser"
         />
         <PrimeButton
           class="p-button-warning"
@@ -222,22 +234,27 @@
 </template>
 
 <script>
-import { ref, reactive, toRef } from "vue";
+import { ref, reactive, toRef, onMounted, watch } from "vue";
 
 import { useUsersStore } from "@/stores/users";
+
+import { useRoute } from "vue-router";
 
 import PrimeButton from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 import Divider from "primevue/divider";
+
 import Password from "primevue/password";
 
 import { useVuelidate } from "@vuelidate/core";
 import { email, required, requiredIf, sameAs } from "@vuelidate/validators";
 
 import FormLayout from "@/views/layouts/FormLayout.vue";
+import FormSkeleton from "@/components/skeletons/FormSkeleton.vue";
 
 import * as customRules from "@/validationRules";
+import { ROLES } from "@/constants";
 
 export default {
   components: {
@@ -247,19 +264,23 @@ export default {
     Dropdown,
     Divider,
     Password,
+    FormSkeleton,
   },
   setup() {
     const usersStore = useUsersStore();
+    const route = useRoute();
+
+    onMounted(() => usersStore.getOne(route.params.id));
 
     const state = reactive({
-      name: "",
+      name: usersStore.user && usersStore.user.data.attributes.name,
       email: "",
       role: "",
       password: "",
       password_confirmation: "",
     });
 
-    const createUserButtonClicked = ref(false);
+    const updateUserButtonClicked = ref(false);
 
     const roles = [
       { name: "Admin", value: 2 },
@@ -273,7 +294,7 @@ export default {
       email: { required, email },
       role: { required, exists: customRules.exists([2, 3]) },
       password: {
-        requiredIfAdmin: requiredIf(() => state.role === 2),
+        //requiredIfAdmin: requiredIf(() => state.role === 2),
         password: customRules.password,
       },
       password_confirmation: {
@@ -284,16 +305,31 @@ export default {
 
     const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
 
-    function createUser() {
-      createUserButtonClicked.value = true;
+    watch(
+      () => usersStore.user,
+      (newUser) => {
+        if (newUser) {
+          state.name = newUser.data.attributes.name;
+          state.email = newUser.data.attributes.email;
+          state.role = ROLES[newUser.data.attributes.role].value;
+        }
+      }
+    );
+
+    function refresh() {
+      usersStore.getOne(route.params.id);
+    }
+
+    function updateUser() {
+      updateUserButtonClicked.value = true;
 
       v$.value.$touch();
 
       if (v$.value.$invalid) {
-        return;
+        // return;
       }
 
-      usersStore.createUser(state);
+      usersStore.editUser(route.params.id, state);
     }
 
     function clearState() {
@@ -309,10 +345,11 @@ export default {
       roles,
       state,
       v$,
-      createUser,
+      refresh,
+      updateUser,
       clearState,
       customRules,
-      createUserButtonClicked,
+      updateUserButtonClicked,
       usersStore,
     };
   },

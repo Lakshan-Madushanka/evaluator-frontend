@@ -10,8 +10,25 @@ export async function getAllRequest(payload) {
   return response;
 }
 
+export async function getOneRequest(id) {
+  const response = await http.get(userRoutes.get_one_route(id));
+
+  return response;
+}
+
 export async function createUserRequest(payload) {
   const response = await http.post(userRoutes.get_create_route, payload);
+
+  return response;
+}
+
+export async function editUserRequest(id, payload) {
+  if (payload.password === "") {
+    delete payload.password;
+    delete payload.password_confirmation;
+  }
+
+  const response = await http.put(userRoutes.get_update_route(id), payload);
 
   return response;
 }
