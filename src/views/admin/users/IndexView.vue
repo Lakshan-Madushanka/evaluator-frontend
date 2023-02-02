@@ -58,7 +58,6 @@
                   @click="toggleColumnsMenu"
                 ></i>
                 <MenuComponent
-                  v-if="authStore.user.role === 'SUPER_ADMIN'"
                   ref="columnsMenuRef"
                   :model="columns"
                   :popup="true"
