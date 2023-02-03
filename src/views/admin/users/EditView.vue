@@ -215,7 +215,7 @@
         <PrimeButton
           class=""
           :label="usersStore.status === 'updating' ? 'Updating' : 'Update'"
-          icon="pi pi-user-plus"
+          icon="pi pi-spinner"
           icon-pos="right"
           :disabled="v$.$invalid && updateUserButtonClicked"
           :loading="usersStore.status === 'updating'"
