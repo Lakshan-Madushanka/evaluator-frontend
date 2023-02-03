@@ -24,7 +24,7 @@ export const useAppStore = defineStore("app", () => {
       authenticated.value = true;
       authLoadedStatus.value = "";
     } catch (error) {
-      if (!error.status || error.status !== 421) {
+      if (!error.status || error.status !== 401) {
         authLoadedStatus.value = "error";
       }
     } finally {

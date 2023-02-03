@@ -22,6 +22,7 @@ instance.interceptors.response.use(
         return Promise.reject(error.response.data);
       }
       handleServerSideErrors(error);
+
       throw error.response;
     } else {
       handleClientSideErrors(error);
@@ -67,16 +68,18 @@ function handleServerSideErrors(errorResponse) {
 
   if (status === 401) {
     if (appStore.initialized) {
+      let redirect = router.currentRoute.value.path;
+
       if (appStore.authenticated) {
         appStore.status = "SESSION_EXPIRED";
         appStore.authenticated = false;
         authStore.resetState();
-      }
 
-      router.push({ name: "login" });
+        router.push({ name: "login", query: { redirect } });
+      }
     }
 
-    throw errorResponse;
+    return;
   }
 
   let query = {

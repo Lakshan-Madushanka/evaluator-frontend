@@ -21,11 +21,20 @@ export const useAuthStore = defineStore("auth", () => {
     loading.value = true;
     try {
       const response = await authRequests.loginRequest(payload);
+      let redirect = router.currentRoute.value.query.redirect;
+
       setUser(response.data);
       appStore.status = "";
       appStore.authenticated = true;
       errors.value = {};
-      router.replace({ name: "home" });
+
+      if (redirect) {
+        router.replace(redirect);
+      } else if (user.role !== "REGULAR") {
+        router.replace({ name: "admin.dashboard" });
+      } else {
+        router.replace({ name: "home" });
+      }
     } catch (data) {
       appStore.setToast("error", data.message);
       errors.value = data.errors;
