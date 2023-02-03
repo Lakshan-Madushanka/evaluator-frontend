@@ -109,6 +109,7 @@
                     @click="applyFilters"
                   />
                   <PrimeButton
+                    v-if="authStore.user.role === 'SUPER_ADMIN'"
                     icon="pi pi-user-plus"
                     label="New User"
                     class="!py-1 !mr-4"
@@ -219,6 +220,7 @@
           </Column>
 
           <Column
+            v-if="authStore.user.role === 'SUPER_ADMIN'"
             field="Actions"
             header="Actions"
             :hidden="!columnVisibility.actions"
@@ -363,7 +365,8 @@ export default {
       {
         label: "Add User",
         icon: "pi pi-user-plus",
-        command: () => applyFilters(),
+        command: () => router.push({ name: "admin.users.create" }),
+        visible: authStore.user.role === "SUPER_ADMIN",
       },
     ]);
 
