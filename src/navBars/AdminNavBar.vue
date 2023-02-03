@@ -19,6 +19,7 @@ const home = { icon: "pi pi-th-large", to: { name: "admin.dashboard" } };
 
 function getItems() {
   switch (route.name) {
+    // Users
     case "admin.users.index":
       return [
         {
@@ -46,6 +47,36 @@ function getItems() {
         {
           label: "edit",
           to: { name: "admin.users.edit" },
+        },
+      ];
+    // Categories
+    case "admin.categories.index":
+      return [
+        {
+          label: "categories",
+          to: { name: "admin.categories.index" },
+        },
+      ];
+    case "admin.categories.create":
+      return [
+        {
+          label: "categories",
+          to: { name: "admin.categories.index" },
+        },
+        {
+          label: "create",
+          to: { name: "admin.categories.create" },
+        },
+      ];
+    case "admin.categories.edit":
+      return [
+        {
+          label: "categories",
+          to: { name: "admin.categories.index" },
+        },
+        {
+          label: "edit",
+          to: { name: "admin.categories.edit" },
         },
       ];
     default:

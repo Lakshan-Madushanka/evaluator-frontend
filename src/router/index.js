@@ -18,11 +18,19 @@ const AdminDashboard = () => import("../views//admin/DashboardView.vue");
  Admin routes
 */
 
-//users
+//Users
 const AdminUsersIndexView = () => import("../views/admin/users/IndexView.vue");
 const AdminCreateUsersView = () =>
   import("../views/admin/users/CreateView.vue");
 const AdminEditUsersView = () => import("../views/admin/users/EditView.vue");
+
+//Categories
+const AdminCategoriesIndexView = () =>
+  import("../views/admin/categories/IndexView.vue");
+const AdminCreateCategoryView = () =>
+  import("../views/admin/categories/CreateView.vue");
+const AdminEditCategoryView = () =>
+  import("../views/admin/categories/EditView.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,6 +76,7 @@ const router = createRouter({
           name: "admin.dashboard",
           component: AdminDashboard,
         },
+        // Users
         {
           path: "users",
           name: "admin.users.index",
@@ -82,6 +91,22 @@ const router = createRouter({
           path: "users/:id/edit",
           name: "admin.users.edit",
           component: AdminEditUsersView,
+        },
+        // Categories
+        {
+          path: "categories",
+          name: "admin.categories.index",
+          component: AdminCategoriesIndexView,
+        },
+        {
+          path: "categories/create",
+          name: "admin.categories.create",
+          component: AdminCreateCategoryView,
+        },
+        {
+          path: "categories/:id/edit",
+          name: "admin.categories.edit",
+          component: AdminEditCategoryView,
         },
       ],
     },

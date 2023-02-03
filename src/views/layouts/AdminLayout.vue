@@ -49,7 +49,7 @@ export default {
 
     const sideBarCollapse = ref(false);
 
-    const activeClasses = reactive({ users: "" });
+    const activeClasses = reactive({ users: "", categories: "" });
     const activeClassesRef = toRefs(activeClasses);
 
     const menu = ref([
@@ -84,6 +84,13 @@ export default {
         icon: "pi pi-fw pi-users",
         exact: true,
       },
+      {
+        href: { name: "admin.categories.index" },
+        title: "Categories",
+        class: activeClassesRef.categories,
+        icon: "pi pi-fw pi-bars",
+        exact: true,
+      },
     ]);
 
     watch(
@@ -93,7 +100,9 @@ export default {
 
         if (routeName.includes("users")) {
           activeClasses.users = "vsm--link_active";
-        } else {
+          activeClasses.categories = "";
+        } else if (routeName.includes("categories")) {
+          activeClasses.categories = "vsm--link_active";
           activeClasses.users = "";
         }
       },
