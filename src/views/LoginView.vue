@@ -70,9 +70,7 @@
               type="submit"
               value="Login"
               :disabled="authStore.loading"
-              :class="{
-                '!bg-lime-700, !cursor-not-allowed': authStore.loading,
-              }"
+              :class="{ '!bg-lime-700 !cursor-not-allowed': authStore.loading }"
             />
             <i
               v-if="authStore.loading"
