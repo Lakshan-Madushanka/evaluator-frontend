@@ -303,6 +303,8 @@ export default {
       state.password = "";
 
       v$.value.$reset();
+
+      usersStore.errors = {};
     }
 
     return {

@@ -530,10 +530,6 @@ export default {
       actionsMenuRef.value.toggle(event);
     }
 
-    function getColumnMenuIcon(column) {
-      return columnVisibility[column] ? "pi pi-eye" : "pi pi-eye-slash";
-    }
-
     function deleteUser(id) {
       confirm.require({
         message:
@@ -591,7 +587,6 @@ export default {
       columnsMenuRef,
       toggleColumnsMenu,
       columnVisibility,
-      getColumnMenuIcon,
       lowercaseFirstLetter,
       snake,
       authStore,

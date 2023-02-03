@@ -326,7 +326,7 @@ export default {
       v$.value.$touch();
 
       if (v$.value.$invalid) {
-        // return;
+        return;
       }
 
       usersStore.editUser(route.params.id, state);
@@ -339,6 +339,8 @@ export default {
       state.password = "";
 
       v$.value.$reset();
+
+      usersStore.errors = {};
     }
 
     return {
