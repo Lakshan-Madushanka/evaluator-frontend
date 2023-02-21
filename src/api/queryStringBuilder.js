@@ -20,6 +20,10 @@ export function buildQueryString(payload) {
     query += buildFilters(queryString.filters) + "&";
   }
 
+  if (queryString.includes && queryString.includes.length > 0) {
+    query += includeRelationships(queryString.includes) + "&";
+  }
+
   return query;
 }
 
@@ -63,12 +67,23 @@ function buildFilters(filters) {
       continue;
     }
     let filterValue = filters[filter];
-    if (typeof filterValue === "object") {
+
+    if (Array.isArray(filterValue)) {
+      filterValue = filterValue.join(",");
+    } else if (typeof filterValue === "object") {
+      if (filterValue["value"] === null) {
+        continue;
+      }
       filterValue = filterValue.value;
     }
 
     params.set(`filter[${filter}]`, filterValue);
   }
 
+  return params.toString();
+}
+
+function includeRelationships(relationships) {
+  const params = new URLSearchParams({ include: relationships.join(",") });
   return params.toString();
 }

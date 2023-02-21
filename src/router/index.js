@@ -32,6 +32,14 @@ const AdminCreateCategoryView = () =>
 const AdminEditCategoryView = () =>
   import("../views/admin/categories/EditView.vue");
 
+//Questionnaires
+const AdminQuestionnairesIndexView = () =>
+  import("../views/admin/questionnaires/IndexView.vue");
+const AdminCreateQuestionnaireView = () =>
+  import("../views/admin/questionnaires/CreateView.vue");
+const AdminEditQuestionnaireView = () =>
+  import("../views/admin/questionnaires/EditView.vue");
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -107,6 +115,22 @@ const router = createRouter({
           path: "categories/:id/edit",
           name: "admin.categories.edit",
           component: AdminEditCategoryView,
+        },
+        // Questionnaires
+        {
+          path: "questionnaires",
+          name: "admin.questionnaires.index",
+          component: AdminQuestionnairesIndexView,
+        },
+        {
+          path: "questionnaires/create",
+          name: "admin.questionnaires.create",
+          component: AdminCreateQuestionnaireView,
+        },
+        {
+          path: "questionnaires/:id/edit",
+          name: "admin.questionnaires.edit",
+          component: AdminEditQuestionnaireView,
         },
       ],
     },

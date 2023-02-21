@@ -180,7 +180,6 @@
 import { onMounted, ref, reactive, watch } from "vue";
 
 import { useCategoriesStore } from "@/stores/categories/index";
-import { useAuthStore } from "@/stores/auth";
 
 import { useRouter } from "vue-router";
 
@@ -214,13 +213,11 @@ export default {
     const confirm = useConfirm();
 
     const categoriesStore = useCategoriesStore();
-    const authStore = useAuthStore();
 
     const router = useRouter();
 
     const query = reactive({
       sort: {},
-      pagination: { number: 1, size: 10 },
     });
 
     const columnsMenuRef = ref();
@@ -258,7 +255,6 @@ export default {
     ]);
 
     const filters = ref({});
-    const showPaginator = ref(true);
 
     const actionsMenuRef = ref();
     const actions = ref([
@@ -280,9 +276,7 @@ export default {
     ]);
 
     onMounted(() => {
-      categoriesStore.getAll({
-        query: { pagination: { number: 1, size: 10 } },
-      });
+      categoriesStore.getAll();
     });
 
     watch(categoriesStore, (newUsersStore) => {
@@ -298,8 +292,6 @@ export default {
     });
 
     function applyFilters() {
-      showPaginator.value = false; // Reset the pagination
-
       categoriesStore.getAll({ query: { filters: filters.value, ...query } });
     }
 
@@ -345,7 +337,6 @@ export default {
       query,
       filters,
       applyFilters,
-      showPaginator,
       reset,
       deleteCategory,
       columns,
@@ -354,7 +345,6 @@ export default {
       columnVisibility,
       lowercaseFirstLetter,
       snake,
-      authStore,
       router,
       actions,
       actionsMenuRef,

@@ -95,7 +95,7 @@
                 class="text-red-500 text-sm"
               >
                 {{ error.$message.replace("Value", "Role") }}
-                {{ customRules.massages[error.$validator] }}
+                {{ customRules.messages[error.$validator] }}
               </p>
             </div>
           </template>
@@ -150,7 +150,7 @@
                 class="text-red-500"
               >
                 {{ error.$message.replace("Value", "Password") }}
-                {{ customRules.massages[error.$validator] }}
+                {{ customRules.messages[error.$validator] }}
               </p>
             </div>
           </template>
@@ -190,7 +190,7 @@
                 class="text-red-500"
               >
                 {{ error.$message.replace("Value", "Password Confirmation") }}
-                {{ customRules.massages[error.$validator] }}
+                {{ customRules.messages[error.$validator] }}
               </p>
             </div>
           </template>

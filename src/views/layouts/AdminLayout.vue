@@ -49,7 +49,11 @@ export default {
 
     const sideBarCollapse = ref(false);
 
-    const activeClasses = reactive({ users: "", categories: "" });
+    const activeClasses = reactive({
+      users: "",
+      categories: "",
+      questionnaires: "",
+    });
     const activeClassesRef = toRefs(activeClasses);
 
     const menu = ref([
@@ -91,6 +95,13 @@ export default {
         icon: "pi pi-fw pi-bars",
         exact: true,
       },
+      {
+        href: { name: "admin.questionnaires.index" },
+        title: "Questionnaires",
+        class: activeClassesRef.questionnaires,
+        icon: "pi pi-fw pi-server",
+        exact: true,
+      },
     ]);
 
     watch(
@@ -103,6 +114,11 @@ export default {
           activeClasses.categories = "";
         } else if (routeName.includes("categories")) {
           activeClasses.categories = "vsm--link_active";
+          activeClasses.users = "";
+          activeClasses.questionnaires = "";
+        } else if (routeName.includes("questionnaires")) {
+          activeClasses.questionnaires = "vsm--link_active";
+          activeClasses.categories = "";
           activeClasses.users = "";
         }
       },

@@ -16,3 +16,15 @@ export function formatText(str, limit = 10) {
   }
   return str.slice(0, limit) + "...";
 }
+
+// Get related relationship from api response
+export function findRelations(relationships, id, type) {
+  for (const relationship in relationships) {
+    if (
+      type === relationships[relationship].type &&
+      id === relationships[relationship].id
+    ) {
+      return relationships[relationship];
+    }
+  }
+}

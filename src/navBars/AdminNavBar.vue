@@ -79,6 +79,36 @@ function getItems() {
           to: { name: "admin.categories.edit" },
         },
       ];
+    // Questionnaires
+    case "admin.questionnaires.index":
+      return [
+        {
+          label: "questionnaires",
+          to: { name: "admin.questionnaires.index" },
+        },
+      ];
+    case "admin.questionnaires.create":
+      return [
+        {
+          label: "questionnaires",
+          to: { name: "admin.questionnaires.index" },
+        },
+        {
+          label: "create",
+          to: { name: "admin.questionnaires.create" },
+        },
+      ];
+    case "admin.questionnaires.edit":
+      return [
+        {
+          label: "questionnaires",
+          to: { name: "admin.questionnaires.index" },
+        },
+        {
+          label: "edit",
+          to: { name: "admin.questionnaires.edit" },
+        },
+      ];
     default:
       return null;
   }

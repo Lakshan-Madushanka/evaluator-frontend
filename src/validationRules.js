@@ -8,7 +8,7 @@ export const exists = (allowedValues) => (value) => {
   return value === "" || allowedValues.includes(value);
 };
 
-export const massages = {
+export const messages = {
   password:
     "Password should contains, " +
     "at least one lowercase, " +
