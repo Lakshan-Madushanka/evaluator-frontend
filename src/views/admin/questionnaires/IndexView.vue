@@ -735,7 +735,7 @@ export default {
       }
       if (newUsersStore.status === "deleted") {
         questionnairesStore.getAll({
-          query: { ...query, filters: filters.value, includes },
+          query: { ...query, filters: filters, includes },
         });
       }
     });
@@ -815,9 +815,10 @@ export default {
 
     function applyFilters() {
       showPaginator.value = false; // Reset the pagination
+      query.pagination.number = 1;
 
       questionnairesStore.getAll({
-        query: { filters: filters, includes },
+        query: { filters: filters, ...query, includes },
       });
     }
 

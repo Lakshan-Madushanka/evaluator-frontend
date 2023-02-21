@@ -494,6 +494,7 @@ export default {
     }
 
     function applyFilters() {
+      query.pagination.number = 1;
       showPaginator.value = false; // Reset the pagination
 
       usersStore.getAll({ query: { filters: filters.value, ...query } });
