@@ -1,5 +1,11 @@
 <template>
+  {{ displayAssignQuestionnaireView }}
   <ConfirmDialog></ConfirmDialog>
+  <AttachViewComponent
+    :display="displayAssignQuestionnaireView"
+    :user-id="userIdToAttachQuestionnaire"
+    @hide="displayAssignQuestionnaireView = $event"
+  />
 
   <BulkDeleteComponent
     :display-component="displayBulkDeleteComponent"
@@ -231,6 +237,12 @@
                 class="p-buttonset"
               >
                 <PrimeButton
+                  class="p-button-info p-button-sm"
+                  icon="pi pi-calendar "
+                  title="Assign Questionnaire"
+                  @click="attachQuestionnaire(slotProps.data.id)"
+                />
+                <PrimeButton
                   class="p-button-sm"
                   icon="pi pi-file-edit"
                   title="Edit"
@@ -311,6 +323,7 @@ import { useToast } from "primevue/usetoast";
 
 import BulkDeleteComponent from "@/components/BulkDeleteComponent.vue";
 import SortComponent from "@/components/SortComponent.vue";
+import AttachViewComponent from "./questionnaires/AttachView.vue";
 
 import { ROLES } from "@/constants";
 import { lowercaseFirstLetter, snake } from "@/helpers";
@@ -329,6 +342,7 @@ export default {
     MenuComponent,
     ConfirmDialog,
     BulkDeleteComponent,
+    AttachViewComponent,
   },
   setup() {
     onMounted(() => {
@@ -344,6 +358,9 @@ export default {
     const authStore = useAuthStore();
 
     const router = useRouter();
+
+    const displayAssignQuestionnaireView = ref(false);
+    const userIdToAttachQuestionnaire = ref();
 
     const query = reactive({
       sort: {},
@@ -564,8 +581,17 @@ export default {
       return ids;
     }
 
+    function attachQuestionnaire(userId) {
+      displayAssignQuestionnaireView.value = true;
+      userIdToAttachQuestionnaire.value = userId;
+    }
+
+    function test($event) {}
+
     return {
       usersStore,
+      displayAssignQuestionnaireView,
+      userIdToAttachQuestionnaire,
       onPage,
       moment,
       query,
@@ -595,6 +621,8 @@ export default {
       actions,
       toggleActionsMenu,
       router,
+      test,
+      attachQuestionnaire,
     };
   },
 };

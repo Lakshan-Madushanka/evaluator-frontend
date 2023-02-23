@@ -20,6 +20,14 @@ export async function getOneRequest(id, payload) {
   return response;
 }
 
+export async function checkAvailability(id) {
+  const response = await http.get(
+    questionnaireRoutes.get_route_to_check_avalability(id)
+  );
+
+  return response;
+}
+
 export async function createQuestionnaireRequest(payload) {
   const response = await http.post(
     questionnaireRoutes.get_create_route,

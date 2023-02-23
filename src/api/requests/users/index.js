@@ -1,4 +1,4 @@
-import * as userRoutes from "@/api/routes/users";
+import * as userRoutes from "@/api/routes/users/index";
 
 import { buildQueryString } from "@/api/queryStringBuilder";
 import http from "@/http";
