@@ -1,5 +1,4 @@
 <template>
-  {{ props.test }}
   <PrimeDialog
     v-model:visible="displayComponent"
     modal

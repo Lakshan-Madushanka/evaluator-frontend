@@ -1,5 +1,4 @@
 <template>
-  {{ displayAssignQuestionnaireView }}
   <ConfirmDialog></ConfirmDialog>
   <AttachViewComponent
     :display="displayAssignQuestionnaireView"
