@@ -455,6 +455,7 @@
               </span>
             </template>
           </Column>
+          
           <template #footer>
             <Paginator
               v-if="questionnairesStore.questionnaires && showPaginator"

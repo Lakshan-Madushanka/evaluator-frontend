@@ -225,6 +225,26 @@
           </Column>
 
           <Column
+            field="questionnaires"
+            header="Questionnaires"
+            :hidden="!columnVisibility.questionnaires"
+          >
+            <template #body="slotProps">
+              <router-link
+                class="inlne-block flex items-center justify-center hover:bg-transparent"
+                :to="{
+                  name: 'admin.users.questionnaires.index',
+                  params: { id: slotProps.data.id },
+                }"
+              >
+                <i
+                  class="pi pi-eye p-1 !text-2xl hover:text-blue-500 hover:!text-[1.7rem]"
+                ></i>
+              </router-link>
+            </template>
+          </Column>
+
+          <Column
             v-if="authStore.user.role === 'SUPER_ADMIN'"
             field="Actions"
             header="Actions"
@@ -392,6 +412,7 @@ export default {
       email: true,
       role: true,
       created_at: true,
+      questionnaires: true,
       actions: true,
     });
     const columnsMenuRef = ref();
@@ -424,6 +445,12 @@ export default {
         label: "Created at",
         command: () => {
           columnVisibility.created_at = !columnVisibility.created_at;
+        },
+      },
+      {
+        label: "Questionnaires",
+        command: () => {
+          columnVisibility.questionnaires = !columnVisibility.questionnaires;
         },
       },
       {
@@ -585,8 +612,6 @@ export default {
       userIdToAttachQuestionnaire.value = userId;
     }
 
-    function test($event) {}
-
     return {
       usersStore,
       displayAssignQuestionnaireView,
@@ -620,7 +645,6 @@ export default {
       actions,
       toggleActionsMenu,
       router,
-      test,
       attachQuestionnaire,
     };
   },

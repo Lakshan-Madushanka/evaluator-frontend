@@ -112,6 +112,7 @@ export default {
         if (routeName.includes("users")) {
           activeClasses.users = "vsm--link_active";
           activeClasses.categories = "";
+          activeClasses.questionnaires = "";
         } else if (routeName.includes("categories")) {
           activeClasses.categories = "vsm--link_active";
           activeClasses.users = "";

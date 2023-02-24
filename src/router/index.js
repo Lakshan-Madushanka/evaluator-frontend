@@ -24,6 +24,11 @@ const AdminCreateUsersView = () =>
   import("../views/admin/users/CreateView.vue");
 const AdminEditUsersView = () => import("../views/admin/users/EditView.vue");
 
+// Questionnaires
+const AdminUsersQuestionnaireView = () =>
+  import("../views/admin/users/questionnaires/indexView.vue");
+// End users
+
 //Categories
 const AdminCategoriesIndexView = () =>
   import("../views/admin/categories/IndexView.vue");
@@ -100,6 +105,14 @@ const router = createRouter({
           name: "admin.users.edit",
           component: AdminEditUsersView,
         },
+        // Questionnaires
+        {
+          path: "/users/:id/questionnaires",
+          name: "admin.users.questionnaires.index",
+          component: AdminUsersQuestionnaireView,
+        },
+        // End users
+
         // Categories
         {
           path: "categories",

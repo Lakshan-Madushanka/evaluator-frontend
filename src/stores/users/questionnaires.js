@@ -12,10 +12,31 @@ export const useUsersQuestionnairesStore = defineStore(
   () => {
     const appStore = useAppStore();
 
+    const loading = ref(false);
     const status = ref("");
     const availableId = ref(null);
+    const questionnaires = ref(null);
     const errors = reactive({ questionnaireId: "" });
 
+    async function getAll(userId, payload) {
+      clearState();
+      loading.value = true;
+
+      try {
+        const results = await usersQuestionnairesRequests.getAllRequest(
+          userId,
+          payload
+        );
+        questionnaires.value = results;
+      } catch (error) {
+        appStore.setToast(
+          "error",
+          "Error occurred while obtaining questionnaire data please try again"
+        );
+      } finally {
+        loading.value = false;
+      }
+    }
     async function checkAvalability(id) {
       clearState();
       status.value = "searching";
@@ -30,7 +51,7 @@ export const useUsersQuestionnairesStore = defineStore(
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while deleting questionnaire please try again"
+          "Error occurred while cheking availablity of the questionnaire please try again"
         );
       } finally {
         status.value = "";
@@ -56,6 +77,29 @@ export const useUsersQuestionnairesStore = defineStore(
       }
     }
 
+    async function resendNotificatiion(userId, questionnaireId) {
+      errors.questionnaireId = "";
+      loading.value = true;
+
+      try {
+        await usersQuestionnairesRequests.resendNotificarionRequest(
+          userId,
+          questionnaireId
+        );
+        appStore.setToast(
+          "success",
+          `Questionnaire attached notification resent to user ${userId}`
+        );
+      } catch (error) {
+        appStore.setToast(
+          "error",
+          "Error occurred while attaching questionnaire please try again"
+        );
+      } finally {
+        loading.value = false;
+      }
+    }
+
     function clearState() {
       status.value = "";
       errors.questionnaireId = "";
@@ -63,11 +107,15 @@ export const useUsersQuestionnairesStore = defineStore(
     }
 
     return {
+      loading,
       status,
       availableId,
+      questionnaires,
       errors,
       checkAvalability,
       attach,
+      getAll,
+      resendNotificatiion,
       clearState,
     };
   }

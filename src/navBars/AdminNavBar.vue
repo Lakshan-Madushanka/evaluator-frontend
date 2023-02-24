@@ -49,6 +49,20 @@ function getItems() {
           to: { name: "admin.users.edit" },
         },
       ];
+    // Questionnaires
+    case "admin.users.questionnaires.index":
+      return [
+        {
+          label: "users",
+          to: { name: "admin.users.index" },
+        },
+        {
+          label: "questionnaires",
+          to: { name: "admin.users.questionnaires.index" },
+        },
+      ];
+    // End Users
+
     // Categories
     case "admin.categories.index":
       return [
