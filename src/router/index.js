@@ -26,7 +26,7 @@ const AdminEditUsersView = () => import("../views/admin/users/EditView.vue");
 
 // Questionnaires
 const AdminUsersQuestionnaireView = () =>
-  import("../views/admin/users/questionnaires/indexView.vue");
+  import("../views/admin/users/questionnaires/IndexView.vue");
 // End users
 
 //Categories
