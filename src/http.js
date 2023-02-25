@@ -3,12 +3,8 @@ import moment from "moment/moment";
 import router from "./router/index";
 import { useAppStore } from "./stores/app";
 import { useAuthStore } from "./stores/auth";
-
-export const baseURL = "http://localhost:8000/";
-export const baseApiURL = "http://localhost:8000/api/v1/";
-
 const instance = axios.create({
-  baseURL: baseApiURL,
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 

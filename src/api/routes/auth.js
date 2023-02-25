@@ -1,4 +1,4 @@
-import { baseURL } from "@/http.js";
+const baseURL = import.meta.env.VITE_BASE_API_URL;
 
 export const csrf_route = `${baseURL}sanctum/csrf-cookie`;
 export const login_route = `administrative/login`;
