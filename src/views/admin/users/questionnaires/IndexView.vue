@@ -256,7 +256,11 @@
                   class="p-button-sm"
                   icon="pi pi-envelope"
                   title="Resend notification"
-                  @click="resendNotification(slotProps.data.id)"
+                  @click="
+                    resendNotification(
+                      slotProps.data.attributes.user_questionnaire_id
+                    )
+                  "
                 />
               </span>
             </template>
@@ -312,7 +316,6 @@ import ConfirmDialog from "primevue/confirmdialog";
 import SelectButton from "primevue/selectbutton";
 import Tag from "primevue/tag";
 import { useConfirm } from "primevue/useconfirm";
-import { useToast } from "primevue/usetoast";
 
 import SortComponent from "@/components/SortComponent.vue";
 
@@ -335,7 +338,6 @@ export default {
   },
   setup() {
     const confirm = useConfirm();
-    const toast = useToast();
 
     const usersQuestionnairesStore = useUsersQuestionnairesStore();
 
