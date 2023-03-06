@@ -123,6 +123,22 @@ function getItems() {
           to: { name: "admin.questionnaires.edit" },
         },
       ];
+    // Questions
+    case "admin.questionnaires.questions.index":
+      return [
+        {
+          label: "questionnaires",
+          to: { name: "admin.questionnaires.index" },
+        },
+        {
+          label: "questions",
+          to: {
+            name: "admin.questionnaires.questions.index",
+            query: { ...route.query },
+          },
+        },
+      ];
+    // End Questionnaires
     default:
       return null;
   }

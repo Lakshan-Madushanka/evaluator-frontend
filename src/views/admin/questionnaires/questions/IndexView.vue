@@ -1,5 +1,4 @@
 <template>
-  <div @click="test">test</div>
   <div class="shadow-lg bg-white p-4 pb-8">
     <div class="flex flex-wrap items-center justify-center sm:justify-between">
       <h1 class="text-2xl font-bold uppercase mb-2">
@@ -609,7 +608,6 @@ export default {
 
       return false;
     }
-    function test() {}
 
     function prepareQuestionsToSync() {
       let questions = [];
@@ -626,7 +624,6 @@ export default {
     }
 
     function syncQuestions() {
-      //prepareQuestionsToSync();
       questionnairesQuestionsStore.syncQuestions(route.params.id, {
         questions: prepareQuestionsToSync(),
       });
@@ -653,7 +650,6 @@ export default {
       selectAllQuestions,
       deselectAllQuestions,
       syncQuestions,
-      test,
     };
   },
 };
