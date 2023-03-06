@@ -45,6 +45,12 @@ const AdminCreateQuestionnaireView = () =>
 const AdminEditQuestionnaireView = () =>
   import("../views/admin/questionnaires/EditView.vue");
 
+// Questions
+const AdminQuestionnairesQuestionsIndexView = () =>
+  import("../views/admin/questionnaires/questions/IndexView.vue");
+
+// End Questionnaires
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -145,6 +151,13 @@ const router = createRouter({
           name: "admin.questionnaires.edit",
           component: AdminEditQuestionnaireView,
         },
+        // Questions
+        {
+          path: "questionnaires/:id/questions",
+          name: "admin.questionnaires.questions.index",
+          component: AdminQuestionnairesQuestionsIndexView,
+        },
+        // End Questionnaire
       ],
     },
 

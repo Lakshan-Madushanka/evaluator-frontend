@@ -436,6 +436,28 @@
               <span class="p-buttonset">
                 <PrimeButton
                   class="p-button-sm"
+                  icon="pi pi-question"
+                  title="Manage questions"
+                  @click="
+                    () =>
+                      router.push({
+                        name: 'admin.questionnaires.questions.index',
+                        params: { id: slotProps.data.id },
+                        query: {
+                          no_of_easy_questions:
+                            slotProps.data.attributes.no_of_easy_questions,
+                          no_of_medium_questions:
+                            slotProps.data.attributes.no_of_medium_questions,
+                          no_of_hard_questions:
+                            slotProps.data.attributes.no_of_hard_questions,
+                          no_of_total_questions:
+                            slotProps.data.attributes.no_of_questions,
+                        },
+                      })
+                  "
+                />
+                <PrimeButton
+                  class="p-button-sm"
                   icon="pi pi-file-edit"
                   title="Edit"
                   @click="
@@ -455,7 +477,7 @@
               </span>
             </template>
           </Column>
-          
+
           <template #footer>
             <Paginator
               v-if="questionnairesStore.questionnaires && showPaginator"
