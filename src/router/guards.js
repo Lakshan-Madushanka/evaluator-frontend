@@ -8,7 +8,7 @@ export const auth = async (to) => {
     return true;
   }
 
-  router.push({ name: "login", query: { redirect: to.path } });
+  router.push({ name: "login", query: { redirect: to.fullPath } });
 
   return false;
 };
