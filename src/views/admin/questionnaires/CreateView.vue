@@ -90,7 +90,7 @@
               placeholder="Select categories"
             />
 
-            <label for="single_answers_type"> Categories</label>
+            <label for="categories"> Categories</label>
           </span>
 
           <!-- Client side errors -->
@@ -523,7 +523,7 @@ export default {
     function prepareFormData() {
       let selectedCategories = [];
       let single_answers_type =
-        state.single_answer_type === "true" ? true : false;
+        state.single_answers_type === "true" ? true : false;
 
       state.categories.forEach((category) => {
         selectedCategories.push(category.value);
