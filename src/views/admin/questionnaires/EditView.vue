@@ -606,8 +606,10 @@ export default {
           newQuestionnaire.data.attributes.single_answers_type
         ) {
           state.single_answers_type = answerType;
-        } else if (answerType.name === "Multiple")
-          state.single_answers_type = answerType;
+          return;
+        }
+
+        state.single_answers_type = answerType;
       }
     }
 
