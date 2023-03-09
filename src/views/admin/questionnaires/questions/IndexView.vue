@@ -53,61 +53,6 @@
         v-if="questionnairesQuestionsStore.loading"
         class="mb-2 !w-full !h-72"
       ></Skeleton>
-      <!--       <OrderList
-        v-else
-        v-model="data.questions"
-        v-model:selection="selectedQuestions"
-        :meta-key-selection="false"
-        list-style="height:100rem"
-        data-key="id"
-      >
-        <template #header>
-          <div class="flex justify-between">
-            <p>List of Questions ({{ getListQuestionsCount() }})</p>
-            <Dropdown
-              v-model="selectedDiffculty"
-              :options="difficultyFilterOptions"
-              option-label="name"
-              placeholder="Difficulty"
-            />
-          </div>
-        </template>
-        <template #item="slotProps">
-          <div v-if="slotProps.item.show" class="flex justify-between">
-            <div class="flex w-[75%]">
-              <span class="mr-2">{{ slotProps.index + 1 }}).</span>
-              <p>{{ slotProps.item.attributes.content }}</p>
-            </div>
-            <div>
-              <p>
-                ID:
-                {{ slotProps.item.attributes.pretty_id }}
-              </p>
-              <p>
-                Single answers type:
-                {{ slotProps.item.attributes.answers_type_single }}
-              </p>
-              <p>
-                Difficulty:
-                {{ slotProps.item.attributes.hardness }}
-              </p>
-              <p>
-                Answers count:
-                {{ slotProps.item.attributes.no_of_answers }}
-              </p>
-              <p>
-                Images count:
-                {{ slotProps.item.attributes.images_count }}
-              </p>
-              <p>
-                Marks:
-                {{ slotProps.item.attributes.marks }}
-              </p>
-            </div>
-          </div>
-        </template>
-      </OrderList>
- -->
 
       <div v-else id="questionsList" ref="questionsListElm" class="shadow">
         <div
@@ -361,7 +306,7 @@ export default {
       assignedQuestions: { easy: 0, medium: 0, hard: 0, total: 0 },
     });
     const selectedQuestions = ref([]);
-    const questionId = ref("quest_0000625");
+    const questionId = ref("");
     const queestionIdSearchButtonClicked = ref(false);
     const addToListError = ref("");
 
@@ -465,16 +410,6 @@ export default {
 
       data.questions = questions;
       selectedQuestions.value = [];
-
-      /* selectedQuestions.value.forEach((selectedQuestion) => {
-        data.questions.forEach((question, index) => {
-          if (selectedQuestion.id === question.id) {
-            data.questions[index].show = false;
-            setAssignedQuestionsCount(question, "decrement");
-            data.assignedQuestions.total--;
-          }
-        });
-      }); */
     }
 
     function searchQuestion() {
@@ -566,9 +501,6 @@ export default {
     }
 
     function selectQuestion(event, question) {
-      /* if (event.target.contains(marksElm.value)) {
-        return;
-      } */
       const length = selectedQuestions.value.length;
       for (let $i = 0; $i < length; $i++) {
         if (selectedQuestions.value[$i].id === question.id) {
