@@ -139,6 +139,38 @@ function getItems() {
         },
       ];
     // End Questionnaires
+
+    // Questions
+    case "admin.questions.index":
+      return [
+        {
+          label: "questions",
+          to: { name: "admin.questions.index" },
+        },
+      ];
+    case "admin.questions.create":
+      return [
+        {
+          label: "questions",
+          to: { name: "admin.questions.index" },
+        },
+        {
+          label: "create",
+          to: { name: "admin.questions.create" },
+        },
+      ];
+    case "admin.questions.edit":
+      return [
+        {
+          label: "questions",
+          to: { name: "admin.questions.index" },
+        },
+        {
+          label: "edit",
+          to: { name: "admin.questions.edit" },
+        },
+      ];
+    // End Questions
     default:
       return null;
   }

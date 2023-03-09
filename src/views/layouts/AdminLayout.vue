@@ -53,6 +53,7 @@ export default {
       users: "",
       categories: "",
       questionnaires: "",
+      questions: "",
     });
     const activeClassesRef = toRefs(activeClasses);
 
@@ -102,6 +103,13 @@ export default {
         icon: "pi pi-fw pi-server",
         exact: true,
       },
+      {
+        href: { name: "admin.questions.index" },
+        title: "Questions",
+        class: activeClassesRef.questions,
+        icon: "pi pi-fw pi-question",
+        exact: true,
+      },
     ]);
 
     watch(
@@ -111,14 +119,22 @@ export default {
 
         if (routeName.includes("users")) {
           activeClasses.users = "vsm--link_active";
+          activeClasses.questions = "";
           activeClasses.categories = "";
           activeClasses.questionnaires = "";
         } else if (routeName.includes("categories")) {
           activeClasses.categories = "vsm--link_active";
+          activeClasses.questions = "";
           activeClasses.users = "";
           activeClasses.questionnaires = "";
         } else if (routeName.includes("questionnaires")) {
           activeClasses.questionnaires = "vsm--link_active";
+          activeClasses.questions = "";
+          activeClasses.categories = "";
+          activeClasses.users = "";
+        } else if (routeName.includes("questions")) {
+          activeClasses.questions = "vsm--link_active";
+          activeClasses.questionnaires = "";
           activeClasses.categories = "";
           activeClasses.users = "";
         }

@@ -29,6 +29,14 @@ const AdminUsersQuestionnaireView = () =>
   import("../views/admin/users/questionnaires/IndexView.vue");
 // End users
 
+// Questions
+const AdminQuestionsIndexView = () =>
+  import("../views/admin/questions/IndexView.vue");
+const AdminQuestionsCreateView = () =>
+  import("../views/admin/questions/CreateView.vue");
+const AdminQuestionsEditView = () =>
+  import("../views/admin/questions/EditView.vue");
+
 //Categories
 const AdminCategoriesIndexView = () =>
   import("../views/admin/categories/IndexView.vue");
@@ -95,7 +103,7 @@ const router = createRouter({
           name: "admin.dashboard",
           component: AdminDashboard,
         },
-        // Users
+        //-------------------------------------Users------------------------------------------------------------------------------
         {
           path: "users",
           name: "admin.users.index",
@@ -117,9 +125,27 @@ const router = createRouter({
           name: "admin.users.questionnaires.index",
           component: AdminUsersQuestionnaireView,
         },
-        // End users
+        //----------------------------------End Users------------------------------------------------------------------------------
 
-        // Categories
+        //--------------------------------------Questions-----------------------------------------------------------------
+        {
+          path: "questions",
+          name: "admin.questions.index",
+          component: AdminQuestionsIndexView,
+        },
+        {
+          path: "questions/create",
+          name: "admin.questions.create",
+          component: AdminQuestionsCreateView,
+        },
+        {
+          path: "questions/:id/edit",
+          name: "admin.questions.edit",
+          component: AdminQuestionsEditView,
+        },
+        //---------------------------------------------End Questions---------------------------------------------------------
+
+        //--------------------------------------------------------Categories---------------------------------------------
         {
           path: "categories",
           name: "admin.categories.index",
@@ -135,7 +161,9 @@ const router = createRouter({
           name: "admin.categories.edit",
           component: AdminEditCategoryView,
         },
-        // Questionnaires
+        //--------------------------------------------------------------End Categories-------------------------------------
+
+        //-------------------------------------------------------Questionnaires--------------------------------------------
         {
           path: "questionnaires",
           name: "admin.questionnaires.index",
@@ -157,7 +185,7 @@ const router = createRouter({
           name: "admin.questionnaires.questions.index",
           component: AdminQuestionnairesQuestionsIndexView,
         },
-        // End Questionnaire
+        //--------------------------------------------------- End Questionnaire----------------------------------------------
       ],
     },
 
