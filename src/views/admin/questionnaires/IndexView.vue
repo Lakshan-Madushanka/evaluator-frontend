@@ -585,7 +585,7 @@ export default {
     const answersTypeFilterOptions = reactive([
       { name: "All", value: null },
       { name: "Single", value: true },
-      { name: "Multple", value: false },
+      { name: "Multiple", value: false },
     ]);
 
     const showPaginator = ref(true);
@@ -746,7 +746,7 @@ export default {
       },
     ]);
 
-    //---------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------
 
     onMounted(() => {
       initQuery();
