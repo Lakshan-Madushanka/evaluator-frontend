@@ -170,6 +170,41 @@ function getItems() {
           to: { name: "admin.questions.edit" },
         },
       ];
+    // End Questions
+
+    // Answers
+    case "admin.answers.index":
+      return [
+        {
+          label: "answers",
+          to: { name: "admin.answers.index" },
+        },
+      ];
+    case "admin.answers.create":
+      return [
+        {
+          label: "answers",
+          to: { name: "admin.answers.index" },
+        },
+        {
+          label: "create",
+          to: { name: "admin.answers.create" },
+        },
+      ];
+    case "admin.answers.edit":
+      return [
+        {
+          label: "answers",
+          to: { name: "admin.answers.index" },
+        },
+        {
+          label: "edit",
+          to: { name: "admin.answers.edit" },
+        },
+      ];
+    // End Answers
+
+    // Image Manager
     case "admin.images.manager":
       return [
         {
@@ -181,7 +216,7 @@ function getItems() {
           to: { name: "admin.images.manager", query: { ...route.query } },
         },
       ];
-    // End Questions
+    // End of image manager
     default:
       return null;
   }

@@ -54,6 +54,7 @@ export default {
       categories: "",
       questionnaires: "",
       questions: "",
+      answers: "",
     });
     const activeClassesRef = toRefs(activeClasses);
 
@@ -110,6 +111,13 @@ export default {
         icon: "pi pi-fw pi-question",
         exact: true,
       },
+      {
+        href: { name: "admin.answers.index" },
+        title: "Answers",
+        class: activeClassesRef.answers,
+        icon: "pi pi-fw pi-language",
+        exact: true,
+      },
     ]);
 
     watch(
@@ -119,21 +127,31 @@ export default {
 
         if (routeName.includes("users")) {
           activeClasses.users = "vsm--link_active";
+          activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.categories = "";
           activeClasses.questionnaires = "";
         } else if (routeName.includes("categories")) {
           activeClasses.categories = "vsm--link_active";
+          activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.users = "";
           activeClasses.questionnaires = "";
         } else if (routeName.includes("questionnaires")) {
           activeClasses.questionnaires = "vsm--link_active";
+          activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.categories = "";
           activeClasses.users = "";
         } else if (routeName.includes("questions")) {
           activeClasses.questions = "vsm--link_active";
+          activeClasses.answers = "";
+          activeClasses.questionnaires = "";
+          activeClasses.categories = "";
+          activeClasses.users = "";
+        } else if (routeName.includes("answers")) {
+          activeClasses.answers = "vsm--link_active";
+          activeClasses.questions = "";
           activeClasses.questionnaires = "";
           activeClasses.categories = "";
           activeClasses.users = "";

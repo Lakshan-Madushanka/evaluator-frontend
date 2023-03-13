@@ -37,6 +37,14 @@ const AdminQuestionsCreateView = () =>
 const AdminQuestionsEditView = () =>
   import("../views/admin/questions/EditView.vue");
 
+// Answers
+const AdminAnswersIndexView = () =>
+  import("../views/admin/answers/IndexView.vue");
+const AdminAnswersCreateView = () =>
+  import("../views/admin/answers/CreateView.vue");
+const AdminAnswersEditView = () =>
+  import("../views/admin/answers/EditView.vue");
+
 //Categories
 const AdminCategoriesIndexView = () =>
   import("../views/admin/categories/IndexView.vue");
@@ -148,6 +156,24 @@ const router = createRouter({
           component: AdminQuestionsEditView,
         },
 
+        //---------------------------------------------End Questions---------------------------------------------------------
+
+        //--------------------------------------Answers-----------------------------------------------------------------
+        {
+          path: "answers",
+          name: "admin.answers.index",
+          component: AdminAnswersIndexView,
+        },
+        {
+          path: "answers/create",
+          name: "admin.answers.create",
+          component: AdminAnswersCreateView,
+        },
+        {
+          path: "answers/:id/edit",
+          name: "admin.answers.edit",
+          component: AdminAnswersEditView,
+        },
         //---------------------------------------------End Questions---------------------------------------------------------
 
         //--------------------------------------------------------Categories---------------------------------------------
