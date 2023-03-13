@@ -650,7 +650,7 @@ export default {
         command: () => applyFilters(),
       },
       {
-        label: "New Questionnaire",
+        label: "New Question",
         icon: "pi pi-plus",
         command: () => router.push({ name: "admin.questions.create" }),
       },
