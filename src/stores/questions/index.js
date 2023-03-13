@@ -13,6 +13,7 @@ export const useQuestionsStore = defineStore("questions", () => {
   const errors = ref({});
   const questions = ref(null);
   const question = ref(null);
+  const images = ref([]);
 
   async function getOne(id, payload) {
     resetStatus(true, "", {});
@@ -34,9 +35,58 @@ export const useQuestionsStore = defineStore("questions", () => {
 
     try {
       const response = await questionsRequests.getAllRequest(payload);
+
       questions.value = response;
     } catch (data) {
       //
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function getImages(id) {
+    resetStatus(true, "", {});
+    images.value = [];
+
+    try {
+      const response = await questionsRequests.getImagesRequest(id);
+      question.value = response;
+
+      images.value = response.data;
+    } catch (data) {
+      //
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function chageOrderOfImages(payload) {
+    resetStatus(true, "changing", {});
+
+    try {
+      await questionsRequests.getChangeOrderOfImagesRequest(payload);
+
+      //const images =
+      status.value = "changed";
+    } catch (data) {
+      //
+      status.value = "";
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function removeImages(ids) {
+    resetStatus(true, "removing", {});
+
+    try {
+      await questionsRequests.getRemoveImagesRequest(ids);
+
+      //const images =
+      status.value = "removed";
+    } catch (data) {
+      //
+      status.value = "";
     } finally {
       loading.value = false;
     }
@@ -139,11 +189,15 @@ export const useQuestionsStore = defineStore("questions", () => {
     errors,
     questions,
     question,
+    images,
     getOne,
     getAll,
+    getImages,
+    chageOrderOfImages,
     createQuestion,
     editQuestion,
     deleteQuestion,
     bulkDeleteQuestions,
+    removeImages,
   };
 });

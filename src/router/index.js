@@ -36,6 +36,8 @@ const AdminQuestionsCreateView = () =>
   import("../views/admin/questions/CreateView.vue");
 const AdminQuestionsEditView = () =>
   import("../views/admin/questions/EditView.vue");
+const AdminQuestionsImagesManageView = () =>
+  import("../views/admin/questions/ManageImagesView.vue");
 
 //Categories
 const AdminCategoriesIndexView = () =>
@@ -142,6 +144,11 @@ const router = createRouter({
           path: "questions/:id/edit",
           name: "admin.questions.edit",
           component: AdminQuestionsEditView,
+        },
+        {
+          path: "questions/:id/images",
+          name: "admin.questions.images",
+          component: AdminQuestionsImagesManageView,
         },
         //---------------------------------------------End Questions---------------------------------------------------------
 

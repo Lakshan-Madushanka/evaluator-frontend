@@ -370,6 +370,19 @@
             <span class="p-buttonset">
               <PrimeButton
                 class="p-button-sm"
+                icon="pi pi-slack"
+                title="Manage Images"
+                @click="
+                  () =>
+                    router.push({
+                      name: 'admin.questions.images',
+                      params: { id: slotProps.data.id },
+                      query: { pretty_id: slotProps.data.attributes.pretty_id },
+                    })
+                "
+              />
+              <PrimeButton
+                class="p-button-sm"
                 icon="pi pi-file-edit"
                 title="Edit"
                 @click="
