@@ -2,18 +2,18 @@
   <ConfirmDialog />
   <div class="mb-4">
     <h1 class="text-2xl font-bold uppercase mb-2 text-center md:text-left">
-      Manage images of questions id
+      Manage images of {{ route.params.type }} id
       <span class="lowercase text-green-500">{{ route.query.pretty_id }}</span>
     </h1>
   </div>
   <div class="p-4 space-y-8 pb-4">
     <div class="bg-white shadow p-8">
       <p class="text-xl text-bold text-center mb-4">All uploaded images</p>
-      <Skeleton v-if="questionsStore.loading" class="mb-2 !h-72"></Skeleton>
+      <Skeleton v-if="imagesStore.loading" class="mb-2 !h-72"></Skeleton>
       <PrimeGalleria
-        v-if="!questionsStore.loading && questionsStore.images.length > 0"
+        v-if="!imagesStore.loading && imagesStore.images.length > 0"
         container-class="m-auto"
-        :value="questionsStore.images"
+        :value="imagesStore.images"
         :num-visible="5"
         container-style="max-width: 640px"
       >
@@ -29,7 +29,7 @@
         </template>
       </PrimeGalleria>
       <p
-        v-if="!questionsStore.loading && questionsStore.images.length === 0"
+        v-if="!imagesStore.loading && imagesStore.images.length === 0"
         class="text-center text-blue-600"
       >
         0 images has been uploaded
@@ -55,10 +55,10 @@
     </div>
     <div class="bg-white shadow p-8">
       <p class="text-xl font-bold mb-4">Change order</p>
-      <Skeleton v-if="questionsStore.loading" class="mb-2 !h-72"></Skeleton>
-      <div v-if="!questionsStore.loading && questionsStore.images.length > 0">
+      <Skeleton v-if="imagesStore.loading" class="mb-2 !h-72"></Skeleton>
+      <div v-if="!imagesStore.loading && imagesStore.images.length > 0">
         <OrderList
-          v-model="questionsStore.images"
+          v-model="imagesStore.images"
           v-model:selection="selectedImages"
           list-style="height:auto"
           data-key="id"
@@ -90,26 +90,24 @@
         <div class="mt-4 flex justify-center space-x-4">
           <PrimeButton
             :label="
-              questionsStore.status === 'changing'
+              imagesStore.status === 'changing'
                 ? 'Changing order'
                 : 'Change order'
             "
-            :loading="questionsStore.status === 'changing'"
+            :loading="imagesStore.status === 'changing'"
             @click="changeOrder"
           />
           <PrimeButton
             v-if="selectedImages.length > 0"
-            :label="
-              questionsStore.status === 'removing' ? 'Removing' : 'Remove'
-            "
+            :label="imagesStore.status === 'removing' ? 'Removing' : 'Remove'"
             class="p-button-danger"
-            :loading="questionsStore.status === 'removing'"
+            :loading="imagesStore.status === 'removing'"
             @click="removeAll"
           />
         </div>
       </div>
       <p
-        v-if="!questionsStore.loading && questionsStore.images.length === 0"
+        v-if="!imagesStore.loading && imagesStore.images.length === 0"
         class="text-center text-blue-600"
       >
         0 images has been uploaded
@@ -123,7 +121,7 @@ import { ref, onMounted, watch } from "vue";
 
 import { useRoute } from "vue-router";
 
-import { useQuestionsStore } from "@/stores/questions";
+import { useImagesStore } from "@/stores/images/manager";
 
 import ConfirmDialog from "primevue/confirmdialog";
 import PrimeGalleria from "primevue/galleria";
@@ -133,7 +131,7 @@ import FileUpload from "primevue/fileupload";
 import OrderList from "primevue/orderlist";
 import { useConfirm } from "primevue/useconfirm";
 
-import { get_route_to_upload_images as imageUploadRoute } from "@/api/routes/questions";
+import { get_route_to_upload_images as imageUploadRoute } from "@/api/routes/images/manager";
 
 import { getCookie } from "@/helpers";
 
@@ -153,26 +151,30 @@ export default {
 
     const confirm = useConfirm();
 
-    const questionsStore = useQuestionsStore();
+    const imagesStore = useImagesStore();
 
     const selectedImages = ref([]);
 
     onMounted(() => {
-      questionsStore.getImages(route.params.id);
+      getImages();
     });
 
     watch(
-      () => questionsStore.status,
+      () => imagesStore.status,
       (newStatus) => {
         if (newStatus === "removed") {
-          questionsStore.getImages(route.params.id);
+          getImages();
           selectedImages.value = [];
         }
       }
     );
 
+    function getImages() {
+      imagesStore.getImages(route.params.id, route.params.type);
+    }
+
     function getImageUploadRoute() {
-      return imageUploadRoute(route.params.id);
+      return imageUploadRoute(route.params.id, route.params.type);
     }
 
     function beforeSend(request) {
@@ -182,7 +184,7 @@ export default {
 
     function prepareDataToChangeOrder() {
       let order = {};
-      questionsStore.images.forEach((image, index) => {
+      imagesStore.images.forEach((image, index) => {
         order[image["id"]] = index + 1;
       });
 
@@ -199,13 +201,13 @@ export default {
     }
 
     function changeOrder() {
-      questionsStore.chageOrderOfImages({
+      imagesStore.chageOrderOfImages(route.params.type, {
         order: prepareDataToChangeOrder(),
       });
     }
 
     function onUploadCompleted() {
-      questionsStore.getImages(route.params.id);
+      getImages();
     }
 
     function removeAll() {
@@ -216,14 +218,16 @@ export default {
         acceptClass: "p-button-danger",
 
         accept: () => {
-          questionsStore.removeImages({ ids: getIdsToDelete() });
+          imagesStore.removeImages(route.params.type, {
+            ids: getIdsToDelete(),
+          });
         },
         reject: () => {},
       });
     }
 
     return {
-      questionsStore,
+      imagesStore,
       route,
       selectedImages,
       getImageUploadRoute,

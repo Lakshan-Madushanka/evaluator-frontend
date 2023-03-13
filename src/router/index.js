@@ -36,8 +36,6 @@ const AdminQuestionsCreateView = () =>
   import("../views/admin/questions/CreateView.vue");
 const AdminQuestionsEditView = () =>
   import("../views/admin/questions/EditView.vue");
-const AdminQuestionsImagesManageView = () =>
-  import("../views/admin/questions/ManageImagesView.vue");
 
 //Categories
 const AdminCategoriesIndexView = () =>
@@ -60,6 +58,10 @@ const AdminQuestionnairesQuestionsIndexView = () =>
   import("../views/admin/questionnaires/questions/IndexView.vue");
 
 // End Questionnaires
+
+// Image Manager =
+const AdminImageManager = () =>
+  import("../views/admin/images/ImageManager.vue");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -145,11 +147,7 @@ const router = createRouter({
           name: "admin.questions.edit",
           component: AdminQuestionsEditView,
         },
-        {
-          path: "questions/:id/images",
-          name: "admin.questions.images",
-          component: AdminQuestionsImagesManageView,
-        },
+
         //---------------------------------------------End Questions---------------------------------------------------------
 
         //--------------------------------------------------------Categories---------------------------------------------
@@ -193,6 +191,13 @@ const router = createRouter({
           component: AdminQuestionnairesQuestionsIndexView,
         },
         //--------------------------------------------------- End Questionnaire----------------------------------------------
+
+        // Image Manager
+        {
+          path: "images-manager/:type/:id",
+          name: "admin.images.manager",
+          component: AdminImageManager,
+        },
       ],
     },
 

@@ -170,15 +170,15 @@ function getItems() {
           to: { name: "admin.questions.edit" },
         },
       ];
-    case "admin.questions.images":
+    case "admin.images.manager":
       return [
         {
           label: "questions",
-          to: { name: "admin.questions.index" },
+          to: { name: `admin.${route.params.type}.index` },
         },
         {
           label: "images",
-          to: { name: "admin.questions.images", query: { ...route.query } },
+          to: { name: "admin.images.manager", query: { ...route.query } },
         },
       ];
     // End Questions

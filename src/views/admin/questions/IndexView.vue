@@ -375,8 +375,8 @@
                 @click="
                   () =>
                     router.push({
-                      name: 'admin.questions.images',
-                      params: { id: slotProps.data.id },
+                      name: 'admin.images.manager',
+                      params: { id: slotProps.data.id, type: 'questions' },
                       query: { pretty_id: slotProps.data.attributes.pretty_id },
                     })
                 "
