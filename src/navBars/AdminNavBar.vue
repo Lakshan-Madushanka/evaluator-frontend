@@ -170,6 +170,17 @@ function getItems() {
           to: { name: "admin.questions.edit" },
         },
       ];
+    case "admin.questions.images":
+      return [
+        {
+          label: "questions",
+          to: { name: "admin.questions.index" },
+        },
+        {
+          label: "images",
+          to: { name: "admin.questions.images", query: { ...route.query } },
+        },
+      ];
     // End Questions
     default:
       return null;
