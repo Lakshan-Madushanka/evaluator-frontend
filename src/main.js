@@ -21,9 +21,13 @@ import ToastService from "primevue/toastservice";
 import Tooltip from "primevue/tooltip";
 import ConfirmationService from "primevue/confirmationservice";
 
+// Custom directives
+import copyToClipboard from "./directives/copyToClipboard";
+
 const app = createApp(App);
 
 app.directive("tooltip", Tooltip);
+app.directive("copy-to-clipboard", copyToClipboard);
 
 app.use(createPinia());
 app.use(router);
