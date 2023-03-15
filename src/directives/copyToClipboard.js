@@ -10,7 +10,7 @@ function createElm(el, targetElmId) {
   icon.style.backgroundColor = "white";
   icon.style.border = "2px solid blue";
   icon.style.borderRadius = "100px";
-  icon.style.fontSize = "1.2rem";
+  icon.style.fontSize = "12px";
 
   container.style.position = "absolute";
   container.style.right = "-2.2rem";

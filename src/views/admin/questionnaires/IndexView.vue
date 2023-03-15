@@ -121,8 +121,17 @@
           <Column field="no" header="No">
             <template #body="slotProps"> {{ slotProps.index + 1 }}</template>
           </Column>
+
           <Column field="id" header="Id" :hidden="!columnVisibility.id">
-            <template #body="slotProps"> {{ slotProps.data.id }}</template>
+            <template #body="slotProps">
+              <div
+                :id="slotProps.data.attributes.pretty_id"
+                v-copy-to-clipboard="slotProps.data.attributes.pretty_id"
+                class="mr-6"
+              >
+                {{ slotProps.data.id }}
+              </div>
+            </template>
           </Column>
 
           <!-- Category -->

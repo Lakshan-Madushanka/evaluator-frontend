@@ -140,8 +140,16 @@
           :show-filter-menu="false"
         >
           <template #body="slotProps">
-            {{ slotProps.data.attributes.pretty_id }}</template
-          >
+            <div class="relative">
+              <div :id="slotProps.data.attributes.pretty_id" class="mr-6">
+                {{ slotProps.data.attributes.pretty_id }}
+              </div>
+              <div
+                v-copy-to-clipboard="slotProps.data.attributes.pretty_id"
+                class="absolute bottom-[20px] right-[74px]"
+              />
+            </div>
+          </template>
           <template #filter>
             <span class="p-input-icon-right !w-32">
               <i class="pi pi-search" />

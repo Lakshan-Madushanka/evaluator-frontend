@@ -135,8 +135,14 @@
         <!-- id -->
         <Column field="id" header="Id" :hidden="!columnVisibility.id">
           <template #body="slotProps">
-            {{ slotProps.data.attributes.pretty_id }}</template
-          >
+            <div
+              :id="slotProps.data.attributes.pretty_id"
+              v-copy-to-clipboard="slotProps.data.attributes.pretty_id"
+              class="mr-6"
+            >
+              {{ slotProps.data.attributes.pretty_id }}
+            </div>
+          </template>
         </Column>
 
         <!-- Category -->
