@@ -1,4 +1,5 @@
 import * as answersRoutes from "@/api/routes/answers";
+import { sanitizeParam } from "@/api/helpers.";
 
 import { buildQueryString } from "@/api/queryStringBuilder";
 import http from "@/http";
@@ -14,6 +15,16 @@ export async function getOneRequest(id, payload) {
   let query = buildQueryString(payload);
 
   const response = await http.get(answersRoutes.get_one_route(id) + query);
+
+  return response;
+}
+
+export async function getRequestToCheckAnswerExists(id) {
+  id = sanitizeParam(id);
+
+  const response = await http.get(
+    answersRoutes.get_route_to_check_answer_exists(id)
+  );
 
   return response;
 }

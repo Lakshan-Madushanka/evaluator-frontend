@@ -170,6 +170,22 @@ function getItems() {
           to: { name: "admin.questions.edit" },
         },
       ];
+    // Answers
+    case "admin.questions.answers.index":
+      return [
+        {
+          label: "questions",
+          to: { name: "admin.questions.index" },
+        },
+        {
+          label: "answers",
+          to: {
+            name: "admin.questions.answers.index",
+            query: { ...route.query },
+          },
+        },
+      ];
+    // End of Answers
     // End Questions
 
     // Answers

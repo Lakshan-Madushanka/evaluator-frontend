@@ -38,6 +38,12 @@ const AdminQuestionsEditView = () =>
   import("../views/admin/questions/EditView.vue");
 
 // Answers
+const AdminQuestionsAnswersIndexView = () =>
+  import("../views/admin/questions/answers/IndexView.vue");
+// And Answers
+// End Questions
+
+// Answers
 const AdminAnswersIndexView = () =>
   import("../views/admin/answers/IndexView.vue");
 const AdminAnswersCreateView = () =>
@@ -64,7 +70,6 @@ const AdminEditQuestionnaireView = () =>
 // Questions
 const AdminQuestionnairesQuestionsIndexView = () =>
   import("../views/admin/questionnaires/questions/IndexView.vue");
-
 // End Questionnaires
 
 // Image Manager =
@@ -156,6 +161,12 @@ const router = createRouter({
           component: AdminQuestionsEditView,
         },
 
+        // Answers
+        {
+          path: "questions/:id/answers",
+          name: "admin.questions.answers.index",
+          component: AdminQuestionsAnswersIndexView,
+        },
         //---------------------------------------------End Questions---------------------------------------------------------
 
         //--------------------------------------Answers-----------------------------------------------------------------

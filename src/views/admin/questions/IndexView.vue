@@ -389,6 +389,22 @@
               />
               <PrimeButton
                 class="p-button-sm"
+                icon="pi pi-language"
+                title="Manage Answers"
+                @click="
+                  () =>
+                    router.push({
+                      name: 'admin.questions.answers.index',
+                      params: { id: slotProps.data.id },
+                      query: {
+                        pretty_id: slotProps.data.attributes.pretty_id,
+                        total_answers: slotProps.data.attributes.no_of_answers,
+                      },
+                    })
+                "
+              />
+              <PrimeButton
+                class="p-button-sm"
                 icon="pi pi-file-edit"
                 title="Edit"
                 @click="
