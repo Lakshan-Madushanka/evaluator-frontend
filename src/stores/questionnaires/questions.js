@@ -3,7 +3,7 @@ import * as questionnaireRequests from "@/api/requests/questionnaires/questions"
 import { defineStore } from "pinia";
 import { useAppStore } from "../app";
 
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 
 export const useQuestionnairesQuestionsStore = defineStore(
   "questionnairesQuestions",
@@ -15,13 +15,15 @@ export const useQuestionnairesQuestionsStore = defineStore(
     const errors = ref({});
     const questions = ref(null);
     const question = ref(null);
+    const meta = reactive({ included: null });
 
-    async function getAll(id) {
+    async function getAll(id, query) {
       resetStatus(true, "", {});
 
       try {
-        const results = await questionnaireRequests.getAllRequest(id);
+        const results = await questionnaireRequests.getAllRequest(id, query);
         questions.value = results.data;
+        meta.included = results.included;
       } catch (data) {
         //
       } finally {
@@ -65,7 +67,7 @@ export const useQuestionnairesQuestionsStore = defineStore(
 
         appStore.setToast(
           "success",
-          "Questions of questiionnaire " +
+          "Questions of questionnaire " +
             questionnaireId +
             " synced successfully"
         );
@@ -94,6 +96,7 @@ export const useQuestionnairesQuestionsStore = defineStore(
       errors,
       questions,
       question,
+      meta,
       getAll,
       checkQuestionEligibility,
       syncQuestions,

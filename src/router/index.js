@@ -70,6 +70,10 @@ const AdminEditQuestionnaireView = () =>
 // Questions
 const AdminQuestionnairesQuestionsIndexView = () =>
   import("../views/admin/questionnaires/questions/IndexView.vue");
+const AdminQuestionnairesQuestionsShowView = () =>
+  import("../views/admin/questionnaires/questions/ShowView.vue");
+const AdminQuestionnairesQuestionsPrintView = () =>
+  import("../views/admin/questionnaires/questions/PrintView.vue");
 // End Questionnaires
 
 // Image Manager =
@@ -109,6 +113,17 @@ const router = createRouter({
     },
 
     // Admin routes
+    {
+      path: "/admin",
+      beforeEnter: guards.auth,
+      children: [
+        {
+          path: "questionnaires/:id/questions/print",
+          name: "admin.questionnaires.questions.print",
+          component: AdminQuestionnairesQuestionsPrintView,
+        },
+      ],
+    },
     {
       path: "/admin",
       name: "admin",
@@ -226,6 +241,11 @@ const router = createRouter({
           path: "questionnaires/:id/questions",
           name: "admin.questionnaires.questions.index",
           component: AdminQuestionnairesQuestionsIndexView,
+        },
+        {
+          path: "questionnaires/:id/questions/show",
+          name: "admin.questionnaires.questions.show",
+          component: AdminQuestionnairesQuestionsShowView,
         },
         //--------------------------------------------------- End Questionnaire----------------------------------------------
 

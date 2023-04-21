@@ -138,6 +138,20 @@ function getItems() {
           },
         },
       ];
+    case "admin.questionnaires.questions.show":
+      return [
+        {
+          label: "questionnaires",
+          to: { name: "admin.questionnaires.index" },
+        },
+        {
+          label: "questions",
+          to: {
+            name: "admin.questionnaires.questions.show",
+            query: { ...route.query },
+          },
+        },
+      ];
     // End Questionnaires
 
     // Questions

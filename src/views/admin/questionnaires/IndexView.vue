@@ -445,6 +445,12 @@
               <span class="p-buttonset">
                 <PrimeButton
                   class="p-button-sm"
+                  icon="pi pi-eye"
+                  title="View questionnaire"
+                  @click="showQuestionnaire(slotProps.data.id)"
+                />
+                <PrimeButton
+                  class="p-button-sm"
                   icon="pi pi-question"
                   title="Manage questions"
                   @click="
@@ -895,6 +901,13 @@ export default {
         reject: () => {},
       });
     }
+    function showQuestionnaire(id) {
+      const routeData = router.resolve({
+        name: "admin.questionnaires.questions.show",
+        params: { id },
+      });
+      window.open(routeData.href, "_blank");
+    }
 
     return {
       questionnairesStore,
@@ -930,6 +943,7 @@ export default {
       toggleActionsMenu,
       onPage,
       findRelations,
+      showQuestionnaire,
     };
   },
 };

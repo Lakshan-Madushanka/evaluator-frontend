@@ -1,9 +1,10 @@
 import * as questionsRoutes from "@/api/routes/questionnaires/questions";
-
 import http from "@/http";
+import { buildQueryString } from "@/api/queryStringBuilder";
 
-export async function getAllRequest(id) {
-  const response = await http.get(questionsRoutes.get_all_route(id));
+export async function getAllRequest(id, query) {
+  query = buildQueryString(query);
+  const response = await http.get(questionsRoutes.get_all_route(id) + query);
 
   return response;
 }
