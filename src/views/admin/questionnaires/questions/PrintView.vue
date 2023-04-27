@@ -140,26 +140,18 @@ import { useRoute } from "vue-router";
 import { useQuestionnairesQuestionsStore } from "@/stores/questionnaires/questions";
 import { useQuestionnairesStore } from "@/stores/questionnaires";
 
-import Badge from "primevue/badge";
-import Card from "primevue/card";
 import Checkbox from "primevue/checkbox";
-import Paginator from "primevue/paginator";
 import PrimeImage from "primevue/image";
 import RadioButton from "primevue/radiobutton";
-import ScrollTop from "primevue/scrolltop";
 import Skeleton from "primevue/skeleton";
 
 import { findRelations, formatMinutes } from "@/helpers";
 
 export default {
   components: {
-    Badge,
-    Card,
     Checkbox,
-    Paginator,
     PrimeImage,
     RadioButton,
-    ScrollTop,
     Skeleton,
   },
   setup() {
