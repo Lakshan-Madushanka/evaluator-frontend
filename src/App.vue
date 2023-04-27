@@ -12,7 +12,6 @@
 
 <script>
 import { watch } from "vue";
-import { useAuthStore } from "./stores/auth";
 import { useAppStore } from "./stores/app";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
@@ -22,7 +21,6 @@ export default {
   components: { AppInitializingComponent, Toast },
   setup() {
     const appStore = useAppStore();
-    const authStore = useAuthStore();
 
     const toast = useToast();
 
@@ -35,18 +33,7 @@ export default {
       });
     });
 
-    function test() {
-      authStore.loadAuthUser();
-
-      toast.add({
-        severity: "error",
-        summary: "Info Message",
-        detail: "Message Content",
-        life: 3000,
-      });
-    }
-
-    return { appStore, test };
+    return { appStore };
   },
 };
 </script>
