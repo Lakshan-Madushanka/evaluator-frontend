@@ -2,10 +2,10 @@ import * as guards from "./guards";
 
 import { createRouter, createWebHistory } from "vue-router";
 
-import HomeView from "../views/HomeView.vue";
 import NProgress from "nprogress";
 import { useAppStore } from "@/stores/app";
 
+const HomeView = () => import("../views/HomeView.vue");
 const AboutView = () => import("../views/AboutView.vue");
 const MainErrorView = () => import("../views/errors/MainErrorView.vue");
 const LoginView = () => import("../views/LoginView.vue");
@@ -80,6 +80,22 @@ const AdminQuestionnairesQuestionsPrintView = () =>
 const AdminImageManager = () =>
   import("../views/admin/images/ImageManager.vue");
 
+/**
+ * End of Admin routes
+ */
+
+/**
+ * Candidates
+ */
+const InstructionsView = () =>
+  import("../views/candidates/questionnaires/InstructionView.vue");
+const QuestionsShowView = () =>
+  import("../views/candidates/questionnaires/ShowView.vue");
+
+/**
+ * End of Candidates
+ */
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -111,8 +127,33 @@ const router = createRouter({
         },
       ],
     },
+    /**
+     * Candidate Routes
+     */
+    {
+      path: "/candidate",
+      beforeEnter: guards.candidate,
+      children: [
+        {
+          path: "questionnaires/instructions",
+          name: "candidate.questionnaires.instructions",
+          component: InstructionsView,
+        },
+        {
+          path: "questionnaires/questions/show",
+          name: "candidate.questionnaires.questions.show",
+          component: QuestionsShowView,
+        },
+      ],
+    },
 
-    // Admin routes
+    /**
+     * End of Candidate routes
+     */
+
+    /**
+     * Admin routes
+     */
     {
       path: "/admin",
       beforeEnter: guards.auth,
@@ -256,6 +297,10 @@ const router = createRouter({
           component: AdminImageManager,
         },
       ],
+
+      /**
+       * End of Admin routes
+       */
     },
 
     {
