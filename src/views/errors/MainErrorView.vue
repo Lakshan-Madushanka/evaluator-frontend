@@ -168,6 +168,6 @@ const router = useRouter();
 const query = route.query;
 
 function getRemainingTime() {
-  return moment.unix(query.retryAfter).format("YYYY-MM-DD HH:mm:ss	");
+  return moment.unix(query.retryAfter).format("YYYY-MM-DD HH:mm:ss");
 }
 </script>
