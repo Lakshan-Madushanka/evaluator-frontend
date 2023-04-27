@@ -37,7 +37,7 @@ export const useAuthStore = defineStore("auth", () => {
       }
     } catch (data) {
       appStore.setToast("error", data.message);
-      errors.value = data.errors;
+      errors.value = data.errors ? data.errors : {};
     } finally {
       loading.value = false;
     }
