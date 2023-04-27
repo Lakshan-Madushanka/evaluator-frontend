@@ -52,12 +52,16 @@
         </div>
         <div class="mt-8 xl:sticky top-[19rem]">
           <div class="flex justify-between items-center space-x-4 mb-2">
-            <p>Show Answers</p>
-            <Checkbox v-model="showAnswers" binary />
+            <label for="showAnswersCheckbox">Show Answers</label>
+            <Checkbox
+              v-model="showAnswers"
+              input-id="showAnswersCheckbox"
+              binary
+            />
           </div>
           <div class="flex justify-between items-center space-x-4">
-            <p>Show Marks</p>
-            <Checkbox v-model="showMarks" binary />
+            <label for="showMarksCheckbox">Show Marks</label>
+            <Checkbox v-model="showMarks" input-id="showMarksCheckbox" binary />
           </div>
         </div>
       </div>
@@ -324,20 +328,14 @@ export default {
       onPageChange({ page: page - 1, rows: paginator.perPage });
     }
 
-    function showPrintQuestionnaireView(id) {
-      const routeData = router.resolve({
-        name: "admin.questionnaires.questions.show",
-        params: { id },
-      });
-      window.open(routeData.href, "_blank");
-    }
-
     function showPrintView() {
-      router.push({
+      const routeData = router.resolve({
         name: "admin.questionnaires.questions.print",
         params: { id: route.params.id },
         query: { showMarks: showMarks.value, showAnswers: showAnswers.value },
       });
+
+      window.open(routeData.href, "_blank");
     }
 
     function test() {}
@@ -362,7 +360,6 @@ export default {
       showPrintView,
       paginator,
       formatMinutes,
-      showPrintQuestionnaireView,
       test,
     };
   },
