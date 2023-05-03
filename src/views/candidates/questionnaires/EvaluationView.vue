@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ props }}
     <PrimeDialog
       v-model:visible="showEvaluation"
       modal
