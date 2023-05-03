@@ -60,7 +60,7 @@ export default {
 
     const candidatesQuestionnairesStore = useCandidatesQuestionnairesStore();
 
-    const secretCode = ref("5be47400-7109-46f5-94bd-4a9e3055ceec");
+    const secretCode = ref("");
     const searchButtonClicked = ref(false);
 
     watch(
