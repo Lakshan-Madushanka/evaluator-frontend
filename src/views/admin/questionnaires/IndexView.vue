@@ -49,7 +49,7 @@
                         <span
                           class="hover:text-blue-800"
                           @click="displayAllColumns"
-                          >Dsplay All</span
+                          >Display All</span
                         >
                         <span
                           class="hover:text-blue-800"
