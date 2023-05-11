@@ -14,11 +14,29 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+
 export default {
+  props: {
+    dir: {
+      type: String,
+      required: false,
+      default: "",
+    },
+  },
   emits: ["directionChange"],
   setup(props, { emit }) {
     const direction = ref(null);
+
+    watch(
+      () => props.dir,
+      function (dir) {
+        if (dir === "") {
+          dir = null;
+        }
+        direction.value = dir;
+      }
+    );
 
     function onDirectionChange() {
       const dir = direction.value;
