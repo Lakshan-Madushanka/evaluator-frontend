@@ -118,6 +118,13 @@ export default {
         icon: "pi pi-fw pi-language",
         exact: true,
       },
+      {
+        href: { name: "admin.evaluations.index" },
+        title: "Evaluations",
+        class: activeClassesRef.evaluations,
+        icon: "pi pi-fw pi-map",
+        exact: true,
+      },
     ]);
 
     watch(
@@ -131,26 +138,38 @@ export default {
           activeClasses.questions = "";
           activeClasses.categories = "";
           activeClasses.questionnaires = "";
+          activeClasses.evaluations = "";
         } else if (routeName.includes("categories")) {
           activeClasses.categories = "vsm--link_active";
           activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.users = "";
           activeClasses.questionnaires = "";
+          activeClasses.evaluations = "";
         } else if (routeName.includes("questionnaires")) {
           activeClasses.questionnaires = "vsm--link_active";
           activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.categories = "";
           activeClasses.users = "";
+          activeClasses.evaluations = "";
         } else if (routeName.includes("questions")) {
           activeClasses.questions = "vsm--link_active";
           activeClasses.answers = "";
           activeClasses.questionnaires = "";
           activeClasses.categories = "";
           activeClasses.users = "";
+          activeClasses.evaluations = "";
         } else if (routeName.includes("answers")) {
           activeClasses.answers = "vsm--link_active";
+          activeClasses.questions = "";
+          activeClasses.questionnaires = "";
+          activeClasses.categories = "";
+          activeClasses.users = "";
+          activeClasses.evaluations = "";
+        } else if (routeName.includes("evaluations")) {
+          activeClasses.evaluations = "vsm--link_active";
+          activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.questionnaires = "";
           activeClasses.categories = "";

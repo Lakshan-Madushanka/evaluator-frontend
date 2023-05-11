@@ -76,6 +76,11 @@ const AdminQuestionnairesQuestionsPrintView = () =>
   import("../views/admin/questionnaires/questions/PrintView.vue");
 // End Questionnaires
 
+// Evaluations
+const AdminEvaluationIndexView = () =>
+  import("../views/admin/evaluations/IndexView.vue");
+// End of Evaluations
+
 // Image Manager =
 const AdminImageManager = () =>
   import("../views/admin/images/ImageManager.vue");
@@ -290,12 +295,21 @@ const router = createRouter({
         },
         //--------------------------------------------------- End Questionnaire----------------------------------------------
 
+        //-------------------------------------------------------Evaluations--------------------------------------------
+        {
+          path: "evaluations",
+          name: "admin.evaluations.index",
+          component: AdminEvaluationIndexView,
+        },
+        //--------------------------------------------------- End Evaluations----------------------------------------------
+
         // Image Manager
         {
           path: "images-manager/:type/:id",
           name: "admin.images.manager",
           component: AdminImageManager,
         },
+        // End of Image Manager
       ],
 
       /**
