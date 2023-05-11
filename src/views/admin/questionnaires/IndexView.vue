@@ -125,8 +125,8 @@
           <Column field="id" header="Id" :hidden="!columnVisibility.id">
             <template #body="slotProps">
               <div
-                :id="slotProps.data.attributes.pretty_id"
-                v-copy-to-clipboard="slotProps.data.attributes.pretty_id"
+                :id="slotProps.data.id"
+                v-copy-to-clipboard="slotProps.data.id"
                 class="mr-6"
               >
                 {{ slotProps.data.id }}
