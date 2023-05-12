@@ -354,7 +354,7 @@
         >
           <template #header>
             <div class="flex justify-between items-center w-full">
-              <p class="mr-4">Total points allocated</p>
+              <p class="mr-4">Created at</p>
               <SortComponent
                 :dir="query.sort.created_at"
                 @direction-change="query.sort.created_at = $event"
@@ -363,7 +363,11 @@
           </template>
 
           <template #body="slotProps">
-            {{ slotProps.data.attributes.created_at }}
+            {{
+              moment(slotProps.data.attributes.created_at).format(
+                "ddd, MMM D, yyyy, h:mm a"
+              )
+            }}
           </template>
         </Column>
 
@@ -414,6 +418,8 @@ import MenuComponent from "primevue/menu";
 import PrimeButton from "primevue/button";
 import Slider from "primevue/slider";
 import Tag from "primevue/tag";
+
+import moment from "moment/moment";
 
 import { lowercaseFirstLetter, snake } from "@/helpers";
 
@@ -583,7 +589,7 @@ export default {
 
     watch(
       [() => query.sort, () => query.pagination],
-      ([newSort, newPagination]) => {
+      () => {
         if (resetting.value === true) {
           return;
         }
@@ -594,15 +600,6 @@ export default {
       },
       { deep: true }
     );
-
-    /*  watch(
-      () => query.pagination,
-      (newPagination) => {
-        evaluationsStore.getAll({
-          query: { pagination: newPagination },
-        });
-      }
-    ); */
 
     function loadData() {
       evaluationsStore.getAll({ query: { pagination: initialPagination } });
@@ -700,6 +697,7 @@ export default {
       validateSearchData,
       snake,
       lowercaseFirstLetter,
+      moment,
     };
   },
 };

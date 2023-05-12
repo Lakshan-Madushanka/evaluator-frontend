@@ -234,6 +234,16 @@ function getItems() {
       ];
     // End Answers
 
+    // Evaluations
+    case "admin.evaluations.index":
+      return [
+        {
+          label: "evaluations",
+          to: { name: "admin.evaluations.index" },
+        },
+      ];
+    // End of Evaluations
+
     // Image Manager
     case "admin.images.manager":
       return [
