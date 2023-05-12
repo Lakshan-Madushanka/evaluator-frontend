@@ -5,7 +5,7 @@
 
   <template v-else>
     <!-- Header -->
-    <header class="bg-gray-400 mt-[-1rem] p-4 mb-2 text-white" @click="test">
+    <header class="bg-gray-400 mt-[-1rem] p-4 mb-2 text-white">
       <div
         class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between"
       >
@@ -338,8 +338,6 @@ export default {
       window.open(routeData.href, "_blank");
     }
 
-    function test() {}
-
     return {
       route,
       router,
@@ -360,7 +358,6 @@ export default {
       showPrintView,
       paginator,
       formatMinutes,
-      test,
     };
   },
 };
