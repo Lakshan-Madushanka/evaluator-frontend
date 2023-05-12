@@ -7,3 +7,9 @@ export async function getQuestionnairesDataRequest() {
 
   return response;
 }
+
+export async function getMainDashboardData() {
+  const response = await http.get(dashboardRoutes.main_data_route);
+
+  return response;
+}
