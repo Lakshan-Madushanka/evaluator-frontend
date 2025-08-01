@@ -3,6 +3,7 @@ import moment from "moment/moment";
 import router from "./router/index";
 import { useAppStore } from "./stores/app";
 import { useAuthStore } from "./stores/auth";
+
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
