@@ -9,3 +9,9 @@ export async function getAllRequest(payload) {
 
   return response;
 }
+
+export async function getOneRequest(id) {
+  const response = await http.get(evaluationRoutes.get_one_route(id));
+
+  return response;
+}

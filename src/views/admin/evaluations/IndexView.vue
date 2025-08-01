@@ -371,6 +371,29 @@
           </template>
         </Column>
 
+        <!-- Actions -->
+        <Column
+          field="Actions"
+          header="Actions"
+          :hidden="!columnVisibility.actions"
+        >
+          <template #body="slotProps">
+            <span class="p-buttonset">
+              <PrimeButton
+                class="p-button-sm"
+                icon="pi pi-eye"
+                title="Show evaluation"
+                @click="
+                  showEvaluation(
+                    slotProps.data.id,
+                    slotProps.data.attributes.questionnaire_id
+                  )
+                "
+              />
+            </span>
+          </template>
+        </Column>
+
         <template #footer>
           <Paginator
             v-if="evaluationsStore.evaluations && showPaginator"
@@ -403,6 +426,8 @@
 
 <script>
 import { ref, reactive, onMounted, watch } from "vue";
+
+import { useRouter } from "vue-router";
 
 import { useEvaluationsStore } from "@/stores/evaluations";
 
@@ -438,6 +463,8 @@ export default {
     Tag,
   },
   setup() {
+    const router = useRouter();
+
     const evaluationsStore = useEvaluationsStore();
 
     const resetting = ref(false);
@@ -474,6 +501,7 @@ export default {
       total_points_allocated: true,
       no_of_answered_questions: true,
       created_at: true,
+      actions: true,
     });
     const columns = ref([
       {
@@ -550,6 +578,12 @@ export default {
         label: "Created at",
         command: () => {
           columnVisibility.created_at = !columnVisibility.created_at;
+        },
+      },
+      {
+        label: "Actions",
+        command: () => {
+          columnVisibility.actions = !columnVisibility.actions;
         },
       },
     ]);
@@ -674,6 +708,14 @@ export default {
       return true;
     }
 
+    function showEvaluation(evaluationId, questionnaireId) {
+      const routeData = router.resolve({
+        name: "admin.evaluations.show",
+        params: { evaluationId, questionnaireId },
+      });
+      window.open(routeData.href, "_blank");
+    }
+
     return {
       showSearchDialog,
       searchData,
@@ -698,6 +740,7 @@ export default {
       snake,
       lowercaseFirstLetter,
       moment,
+      showEvaluation,
     };
   },
 };

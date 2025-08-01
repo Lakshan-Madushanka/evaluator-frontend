@@ -9,6 +9,24 @@ export const useEvaluationsStore = defineStore("evaluations", () => {
   const status = ref("");
   const errors = ref({});
   const evaluations = ref(null);
+  const evaluation = ref();
+
+  async function getOne(id) {
+    resetStatus(true, "");
+    errors.value = {};
+
+    try {
+      const response = await evaluationRequests.getOneRequest(id);
+
+      evaluation.value = response.data.attributes;
+
+      console.log("data", response);
+    } catch (data) {
+      //
+    } finally {
+      loading.value = false;
+    }
+  }
 
   async function getAll(payload) {
     resetStatus(true, "");
@@ -34,6 +52,8 @@ export const useEvaluationsStore = defineStore("evaluations", () => {
     status,
     errors,
     evaluations,
+    evaluation,
     getAll,
+    getOne,
   };
 });
