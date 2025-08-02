@@ -12,13 +12,21 @@
           <table class="table-auto border">
             <tbody class>
               <tr class="border">
+                <td class="border border-black px-4 py-2">Allocated time</td>
+                <td class="border border-black px-4 py-2">
+                  {{ formattedAllocatedTime }}
+                </td>
+              </tr>
+              <tr class="border">
                 <td class="border border-black px-4 py-2">Max time</td>
                 <td class="border border-black px-4 py-2">
                   {{
-                    candidatesQuestionnairesStore.questionnaireInfo
-                      .allocated_time + 5
+                    moment(
+                      candidatesQuestionnairesStore.questionnaireInfo.expires_at
+                    )
+                      .local()
+                      .format("YYYY-MM-DD HH:mm:ss")
                   }}
-                  Minutes
                 </td>
               </tr>
               <tr class="border">
@@ -98,20 +106,42 @@
 
 <script>
 import { useRouter } from "vue-router";
-
 import { useCandidatesQuestionnairesStore } from "@/stores/candidates/questionnaires";
-
 import PrimeButton from "primevue/button";
 import Card from "primevue/card";
+import moment from "moment";
 
 export default {
   components: { Card, PrimeButton },
   setup() {
     const router = useRouter();
-
     const candidatesQuestionnairesStore = useCandidatesQuestionnairesStore();
 
-    return { router, candidatesQuestionnairesStore };
+    const allocatedTime = moment.duration(
+      candidatesQuestionnairesStore.questionnaireInfo.allocated_time,
+      "minutes"
+    );
+
+    let formattedAllocatedTime = "";
+
+    if (allocatedTime.hours() && allocatedTime.minutes()) {
+      formattedAllocatedTime = `${allocatedTime.hours()}(hours) : ${allocatedTime.minutes()}(minutes)`;
+    }
+
+    if (!allocatedTime.hours() && allocatedTime.minutes()) {
+      formattedAllocatedTime = `${allocatedTime.minutes()}(minutes)`;
+    }
+
+    if (allocatedTime.hours() && !allocatedTime.minutes()) {
+      formattedAllocatedTime = `${allocatedTime.hours()}(hours)`;
+    }
+
+    return {
+      router,
+      candidatesQuestionnairesStore,
+      moment,
+      formattedAllocatedTime,
+    };
   },
 };
 </script>
