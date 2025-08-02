@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function uppercaseFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -62,4 +64,37 @@ export function formatMinutes(minutes) {
   }
 
   return hours + " : " + mins + " : " + secs;
+}
+
+export function formatDuration(seconds, format) {
+  const allocatedTime = moment.duration(seconds, format);
+
+  let formattedTime = "";
+
+  if (allocatedTime.hours() && allocatedTime.minutes()) {
+    formattedTime = `${allocatedTime.hours()}(hours) : ${allocatedTime.minutes()}(minutes)`;
+  }
+
+  if (allocatedTime.hours() && allocatedTime.minutes()) {
+    formattedTime = `${allocatedTime.hours()}(hours) : ${allocatedTime.minutes()}(minutes)`;
+  }
+
+  if (!allocatedTime.hours() && allocatedTime.minutes()) {
+    formattedTime = `${allocatedTime.minutes()}(minutes)`;
+  }
+
+  if (allocatedTime.hours() && !allocatedTime.minutes()) {
+    formattedTime = `${allocatedTime.hours()}(hours)`;
+  }
+
+  return formattedTime;
+}
+
+export function arraysHaveSameValues(a, b) {
+  if (a.length !== b.length) return false;
+
+  const sortedA = [...a].sort();
+  const sortedB = [...b].sort();
+
+  return sortedA.every((val, i) => val === sortedB[i]);
 }

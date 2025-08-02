@@ -9,7 +9,7 @@
 
   <template v-else>
     <!-- Header -->
-    <header class="bg-gray-400 mt-[-1rem] p-4 mb-2 text-white" @click="test">
+    <header class="bg-gray-400 mt-[-1rem] p-4 mb-2 text-white">
       <div
         class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between"
       >
@@ -50,8 +50,8 @@
             :href="`#${question.id}_card`"
             class="shadow-md mr-1 mb-1 p-1 hover:cursor-pointer hover:bg-gray-200 border border-solid border-1 border-gray-300"
             :class="{
-              'bg-green-200':
-                evaluationsStore.evaluation.answers[question.id].length > 0,
+              'bg-green-200': userHasCorrectAnswer(question),
+              'bg-red-200': !userHasCorrectAnswer(question),
             }"
             @click="navigate(index + 1)"
           >
@@ -76,6 +76,12 @@
                   <div class="flex w-[90%]">
                     <p class="mr-2">{{ getQuestionNo(questionIndex) }}).</p>
                     <p v-html="question.attributes.content"></p>
+                    <span v-if="userHasCorrectAnswer(question)"
+                      >&nbsp; <i class="pi pi-check-circle text-green-500"></i
+                    ></span>
+                    <span v-else
+                      >&nbsp; <i class="pi pi-times-circle text-green-500"></i
+                    ></span>
                   </div>
                   <p v-if="showMarks">
                     <span class="hidden lg:inline">marks</span> ({{
@@ -111,7 +117,9 @@
                   >
                     <p class="mr-4">{{ answerIndex + 1 }}</p>
                     <RadioButton
-                      v-model="evaluationsStore.evaluation.answers[question.id]"
+                      v-model="
+                        evaluationsStore.evaluation.answers[question.id][0]
+                      "
                       :input-id="answer.id"
                       :name="answer.id"
                       :value="answer.id"
@@ -125,7 +133,7 @@
 
                     <i
                       v-if="answer.id === correctAnswers[question.id]"
-                      class="ml-4 text-green-500 pi pi-check !text-2xl"
+                      class="ml-4 text-green-500 pi pi-check"
                     ></i>
                   </div>
 
@@ -146,7 +154,7 @@
 
                     <i
                       v-if="correctAnswers[question.id].includes(answer.id)"
-                      class="ml-4 text-green-500 pi pi-check !text-2xl"
+                      class="ml-4 text-green-500 pi pi-check"
                     ></i>
                   </div>
 
@@ -202,7 +210,7 @@ import ScrollTop from "primevue/scrolltop";
 
 import QuestionnaireSkeleton from "@/components/skeletons/QuestionnaireSkeleton.vue";
 
-import { findRelations, formatMinutes } from "@/helpers";
+import { findRelations, formatMinutes, arraysHaveSameValues } from "@/helpers";
 
 export default {
   components: {
@@ -333,7 +341,19 @@ export default {
       window.open(routeData.href, "_blank"); */
     }
 
-    function test() {}
+    function userHasCorrectAnswer(question) {
+      if (question["attributes"]["answers_type_single"]) {
+        return (
+          evaluationsStore.evaluation.answers[question.id][0] ===
+          correctAnswers.value[question.id]
+        );
+      }
+
+      return arraysHaveSameValues(
+        correctAnswers.value[question.id],
+        evaluationsStore.evaluation.answers[question.id]
+      );
+    }
 
     return {
       route,
@@ -354,6 +374,8 @@ export default {
       showPrintView,
       paginator,
       formatMinutes,
+      arraysHaveSameValues,
+      userHasCorrectAnswer,
       test,
     };
   },

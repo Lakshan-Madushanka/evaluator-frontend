@@ -276,7 +276,9 @@
           </template>
 
           <template #body="slotProps">
-            {{ slotProps.data.attributes.time_taken }}
+            {{
+              formatDuration(slotProps.data.attributes.time_taken, "seconds")
+            }}
           </template>
         </Column>
 
@@ -298,7 +300,7 @@
           </template>
 
           <template #body="slotProps">
-            {{ slotProps.data.attributes.time_taken }}
+            {{ slotProps.data.attributes.no_of_correct_answers }}
           </template>
         </Column>
 
@@ -320,7 +322,7 @@
           </template>
 
           <template #body="slotProps">
-            {{ slotProps.data.attributes.time_taken }}
+            {{ slotProps.data.attributes.total_points_earned }}
           </template>
         </Column>
 
@@ -446,7 +448,7 @@ import Tag from "primevue/tag";
 
 import moment from "moment/moment";
 
-import { lowercaseFirstLetter, snake } from "@/helpers";
+import { lowercaseFirstLetter, snake, formatDuration } from "@/helpers";
 
 export default {
   components: {
@@ -741,6 +743,7 @@ export default {
       lowercaseFirstLetter,
       moment,
       showEvaluation,
+      formatDuration,
     };
   },
 };
