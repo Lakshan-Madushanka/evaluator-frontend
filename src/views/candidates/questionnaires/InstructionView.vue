@@ -1,67 +1,78 @@
 <template>
-  <Card class="mt-16 mx-8 xl:mx-80">
+  <Card class="mt-4 mx-8 xl:max-w-4xl xl:mx-auto border mb-4">
     <template #title>
       <p class="text-center uppercase">
         {{ candidatesQuestionnairesStore.questionnaireInfo.name }}
       </p>
     </template>
     <template #content>
-      <div class="p-4">
-        <div class="mb-4">
-          <p class="text-xl font-bold mb-2">Information</p>
-          <ul class="w-64">
-            <li class="w-full flex justify-between space-y-1">
-              <p>Max time</p>
-              <p>
-                {{
-                  candidatesQuestionnairesStore.questionnaireInfo
-                    .allocated_time + 5
-                }}
-                Minutes
-              </p>
-            </li>
-            <li class="w-full flex justify-between">
-              <p>No of questions</p>
-              <p>
-                {{
-                  candidatesQuestionnairesStore.questionnaireInfo
-                    .no_of_questions
-                }}
-              </p>
-            </li>
-            <li class="w-full flex justify-between">
-              <p>Answer type</p>
-              <p>
-                {{
-                  candidatesQuestionnairesStore.questionnaireInfo
-                    .single_answer_type
-                    ? "Single"
-                    : "Multiple"
-                }}
-              </p>
-            </li>
-          </ul>
+      <div class="p-4 space-y-8">
+        <div>
+          <p class="text-xl font-bold mb-4">Summary</p>
+          <table class="table-auto border">
+            <tbody class>
+              <tr class="border">
+                <td class="border border-black px-4 py-2">Max time</td>
+                <td class="border border-black px-4 py-2">
+                  {{
+                    candidatesQuestionnairesStore.questionnaireInfo
+                      .allocated_time + 5
+                  }}
+                  Minutes
+                </td>
+              </tr>
+              <tr class="border">
+                <td class="border border-black px-4 py-2">No of questions</td>
+                <td class="border border-black px-4 py-2">
+                  {{
+                    candidatesQuestionnairesStore.questionnaireInfo
+                      .no_of_questions
+                  }}
+                </td>
+              </tr>
+              <tr class="border">
+                <td class="border border-black px-4 py-2">Answer type</td>
+                <td class="border border-black px-4 py-2">
+                  {{
+                    candidatesQuestionnairesStore.questionnaireInfo
+                      .single_answer_type
+                      ? "Single"
+                      : "Multiple"
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div>
-          <p class="text-xl font-bold mb-2">Instructions</p>
-          <ul class="space-y-2 list-disc list-inside">
-            <li>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
+          <p class="text-xl font-bold mb-4">Instructions</p>
+          <ul class="space-y-4 flex flex-col">
+            <li class="flex">
+              <p class="text-xl mr-2">&#x25CF;</p>
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+              </p>
             </li>
-            <li>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
+            <li class="flex">
+              <p class="text-xl mr-2">&#x25CF;</p>
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+              </p>
             </li>
-            <li>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
+            <li class="flex">
+              <p class="text-xl mr-2">&#x25CF;</p>
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+              </p>
             </li>
           </ul>
         </div>

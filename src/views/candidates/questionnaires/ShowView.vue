@@ -14,7 +14,7 @@
           {{ questionnaire?.name }}
         </p>
       </div>
-      <div>
+      <div v-once>
         <Countdown
           :flip-animation="true"
           countdown-size="2rem"
