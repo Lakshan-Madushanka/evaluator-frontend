@@ -351,7 +351,7 @@ export default {
 
       return arraysHaveSameValues(
         correctAnswers.value[question.id],
-        evaluationsStore.evaluation.answers[question.id]
+        evaluationsStore.evaluation.answers[question.id],
       );
     }
 

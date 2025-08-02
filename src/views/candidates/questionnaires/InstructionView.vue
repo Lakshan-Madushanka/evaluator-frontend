@@ -22,7 +22,8 @@
                 <td class="border border-black px-4 py-2">
                   {{
                     moment(
-                      candidatesQuestionnairesStore.questionnaireInfo.expires_at
+                      candidatesQuestionnairesStore.questionnaireInfo
+                        .expires_at,
                     )
                       .local()
                       .format("YYYY-MM-DD HH:mm:ss")
@@ -119,7 +120,7 @@ export default {
 
     const allocatedTime = moment.duration(
       candidatesQuestionnairesStore.questionnaireInfo.allocated_time,
-      "minutes"
+      "minutes",
     );
 
     let formattedAllocatedTime = "";
