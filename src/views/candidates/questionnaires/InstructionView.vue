@@ -14,7 +14,13 @@
               <tr class="border">
                 <td class="border border-black px-4 py-2">Allocated time</td>
                 <td class="border border-black px-4 py-2">
-                  {{ formattedAllocatedTime }}
+                  {{
+                    formatDuration(
+                      candidatesQuestionnairesStore.questionnaireInfo
+                        .allocated_time,
+                      "minutes"
+                    )
+                  }}
                 </td>
               </tr>
               <tr class="border">
@@ -110,6 +116,7 @@ import { useCandidatesQuestionnairesStore } from "@/stores/candidates/questionna
 import PrimeButton from "primevue/button";
 import Card from "primevue/card";
 import moment from "moment";
+import { formatDuration } from "@/helpers";
 
 export default {
   components: { Card, PrimeButton },
@@ -117,30 +124,11 @@ export default {
     const router = useRouter();
     const candidatesQuestionnairesStore = useCandidatesQuestionnairesStore();
 
-    const allocatedTime = moment.duration(
-      candidatesQuestionnairesStore.questionnaireInfo.allocated_time,
-      "minutes"
-    );
-
-    let formattedAllocatedTime = "";
-
-    if (allocatedTime.hours() && allocatedTime.minutes()) {
-      formattedAllocatedTime = `${allocatedTime.hours()}(hours) : ${allocatedTime.minutes()}(minutes)`;
-    }
-
-    if (!allocatedTime.hours() && allocatedTime.minutes()) {
-      formattedAllocatedTime = `${allocatedTime.minutes()}(minutes)`;
-    }
-
-    if (allocatedTime.hours() && !allocatedTime.minutes()) {
-      formattedAllocatedTime = `${allocatedTime.hours()}(hours)`;
-    }
-
     return {
       router,
       candidatesQuestionnairesStore,
       moment,
-      formattedAllocatedTime,
+      formatDuration,
     };
   },
 };

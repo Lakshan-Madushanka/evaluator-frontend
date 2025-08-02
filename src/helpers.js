@@ -66,8 +66,8 @@ export function formatMinutes(minutes) {
   return hours + " : " + mins + " : " + secs;
 }
 
-export function formatDuration(seconds, format) {
-  const allocatedTime = moment.duration(seconds, format);
+export function formatDuration(duration, format) {
+  const allocatedTime = moment.duration(duration, format);
 
   let formattedTime = "";
 
