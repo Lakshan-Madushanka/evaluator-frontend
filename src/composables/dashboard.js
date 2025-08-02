@@ -39,10 +39,10 @@ export function useDashboard() {
     ([newcategoryQuestionnaires, newcategoryQuestions]) => {
       if (newcategoryQuestionnaires) {
         categoryQuestionnairesChartData.labels = Object.keys(
-          newcategoryQuestionnaires
+          newcategoryQuestionnaires,
         );
         categoryQuestionnairesChartData.datasets[0]["data"] = Object.values(
-          newcategoryQuestionnaires
+          newcategoryQuestionnaires,
         );
       }
 
@@ -51,7 +51,7 @@ export function useDashboard() {
         categoryQuestionsChartData.datasets[0]["data"] =
           Object.values(newcategoryQuestions);
       }
-    }
+    },
   );
 
   return { categoryQuestionnairesChartData, categoryQuestionsChartData };

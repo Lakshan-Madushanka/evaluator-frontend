@@ -27,7 +27,7 @@ export async function getImagesRequest(id) {
 export async function getChangeOrderOfImagesRequest(payload) {
   const response = await http.post(
     questionsRoutes.get_route_to_change_order_of_images,
-    payload
+    payload,
   );
 
   return response;
@@ -36,7 +36,7 @@ export async function getChangeOrderOfImagesRequest(payload) {
 export async function getRemoveImagesRequest(ids) {
   const response = await http.post(
     questionsRoutes.get_route_to_remove_images,
-    ids
+    ids,
   );
 
   return response;
@@ -51,7 +51,7 @@ export async function createQuestionRequest(payload) {
 export async function editQuestionRequest(id, payload) {
   const response = await http.put(
     questionsRoutes.get_update_route(id),
-    payload
+    payload,
   );
 
   return response;

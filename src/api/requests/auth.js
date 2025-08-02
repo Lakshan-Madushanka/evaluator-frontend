@@ -24,7 +24,7 @@ export async function loadAuthUserRequest() {
 export async function updateProfileRequest(userId, payload) {
   const response = await http.put(
     authRoutes.get_update_profile_route(userId),
-    payload
+    payload,
   );
 
   return response;

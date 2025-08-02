@@ -51,7 +51,7 @@ export const useCategoriesStore = defineStore("categories", () => {
 
       appStore.setToast(
         "success",
-        "Category created successfully with id " + response.data.id
+        "Category created successfully with id " + response.data.id,
       );
       errors.value = {};
     } catch (data) {
@@ -73,7 +73,7 @@ export const useCategoriesStore = defineStore("categories", () => {
 
       appStore.setToast(
         "success",
-        "Category with id " + response.data.id + " updated successfully"
+        "Category with id " + response.data.id + " updated successfully",
       );
       errors.value = {};
     } catch (data) {
@@ -98,7 +98,7 @@ export const useCategoriesStore = defineStore("categories", () => {
     } catch (data) {
       appStore.setToast(
         "error",
-        "Error occurred while deleting category please try again"
+        "Error occurred while deleting category please try again",
       );
     } finally {
       loading.value = false;

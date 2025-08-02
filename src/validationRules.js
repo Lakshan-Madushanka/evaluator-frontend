@@ -1,7 +1,7 @@
 import { helpers } from "@vuelidate/validators";
 
 export const password = helpers.regex(
-  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
 );
 
 export const exists = (allowedValues) => (value) => {

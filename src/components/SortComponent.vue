@@ -35,7 +35,7 @@ export default {
           dir = null;
         }
         direction.value = dir;
-      }
+      },
     );
 
     function onDirectionChange() {

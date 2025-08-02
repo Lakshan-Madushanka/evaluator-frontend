@@ -125,7 +125,7 @@ export default {
         if (newCategory) {
           state.name = newCategory.data.attributes.name;
         }
-      }
+      },
     );
 
     function refresh() {

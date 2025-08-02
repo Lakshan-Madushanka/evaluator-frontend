@@ -14,7 +14,7 @@ export async function getOneRequest(id, payload) {
   let query = buildQueryString(payload);
 
   const response = await http.get(
-    questionnaireRoutes.get_one_route(id) + query
+    questionnaireRoutes.get_one_route(id) + query,
   );
 
   return response;
@@ -22,7 +22,7 @@ export async function getOneRequest(id, payload) {
 
 export async function checkAvailability(id) {
   const response = await http.get(
-    questionnaireRoutes.get_route_to_check_avalability(id)
+    questionnaireRoutes.get_route_to_check_avalability(id),
   );
 
   return response;
@@ -31,7 +31,7 @@ export async function checkAvailability(id) {
 export async function createQuestionnaireRequest(payload) {
   const response = await http.post(
     questionnaireRoutes.get_create_route,
-    payload
+    payload,
   );
 
   return response;
@@ -40,7 +40,7 @@ export async function createQuestionnaireRequest(payload) {
 export async function editQuestionnaireRequest(id, payload) {
   const response = await http.put(
     questionnaireRoutes.get_update_route(id),
-    payload
+    payload,
   );
 
   return response;
