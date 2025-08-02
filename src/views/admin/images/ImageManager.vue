@@ -79,7 +79,7 @@
                 <p>
                   {{
                     moment(slotProps.item.created_at).format(
-                      "ddd, MMM D, yyyy, h:mm a"
+                      "ddd, MMM D, yyyy, h:mm a",
                     )
                   }}
                 </p>
@@ -166,7 +166,7 @@ export default {
           getImages();
           selectedImages.value = [];
         }
-      }
+      },
     );
 
     function getImages() {

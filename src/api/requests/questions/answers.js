@@ -11,7 +11,7 @@ export async function getAllRequest(id) {
 export async function getSyncRequest(id, payload) {
   const response = await http.post(
     questionsAnswersRoutes.get_sync_route(id),
-    payload
+    payload,
   );
 
   return response;

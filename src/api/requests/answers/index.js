@@ -23,7 +23,7 @@ export async function getRequestToCheckAnswerExists(id) {
   id = sanitizeParam(id);
 
   const response = await http.get(
-    answersRoutes.get_route_to_check_answer_exists(id)
+    answersRoutes.get_route_to_check_answer_exists(id),
   );
 
   return response;

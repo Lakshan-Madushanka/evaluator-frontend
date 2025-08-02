@@ -49,7 +49,7 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const response = await authRequests.updateProfileRequest(
         user.id,
-        newPayload
+        newPayload,
       );
       setUser(response.data);
       errors.value = {};

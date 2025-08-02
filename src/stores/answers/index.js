@@ -53,7 +53,7 @@ export const useAnswersStore = defineStore("answers", () => {
 
       appStore.setToast(
         "success",
-        "Answer created successfully with id " + response.data.id
+        "Answer created successfully with id " + response.data.id,
       );
       errors.value = {};
     } catch (data) {
@@ -75,7 +75,7 @@ export const useAnswersStore = defineStore("answers", () => {
 
       appStore.setToast(
         "success",
-        "Answer with id " + response.data.id + " updated successfully"
+        "Answer with id " + response.data.id + " updated successfully",
       );
       errors.value = {};
     } catch (data) {
@@ -100,7 +100,7 @@ export const useAnswersStore = defineStore("answers", () => {
     } catch (data) {
       appStore.setToast(
         "error",
-        "Error occurred while deleting answers please try again"
+        "Error occurred while deleting answers please try again",
       );
     } finally {
       loading.value = false;
@@ -117,12 +117,12 @@ export const useAnswersStore = defineStore("answers", () => {
       status.value = "deleted";
       appStore.setToast(
         "success",
-        `${payload.ids.length} no of answers deleted successfully`
+        `${payload.ids.length} no of answers deleted successfully`,
       );
     } catch (data) {
       appStore.setToast(
         "error",
-        "Error occurred while deleting answers please try again"
+        "Error occurred while deleting answers please try again",
       );
       status.value = "";
     } finally {

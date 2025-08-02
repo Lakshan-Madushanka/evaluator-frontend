@@ -313,7 +313,7 @@ export default {
           state.email = newUser.data.attributes.email;
           state.role = ROLES[newUser.data.attributes.role].value;
         }
-      }
+      },
     );
 
     function refresh() {

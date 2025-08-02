@@ -38,14 +38,14 @@ export const useQuestionnairesQuestionsStore = defineStore(
         const results =
           await questionnaireRequests.checkQuestionEligibilityRequest(
             questionnaireId,
-            questionId
+            questionId,
           );
 
         if (results.eligible === false) {
           errors.value.questionId = "Invalid or not eligible question id";
           appStore.setToast(
             "warn",
-            "Counld not find eligible question for id " + questionId
+            "Counld not find eligible question for id " + questionId,
           );
         }
         question.value = results.data;
@@ -62,14 +62,14 @@ export const useQuestionnairesQuestionsStore = defineStore(
       try {
         const results = await questionnaireRequests.syncQuestionsRequest(
           questionnaireId,
-          questions
+          questions,
         );
 
         appStore.setToast(
           "success",
           "Questions of questionnaire " +
             questionnaireId +
-            " synced successfully"
+            " synced successfully",
         );
       } catch (data) {
         //
@@ -82,7 +82,7 @@ export const useQuestionnairesQuestionsStore = defineStore(
       isLoading,
       statusValue,
       errorsValue,
-      questionValue = null
+      questionValue = null,
     ) {
       loading.value = isLoading;
       status.value = statusValue;
@@ -101,5 +101,5 @@ export const useQuestionnairesQuestionsStore = defineStore(
       checkQuestionEligibility,
       syncQuestions,
     };
-  }
+  },
 );

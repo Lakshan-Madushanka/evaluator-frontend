@@ -93,7 +93,7 @@ export default {
       showEvaluation,
       candidatesQuestionnairesStore,
       evaluation: computed(
-        () => candidatesQuestionnairesStore.evaluation?.attributes
+        () => candidatesQuestionnairesStore.evaluation?.attributes,
       ),
       marks,
       onModalHide,

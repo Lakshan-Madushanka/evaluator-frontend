@@ -27,14 +27,14 @@ export const useCandidatesQuestionnairesStore = defineStore(
       try {
         const results = await candidatesQuestionnairesRequests.getAllRequest(
           availableCode.value,
-          payload
+          payload,
         );
         questions.value = results.data;
         meta.included = results.included;
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while obtaining questionnaire data please try again"
+          "Error occurred while obtaining questionnaire data please try again",
         );
       } finally {
         loading.value = false;
@@ -60,7 +60,7 @@ export const useCandidatesQuestionnairesStore = defineStore(
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while cheking availablity of the questionnaire please try again"
+          "Error occurred while cheking availablity of the questionnaire please try again",
         );
       } finally {
         status.value = "";
@@ -73,7 +73,7 @@ export const useCandidatesQuestionnairesStore = defineStore(
       try {
         const response = await candidatesQuestionnairesRequests.evaluateRequest(
           availableCode.value,
-          payload
+          payload,
         );
 
         status.value = "evaluated";
@@ -82,7 +82,7 @@ export const useCandidatesQuestionnairesStore = defineStore(
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while evaluatng questionnaire please try again"
+          "Error occurred while evaluatng questionnaire please try again",
         );
       }
     }
@@ -106,5 +106,5 @@ export const useCandidatesQuestionnairesStore = defineStore(
       evaluate,
       clearState,
     };
-  }
+  },
 );

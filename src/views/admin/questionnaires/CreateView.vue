@@ -517,7 +517,7 @@ export default {
             });
           });
         }
-      }
+      },
     );
 
     function prepareFormData() {

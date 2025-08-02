@@ -143,7 +143,7 @@ export default {
         if (newAnswer) {
           state.text = newAnswer.data.attributes.text;
         }
-      }
+      },
     );
 
     function updateAnswer() {

@@ -47,13 +47,12 @@ export const useQuestionnairesStore = defineStore("questionnaires", () => {
     errors.value = {};
 
     try {
-      const response = await questionnaireRequests.createQuestionnaireRequest(
-        payload
-      );
+      const response =
+        await questionnaireRequests.createQuestionnaireRequest(payload);
 
       appStore.setToast(
         "success",
-        "Questionnaire created successfully with id " + response.data.id
+        "Questionnaire created successfully with id " + response.data.id,
       );
       errors.value = {};
     } catch (data) {
@@ -73,12 +72,12 @@ export const useQuestionnairesStore = defineStore("questionnaires", () => {
     try {
       const response = await questionnaireRequests.editQuestionnaireRequest(
         id,
-        payload
+        payload,
       );
 
       appStore.setToast(
         "success",
-        "Questionnaire with id " + response.data.id + " updated successfully"
+        "Questionnaire with id " + response.data.id + " updated successfully",
       );
       errors.value = {};
     } catch (data) {
@@ -103,7 +102,7 @@ export const useQuestionnairesStore = defineStore("questionnaires", () => {
     } catch (data) {
       appStore.setToast(
         "error",
-        "Error occurred while deleting questionnaire please try again"
+        "Error occurred while deleting questionnaire please try again",
       );
     } finally {
       loading.value = false;
