@@ -15,17 +15,24 @@
         container-class="m-auto"
         :value="imagesStore.images"
         :num-visible="5"
-        container-style="max-width: 640px"
+        container-style="width: 640px; padding: 4px"
       >
         <template #item="slotProps">
           <img
             :src="slotProps.item.original_url"
             :alt="slotProps.item.alt"
-            style="width: 100%"
+            :title="slotProps.item.name"
+            style="max-width: 100%"
+            class="object-fill"
           />
         </template>
         <template #thumbnail="slotProps">
-          <img :src="slotProps.item.original_url" :alt="slotProps.item.alt" />
+          <img
+            :src="slotProps.item.original_url"
+            :alt="slotProps.item.alt"
+            :title="slotProps.item.name"
+            class="max-w-[6rem]"
+          />
         </template>
       </PrimeGalleria>
       <p
@@ -63,10 +70,10 @@
           list-style="height:auto"
           data-key="id"
         >
-          <template #header> List of Products </template>
+          <template #header> List of Images </template>
 
           <template #item="slotProps">
-            <div class="flex flex-wrap justify-between">
+            <div class="flex flex-wrap justify-between space-x-4 items-center">
               <div class="">
                 <img
                   class="w-8 h-8"
@@ -79,7 +86,7 @@
                 <p>
                   {{
                     moment(slotProps.item.created_at).format(
-                      "ddd, MMM D, yyyy, h:mm a",
+                      "ddd, MMM D, yyyy, h:mm a"
                     )
                   }}
                 </p>
@@ -166,7 +173,7 @@ export default {
           getImages();
           selectedImages.value = [];
         }
-      },
+      }
     );
 
     function getImages() {
