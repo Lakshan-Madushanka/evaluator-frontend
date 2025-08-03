@@ -82,7 +82,7 @@
             >
               <div class="flex w-[75%]">
                 <span class="mr-2">{{ index + 1 }}).</span>
-                <p>{{ question.attributes.content }}</p>
+                <p v-html="question.attributes.content"></p>
               </div>
               <div class="space-y-1">
                 <p>
@@ -231,9 +231,11 @@
         <template #content>
           <div class="flex justify-between">
             <div class="flex w-[75%]">
-              <p>
-                {{ questionnairesQuestionsStore.question.attributes.content }}
-              </p>
+              <p
+                v-html="
+                  questionnairesQuestionsStore.question.attributes.content
+                "
+              ></p>
             </div>
             <div>
               <p>

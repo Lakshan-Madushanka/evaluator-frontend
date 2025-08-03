@@ -2,7 +2,7 @@
   <div class="shadow-lg bg-white p-4 pb-8">
     <div class="flex flex-wrap items-center justify-center sm:justify-between">
       <h1 class="text-2xl font-bold uppercase mb-2">
-        Manage answers of questions
+        Manage answers of question
         <span class="text-green-400 mr-1">{{ route.params.id }}</span>
         <span class="text-sm lowercase">(id)</span>
       </h1>
@@ -41,16 +41,20 @@
                 <span class="mr-2">{{ index + 1 }}).</span>
                 <p v-html="answer.attributes.text"></p>
               </div>
-              <div>
+              <div class="space-y-1">
                 <p>
-                  ID:
-                  {{ answer.attributes.pretty_id }}
+                  ID
+                  <Tag severity="secondary">{{
+                    answer.attributes.pretty_id
+                  }}</Tag>
                 </p>
                 <p>
-                  Images count:
-                  {{ answer.attributes.images_count }}
+                  Images count
+                  <Tag severity="secondary">{{
+                    answer.attributes.images_count
+                  }}</Tag>
                 </p>
-                <div @click.stop.prevent>
+                <div class="cursor-pointer">
                   <label
                     class="mr-2"
                     :for="`answer_${answer.attributes.pretty_id}`"
@@ -59,7 +63,7 @@
                   <Checkbox
                     v-model="answer.attributes.correct_answer"
                     :input-id="`answer_${answer.attributes.pretty_id}`"
-                    :binary="true"
+                    binary
                   />
                 </div>
               </div>
@@ -68,17 +72,17 @@
         </TransitionGroup>
       </div>
 
-      <div class="mt-8 flex justify-center flex-wrap items-start">
+      <div class="mt-8 flex justify-center flex-wrap items-start space-x-2">
         <PrimeButton
           :label="
             questionsAnswersStore.status === 'syncing' ? 'Syncing' : 'Sync All'
           "
           icon="pi pi-history"
-          class="!mb-2 !mr-4 p-button-warning"
+          class="!mb-2 p-button-warning"
           :loading="questionsAnswersStore.status === 'syncing'"
           @click="syncAnswers"
         />
-        <span v-if="data.answers.length > 0" class="p-buttonset mr-4 mb-2">
+        <span v-if="data.answers.length > 0" class="p-buttonset mb-2 space-x-2">
           <PrimeButton
             label="Select All"
             icon="pi pi-clone"
@@ -195,6 +199,7 @@ import Checkbox from "primevue/checkbox";
 import InputText from "primevue/inputtext";
 import PrimeButton from "primevue/button";
 import Skeleton from "primevue/skeleton";
+import Tag from "primevue/tag";
 
 export default {
   components: {
@@ -203,6 +208,7 @@ export default {
     PrimeButton,
     Skeleton,
     InputText,
+    Tag,
   },
   setup() {
     const route = useRoute();
@@ -225,7 +231,7 @@ export default {
       () => questionsAnswersStore.answers,
       (newAnswers) => {
         data.answers = JSON.parse(JSON.stringify(newAnswers));
-      },
+      }
     );
 
     function getData() {
