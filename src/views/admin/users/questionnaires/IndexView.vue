@@ -75,7 +75,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label'])
+                              lowercaseFirstLetter(slotProps['item']['label']),
                             )
                           ]
                             ? 'pi pi-eye'
@@ -179,7 +179,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.started_at).format(
-                  "ddd, MMM D, yyyy, h:mm a"
+                  "ddd, MMM D, yyyy, h:mm a",
                 )
               }}</template
             >
@@ -199,7 +199,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.finished_at).format(
-                  "ddd, MMM D, yyyy, h:mm a"
+                  "ddd, MMM D, yyyy, h:mm a",
                 )
               }}</template
             >
@@ -219,7 +219,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.expires_at).format(
-                  "ddd, MMM D, yyyy, h:mm a"
+                  "ddd, MMM D, yyyy, h:mm a",
                 )
               }}</template
             >
@@ -250,7 +250,7 @@
               <Tag
                 v-if="
                   moment(slotProps.data.attributes.expires_at).isBefore(
-                    moment()
+                    moment(),
                   )
                 "
                 >Expired</Tag
@@ -272,7 +272,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a"
+                  "ddd, MMM D, yyyy, h:mm a",
                 )
               }}</template
             >
@@ -290,7 +290,7 @@
                   v-if="
                     shouldAlloweToResendNotiificaton(
                       slotProps.data.attributes.attempts,
-                      slotProps.data.attributes.expires_at
+                      slotProps.data.attributes.expires_at,
                     )
                   "
                   class="p-button-sm"
@@ -298,7 +298,7 @@
                   title="Resend notification"
                   @click="
                     resendNotification(
-                      slotProps.data.attributes.user_questionnaire_id
+                      slotProps.data.attributes.user_questionnaire_id,
                     )
                   "
                 />
@@ -569,7 +569,7 @@ export default {
         accept: () => {
           usersQuestionnairesStore.resendNotificatiion(
             route.params.id,
-            questionnaireId
+            questionnaireId,
           );
         },
         reject: () => {},
