@@ -23,6 +23,7 @@ import MenuComponent from "primevue/menu";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { formatText } from "@/helpers";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
@@ -32,17 +33,24 @@ export default {
   setup() {
     const authStore = useAuthStore();
 
+    const router = useRouter();
+
     const authMenu = ref();
 
     const authItems = [
       {
         label: "Profile",
         icon: "pi pi-fw pi-user-edit",
-        to: { name: "profile" },
+        command: () => {
+          router.push({ name: "profile" });
+        },
       },
       {
         label: "Dashboard",
         icon: "pi pi-fw pi-th-large",
+        command: () => {
+          router.push({ name: "admin.dashboard" });
+        },
         to: { name: "admin.dashboard" },
       },
       { separator: true },

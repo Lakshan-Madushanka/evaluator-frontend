@@ -74,7 +74,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             ).toLowerCase()
                           ]
                             ? 'pi pi-eye'
@@ -151,15 +151,16 @@
             </div>
           </template>
           <template #filter>
-            <span class="p-input-icon-right !w-32">
-              <i class="pi pi-search" />
-              <InputText
-                v-model="filters.pretty_id"
-                class="!w-full"
-                type="text"
-                placeholder="Search"
-                @keyup.enter="applyFilters"
-              />
+            <span>
+              <IconField>
+                <InputIcon class="pi pi-search" />
+                <InputText
+                  v-model="filters.pretty_id"
+                  type="text"
+                  placeholder="Search"
+                  @keyup.enter="applyFilters"
+                />
+              </IconField>
             </span>
           </template>
         </Column>
@@ -172,14 +173,16 @@
           :hidden="!columnVisibility.content"
         >
           <template #filter>
-            <span class="p-input-icon-right">
-              <i class="pi pi-search" />
-              <InputText
-                v-model="filters.text"
-                type="text"
-                placeholder="Search"
-                @keyup.enter="applyFilters"
-              />
+            <span>
+              <IconField>
+                <InputIcon class="pi pi-search" />
+                <InputText
+                  v-model="filters.text"
+                  type="text"
+                  placeholder="Search"
+                  @keyup.enter="applyFilters"
+                />
+              </IconField>
             </span>
           </template>
           <template #body="slotProps">
@@ -208,7 +211,7 @@
           body-class="!text-center"
         >
           <template #body="slotProps">
-            <Tag class="!bg-purple-600" rounded>{{
+            <Tag severity="info">{{
               slotProps.data.attributes.images_count
             }}</Tag>
           </template>
@@ -227,7 +230,7 @@
           <template #body="slotProps">
             {{
               moment(slotProps.data.attributes.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a",
+                "ddd, MMM D, yyyy, h:mm a"
               )
             }}</template
           >
@@ -240,7 +243,7 @@
           :hidden="!columnVisibility.actions"
         >
           <template #body="slotProps">
-            <span class="p-buttonset">
+            <span class="p-buttonset space-x-1">
               <PrimeButton
                 class="p-button-sm"
                 icon="pi pi-slack"
@@ -322,6 +325,8 @@ import MenuComponent from "primevue/menu";
 import PrimeButton from "primevue/button";
 import InputText from "primevue/inputtext";
 import Tag from "primevue/tag";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 import { useConfirm } from "primevue/useconfirm";
 
 import moment from "moment/moment";
@@ -350,6 +355,8 @@ export default {
     PrimeButton,
     SortComponent,
     Tag,
+    IconField,
+    InputIcon,
   },
   setup() {
     const confirm = useConfirm();

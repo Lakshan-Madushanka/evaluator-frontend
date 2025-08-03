@@ -84,28 +84,38 @@
                 <span class="mr-2">{{ index + 1 }}).</span>
                 <p>{{ question.attributes.content }}</p>
               </div>
-              <div>
+              <div class="space-y-1">
                 <p>
-                  ID:
-                  {{ question.attributes.pretty_id }}
+                  ID
+                  <Tag severity="secondary" size="small">{{
+                    question.attributes.pretty_id
+                  }}</Tag>
                 </p>
                 <p>
-                  Single answers type:
-                  {{ question.attributes.answers_type_single }}
+                  Single answers type
+                  <Tag severity="secondary" size="small">{{
+                    question.attributes.answers_type_single
+                  }}</Tag>
                 </p>
                 <p>
-                  Difficulty:
-                  {{ question.attributes.hardness }}
+                  Difficulty
+                  <Tag severity="secondary" size="small">
+                    {{ question.attributes.hardness }}</Tag
+                  >
                 </p>
                 <p>
-                  Answers count:
-                  {{ question.attributes.no_of_answers }}
+                  Answers count
+                  <Tag severity="secondary" size="small">
+                    {{ question.attributes.no_of_answers }}
+                  </Tag>
                 </p>
                 <p>
-                  Images count:
-                  {{ question.attributes.images_count }}
+                  Images count
+                  <Tag severity="secondary" size="small">
+                    {{ question.attributes.images_count }}
+                  </Tag>
                 </p>
-                <p>
+                <p class="mt-2">
                   Marks:
                   <InputNumber
                     v-model="question.attributes.marks"
@@ -134,7 +144,10 @@
           :loading="questionnairesQuestionsStore.status === 'syncing'"
           @click="syncQuestions"
         />
-        <span v-if="data.questions.length > 0" class="p-buttonset mr-4 mb-2">
+        <span
+          v-if="data.questions.length > 0"
+          class="p-buttonset space-x-4 mr-4 mb-2"
+        >
           <PrimeButton
             label="Select All"
             icon="pi pi-clone"
@@ -161,6 +174,7 @@
         <div class="w-1/2">
           <InputText
             v-model="questionId"
+            type="search"
             class="w-full"
             placeholder="Question Id"
             @keyup.enter="searchQuestion"
@@ -357,7 +371,7 @@ export default {
           setAssignedQuestionsCount(question, "increment");
           data.assignedQuestions.total++;
         });
-      },
+      }
     );
 
     function getData() {
@@ -420,7 +434,7 @@ export default {
 
       questionnairesQuestionsStore.checkQuestionEligibility(
         route.params.id,
-        questionId.value,
+        questionId.value
       );
     }
 

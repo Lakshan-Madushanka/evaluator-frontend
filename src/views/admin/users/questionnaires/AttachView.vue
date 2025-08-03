@@ -20,25 +20,29 @@
     >
       <div class="w-[60%] mb-2 sm:mb-0">
         <span class="p-input-icon-left p-input-icon-right w-full">
-          <i class="pi pi-search" />
-          <InputText
-            id="questionnaire_id"
-            v-model="questionnaireId"
-            :class="[
-              'w-full disabled:!text-pink-500',
+          <span>
+            <IconField>
+              <InputIcon class="pi pi-search" />
+              <InputText
+                id="questionnaire_id"
+                v-model="questionnaireId"
+                :class="[
+                  'w-full disabled:!text-pink-500',
 
-              {
-                '!font-bold': usersQuestionnairesStore.availableId,
-              },
-            ]"
-            placeholder="Questionnaire id"
-            autofocus
-            :disabled="usersQuestionnairesStore.availableId"
-            @keyup.enter="attachOrSearch"
-            @keydown="onQuestionnaireIdTextInputKeyDown"
-            @paste="onPasteQquestionnaireIdTextInput"
-          />
-          <i class="pi pi-times cursor-pointer" @click="questionnaireId = ''" />
+                  {
+                    '!font-bold': usersQuestionnairesStore.availableId,
+                  },
+                ]"
+                placeholder="Questionnaire id"
+                type="search"
+                autofocus
+                :disabled="usersQuestionnairesStore.availableId"
+                @keyup.enter="attachOrSearch"
+                @keydown="onQuestionnaireIdTextInputKeyDown"
+                @paste="onPasteQquestionnaireIdTextInput"
+              />
+            </IconField>
+          </span>
         </span>
         <p
           v-if="questionnaireId === '' && searchButtonClicked"
@@ -93,9 +97,11 @@ import { useUsersQuestionnairesStore } from "@/stores/users/questionnaires";
 import PrimeButton from "primevue/button";
 import PrimeDialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 
 export default {
-  components: { PrimeDialog, InputText, PrimeButton },
+  components: { PrimeDialog, InputText, PrimeButton, IconField, InputIcon },
   props: {
     display: { type: Boolean, default: false },
     userId: { type: String, default: null },
@@ -117,14 +123,14 @@ export default {
         if (newStatus === "attached") {
           clearState();
         }
-      },
+      }
     );
 
     watch(
       () => props.display,
       (newValue) => {
         displayComponent.value = newValue;
-      },
+      }
     );
 
     function clearState() {

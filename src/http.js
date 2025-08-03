@@ -25,7 +25,7 @@ instance.interceptors.response.use(
       handleClientSideErrors(error);
       throw error;
     }
-  },
+  }
 );
 
 function handleClientSideErrors(errorResponse) {

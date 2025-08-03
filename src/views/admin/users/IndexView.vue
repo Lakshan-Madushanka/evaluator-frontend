@@ -73,7 +73,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             )
                           ]
                             ? 'pi pi-eye'
@@ -139,14 +139,16 @@
             :hidden="!columnVisibility.name"
           >
             <template #filter>
-              <span class="p-input-icon-right">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="filters.name"
-                  type="text"
-                  placeholder="Search"
-                  @keyup.enter="applyFilters"
-                />
+              <span>
+                <IconField>
+                  <InputIcon class="pi pi-search" />
+                  <InputText
+                    v-model="filters.name"
+                    type="text"
+                    placeholder="Search"
+                    @keyup.enter="applyFilters"
+                  />
+                </IconField>
               </span>
             </template>
             <template #body="slotProps">
@@ -160,14 +162,16 @@
             :hidden="!columnVisibility.email"
           >
             <template #filter>
-              <span class="p-input-icon-right">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="filters.email"
-                  type="text"
-                  placeholder="Search"
-                  @keyup.enter="applyFilters"
-                />
+              <span>
+                <IconField>
+                  <InputIcon class="pi pi-search" />
+                  <InputText
+                    v-model="filters.email"
+                    type="text"
+                    placeholder="Search"
+                    @keyup.enter="applyFilters"
+                  />
+                </IconField>
               </span>
             </template>
             <template #body="slotProps">
@@ -194,14 +198,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag
-                :class="{
-                  '!bg-green-800':
-                    slotProps.data.attributes.role === 'SUPER_ADMIN',
-                  '!bg-green-600': slotProps.data.attributes.role === 'ADMIN',
-                  '!bg-green-400': slotProps.data.attributes.role === 'REGULAR',
-                }"
-              >
+              <Tag severity="info">
                 {{ ROLES[slotProps.data.attributes.role]["name"] }}
               </Tag>
             </template>
@@ -218,7 +215,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -253,10 +250,10 @@
             <template #body="slotProps">
               <span
                 v-if="slotProps.data.attributes.role !== 'SUPER_ADMIN'"
-                class="p-buttonset"
+                class="p-buttonset space-x-1"
               >
                 <PrimeButton
-                  class="p-button-info p-button-sm"
+                  class="p-button-sm"
                   icon="pi pi-calendar "
                   title="Assign Questionnaire"
                   @click="attachQuestionnaire(slotProps.data.id)"
@@ -339,6 +336,8 @@ import Dropdown from "primevue/dropdown";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 
 import BulkDeleteComponent from "@/components/BulkDeleteComponent.vue";
 import SortComponent from "@/components/SortComponent.vue";
@@ -362,6 +361,8 @@ export default {
     ConfirmDialog,
     BulkDeleteComponent,
     AttachViewComponent,
+    IconField,
+    InputIcon,
   },
   setup() {
     onMounted(() => {

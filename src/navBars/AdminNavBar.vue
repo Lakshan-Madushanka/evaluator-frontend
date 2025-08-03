@@ -13,9 +13,19 @@
 import Breadcrumb from "primevue/breadcrumb";
 import AuthUserMenu from "@/components/AuthUserMenu.vue";
 import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 
 const route = useRoute();
-const home = { icon: "pi pi-th-large", to: { name: "admin.dashboard" } };
+const router = useRouter();
+
+const home = {
+  icon: "pi pi-th-large",
+  command: () => {
+    router.push({
+      name: "admin.dashboard",
+    });
+  },
+};
 
 function getItems() {
   switch (route.name) {
@@ -24,29 +34,43 @@ function getItems() {
       return [
         {
           label: "users",
-          to: { name: "admin.users.index" },
+          command: () => {
+            router.push({ name: "admin.users.index" });
+          },
         },
       ];
     case "admin.users.create":
       return [
         {
           label: "users",
-          to: { name: "admin.users.index" },
+          command: () => {
+            router.push({ name: "admin.users.index" });
+          },
         },
         {
           label: "create",
-          to: { name: "admin.users.create" },
+          command: () => {
+            router.push({ name: "admin.users.create" });
+          },
         },
       ];
     case "admin.users.edit":
       return [
         {
           label: "users",
-          to: { name: "admin.users.index" },
+          command: () => {
+            router.push({
+              name: "admin.users.index",
+            });
+          },
         },
         {
           label: "edit",
-          to: { name: "admin.users.edit" },
+          command: () => {
+            router.push({
+              name: "admin.users.edit",
+            });
+          },
         },
       ];
     // Questionnaires
@@ -54,11 +78,19 @@ function getItems() {
       return [
         {
           label: "users",
-          to: { name: "admin.users.index" },
+          command: () => {
+            router.push({
+              name: "admin.users.index",
+            });
+          },
         },
         {
           label: "questionnaires",
-          to: { name: "admin.users.questionnaires.index" },
+          command: () => {
+            router.push({
+              name: "admin.users.questionnaires.index",
+            });
+          },
         },
       ];
     // End Users
@@ -68,29 +100,39 @@ function getItems() {
       return [
         {
           label: "categories",
-          to: { name: "admin.categories.index" },
+          command: () => {
+            router.push({ name: "admin.categories.index" });
+          },
         },
       ];
     case "admin.categories.create":
       return [
         {
           label: "categories",
-          to: { name: "admin.categories.index" },
+          command: () => {
+            router.push({ name: "admin.categories.index" });
+          },
         },
         {
           label: "create",
-          to: { name: "admin.categories.create" },
+          command: () => {
+            router.push({ name: "admin.categories.create" });
+          },
         },
       ];
     case "admin.categories.edit":
       return [
         {
           label: "categories",
-          to: { name: "admin.categories.index" },
+          command: () => {
+            router.push({ name: "admin.categories.index" });
+          },
         },
         {
           label: "edit",
-          to: { name: "admin.categories.edit" },
+          command: () => {
+            router.push({ name: "admin.categories.edit" });
+          },
         },
       ];
     // Questionnaires
@@ -98,29 +140,39 @@ function getItems() {
       return [
         {
           label: "questionnaires",
-          to: { name: "admin.questionnaires.index" },
+          command: () => {
+            router.push({ name: "admin.questionnaires.index" });
+          },
         },
       ];
     case "admin.questionnaires.create":
       return [
         {
           label: "questionnaires",
-          to: { name: "admin.questionnaires.index" },
+          command: () => {
+            router.push({ name: "admin.questionnaires.index" });
+          },
         },
         {
           label: "create",
-          to: { name: "admin.questionnaires.create" },
+          command: () => {
+            router.push({ name: "admin.questionnaires.create" });
+          },
         },
       ];
     case "admin.questionnaires.edit":
       return [
         {
           label: "questionnaires",
-          to: { name: "admin.questionnaires.index" },
+          command: () => {
+            router.push({ name: "admin.questionnaires.index" });
+          },
         },
         {
           label: "edit",
-          to: { name: "admin.questionnaires.edit" },
+          command: () => {
+            router.push({ name: "admin.questionnaires.edit" });
+          },
         },
       ];
     // Questions
@@ -128,13 +180,17 @@ function getItems() {
       return [
         {
           label: "questionnaires",
-          to: { name: "admin.questionnaires.index" },
+          command: () => {
+            router.push({ name: "admin.questionnaires.index" });
+          },
         },
         {
           label: "questions",
-          to: {
-            name: "admin.questionnaires.questions.index",
-            query: { ...route.query },
+          command: () => {
+            router.push({
+              name: "admin.questionnaires.questions.index",
+              query: { ...route.query },
+            });
           },
         },
       ];
@@ -142,13 +198,17 @@ function getItems() {
       return [
         {
           label: "questionnaires",
-          to: { name: "admin.questionnaires.index" },
+          command: () => {
+            router.push({ name: "admin.questionnaires.index" });
+          },
         },
         {
           label: "questions",
-          to: {
-            name: "admin.questionnaires.questions.show",
-            query: { ...route.query },
+          command: () => {
+            router.push({
+              name: "admin.questionnaires.questions.show",
+              query: { ...route.query },
+            });
           },
         },
       ];
@@ -159,29 +219,39 @@ function getItems() {
       return [
         {
           label: "questions",
-          to: { name: "admin.questions.index" },
+          command: () => {
+            router.push({ name: "admin.questions.index" });
+          },
         },
       ];
     case "admin.questions.create":
       return [
         {
           label: "questions",
-          to: { name: "admin.questions.index" },
+          command: () => {
+            router.push({ name: "admin.questions.index" });
+          },
         },
         {
           label: "create",
-          to: { name: "admin.questions.create" },
+          command: () => {
+            router.push({ name: "admin.questions.create" });
+          },
         },
       ];
     case "admin.questions.edit":
       return [
         {
           label: "questions",
-          to: { name: "admin.questions.index" },
+          command: () => {
+            router.push({ name: "admin.questions.index" });
+          },
         },
         {
           label: "edit",
-          to: { name: "admin.questions.edit" },
+          command: () => {
+            router.push({ name: "admin.questions.edit" });
+          },
         },
       ];
     // Answers
@@ -189,13 +259,17 @@ function getItems() {
       return [
         {
           label: "questions",
-          to: { name: "admin.questions.index" },
+          command: () => {
+            router.push({ name: "admin.questions.index" });
+          },
         },
         {
           label: "answers",
-          to: {
-            name: "admin.questions.answers.index",
-            query: { ...route.query },
+          command: () => {
+            router.push({
+              name: "admin.questions.answers.index",
+              query: { ...route.query },
+            });
           },
         },
       ];
@@ -207,29 +281,39 @@ function getItems() {
       return [
         {
           label: "answers",
-          to: { name: "admin.answers.index" },
+          command: () => {
+            router.push({ name: "admin.answers.index" });
+          },
         },
       ];
     case "admin.answers.create":
       return [
         {
           label: "answers",
-          to: { name: "admin.answers.index" },
+          command: () => {
+            router.push({ name: "admin.answers.index" });
+          },
         },
         {
           label: "create",
-          to: { name: "admin.answers.create" },
+          command: () => {
+            router.push({ name: "admin.answers.create" });
+          },
         },
       ];
     case "admin.answers.edit":
       return [
         {
           label: "answers",
-          to: { name: "admin.answers.index" },
+          command: () => {
+            router.push({ name: "admin.answers.index" });
+          },
         },
         {
           label: "edit",
-          to: { name: "admin.answers.edit" },
+          command: () => {
+            router.push({ name: "admin.answers.edit" });
+          },
         },
       ];
     // End Answers
@@ -239,7 +323,9 @@ function getItems() {
       return [
         {
           label: "evaluations",
-          to: { name: "admin.evaluations.index" },
+          command: () => {
+            router.push({ name: "admin.evaluations.index" });
+          },
         },
       ];
     // End of Evaluations
@@ -249,11 +335,18 @@ function getItems() {
       return [
         {
           label: "questions",
-          to: { name: `admin.${route.params.type}.index` },
+          command: () => {
+            router.push({ name: `admin.${route.params.type}.index` });
+          },
         },
         {
           label: "images",
-          to: { name: "admin.images.manager", query: { ...route.query } },
+          command: () => {
+            router.push({
+              name: "admin.images.manager",
+              query: { ...route.query },
+            });
+          },
         },
       ];
     // End of image manager

@@ -99,7 +99,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             ).toLowerCase()
                           ]
                             ? 'pi pi-eye'
@@ -170,15 +170,17 @@
           :hidden="!columnVisibility.user_id"
         >
           <template #filter>
-            <span class="p-input-icon-right">
-              <i class="pi pi-search" />
-              <InputText
-                v-model="query.filters.user"
-                type="text"
-                placeholder="Search"
-                class="!min-w-[8rem]"
-                @keyup.enter="applyFilters"
-              />
+            <span>
+              <IconField>
+                <InputIcon class="pi pi-search" />
+                <InputText
+                  v-model="query.filters.user"
+                  type="text"
+                  placeholder="Search"
+                  @keyup.enter="applyFilters"
+                  class="!min-w-[8rem]"
+                />
+              </IconField>
             </span>
           </template>
           <template #body="slotProps">
@@ -200,15 +202,17 @@
           :hidden="!columnVisibility.questionnaire_id"
         >
           <template #filter>
-            <span class="p-input-icon-right">
-              <i class="pi pi-search" />
-              <InputText
-                v-model="query.filters.questionnaire"
-                type="text"
-                placeholder="Search"
-                class="min-w-[8rem]"
-                @keyup.enter="applyFilters"
-              />
+            <span>
+              <IconField>
+                <InputIcon class="pi pi-search" />
+                <InputText
+                  v-model="query.filters.questionnaire"
+                  type="text"
+                  placeholder="Search"
+                  @keyup.enter="applyFilters"
+                  class="!min-w-[8rem]"
+                />
+              </IconField>
             </span>
           </template>
           <template #body="slotProps">
@@ -252,7 +256,7 @@
             </div>
           </template>
           <template #body="slotProps">
-            <Tag class="!bg-green-500" rounded
+            <Tag severity="info"
               >{{ slotProps.data.attributes.marks_percentage }}
             </Tag>
           </template>
@@ -276,9 +280,11 @@
           </template>
 
           <template #body="slotProps">
-            {{
-              formatDuration(slotProps.data.attributes.time_taken, "seconds")
-            }}
+            <Tag severity="info">
+              {{
+                formatDuration(slotProps.data.attributes.time_taken, "seconds")
+              }}
+            </Tag>
           </template>
         </Column>
 
@@ -300,7 +306,9 @@
           </template>
 
           <template #body="slotProps">
-            {{ slotProps.data.attributes.no_of_correct_answers }}
+            <Tag severity="info">{{
+              slotProps.data.attributes.no_of_correct_answers
+            }}</Tag>
           </template>
         </Column>
 
@@ -322,7 +330,9 @@
           </template>
 
           <template #body="slotProps">
-            {{ slotProps.data.attributes.total_points_earned }}
+            <Tag severity="info">{{
+              slotProps.data.attributes.total_points_earned
+            }}</Tag>
           </template>
         </Column>
 
@@ -344,7 +354,9 @@
           </template>
 
           <template #body="slotProps">
-            {{ slotProps.data.attributes.total_points_allocated }}
+            <Tag severity="info">{{
+              slotProps.data.attributes.total_points_allocated
+            }}</Tag>
           </template>
         </Column>
 
@@ -367,7 +379,7 @@
           <template #body="slotProps">
             {{
               moment(slotProps.data.attributes.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a",
+                "ddd, MMM D, yyyy, h:mm a"
               )
             }}
           </template>
@@ -380,7 +392,7 @@
           :hidden="!columnVisibility.actions"
         >
           <template #body="slotProps">
-            <span class="p-buttonset">
+            <span class="p-buttonset space-x-1">
               <PrimeButton
                 class="p-button-sm"
                 icon="pi pi-eye"
@@ -388,7 +400,7 @@
                 @click="
                   showEvaluation(
                     slotProps.data.id,
-                    slotProps.data.attributes.questionnaire_id,
+                    slotProps.data.attributes.questionnaire_id
                   )
                 "
               />
@@ -445,6 +457,8 @@ import MenuComponent from "primevue/menu";
 import PrimeButton from "primevue/button";
 import Slider from "primevue/slider";
 import Tag from "primevue/tag";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 
 import moment from "moment/moment";
 
@@ -463,6 +477,8 @@ export default {
     Slider,
     SortComponent,
     Tag,
+    IconField,
+    InputIcon,
   },
   setup() {
     const router = useRouter();
@@ -634,7 +650,7 @@ export default {
           query: { ...query },
         });
       },
-      { deep: true },
+      { deep: true }
     );
 
     function loadData() {

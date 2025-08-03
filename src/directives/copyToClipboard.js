@@ -6,19 +6,17 @@ function createElm(el, targetElmId) {
 
   icon.className = "pi pi-copy hover:cursor-pointer";
 
-  icon.style.padding = "3px";
+  icon.style.padding = "0";
   icon.style.backgroundColor = "white";
-  icon.style.border = "2px solid blue";
-  icon.style.borderRadius = "100px";
-  icon.style.fontSize = "12px";
+  icon.style.fontSize = "16px";
 
   container.style.position = "absolute";
-  container.style.right = "-2.2rem";
+  container.style.right = "-1.8rem";
   container.style.top = "-3px";
 
   container.appendChild(icon);
 
-  el.addEventListener("click", () => copyToClipBoard(container, targetElmId));
+  icon.addEventListener("click", () => copyToClipBoard(container, targetElmId));
 
   el.appendChild(container);
 }

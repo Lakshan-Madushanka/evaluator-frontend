@@ -41,7 +41,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             )
                           ]
                             ? 'pi pi-eye'
@@ -113,14 +113,16 @@
               </div>
             </template>
             <template #filter>
-              <span class="p-input-icon-right">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="filters.name"
-                  type="text"
-                  placeholder="Search"
-                  @keyup.enter="applyFilters"
-                />
+              <span>
+                <IconField>
+                  <InputIcon class="pi pi-search" />
+                  <InputText
+                    v-model="filters.name"
+                    type="text"
+                    placeholder="Search"
+                    @keyup.enter="applyFilters"
+                  />
+                </IconField>
               </span>
             </template>
             <template #body="slotProps">
@@ -136,7 +138,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -148,7 +150,7 @@
             :hidden="!columnVisibility.actions"
           >
             <template #body="slotProps">
-              <span class="p-buttonset">
+              <span class="p-buttonset space-x-1">
                 <PrimeButton
                   class="p-button-sm"
                   icon="pi pi-file-edit"
@@ -193,6 +195,8 @@ import MenuComponent from "primevue/menu";
 import InputText from "primevue/inputtext";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 
 import SortComponent from "@/components/SortComponent.vue";
 
@@ -208,6 +212,8 @@ export default {
     InputText,
     MenuComponent,
     ConfirmDialog,
+    IconField,
+    InputIcon,
   },
   setup() {
     const confirm = useConfirm();

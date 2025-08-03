@@ -576,8 +576,6 @@ export default {
       });
     }
 
-    function test($event) {}
-
     return {
       usersQuestionnairesStore,
       onPage,
@@ -601,7 +599,6 @@ export default {
       toggleActionsMenu,
       route,
       router,
-      test,
       shouldAlloweToResendNotiificaton,
       resendNotification,
     };

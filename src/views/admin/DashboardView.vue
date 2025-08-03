@@ -4,16 +4,17 @@
     <div
       class="sm:grid space-y-4 sm:space-y-0 grid-cols-2 gap-y-4 gap-x-8 xl:gap-y-0 xl:grid-cols-4 xl:gap-x-4"
     >
-      <Card class="">
+      <Card>
         <template #title>
-          <div class="relative">
-            <p>Users</p>
-            <div
-              v-if="dashboardStore.data.usersCount.total"
-              class="absolute top-[-1rem] left-[4rem]"
+          <div v-if="dashboardStore.data.usersCount.total">
+            <OverlayBadge
+              :value="dashboardStore.data.usersCount.total"
+              class="inline-flex"
+              severity="secondary"
+              size="small"
             >
-              <Tag rounded>{{ dashboardStore.data.usersCount.total }}</Tag>
-            </div>
+              <span>Users</span>
+            </OverlayBadge>
           </div>
         </template>
         <template #content>
@@ -42,19 +43,15 @@
           </ul>
         </template>
       </Card>
-      <Card class="">
+      <Card>
         <template #title> Categories </template>
         <template #content>
           <div v-if="dashboardStore.loading">
             <ProgressSpinner />
           </div>
-
-          <span
-            v-else
-            class="inline-block mx-6 mt-2 py-4 px-8 text-2xl font-bold text-white rounded bg-blue-400"
-          >
+          <Avatar v-else class="p-8 text-2xl font-bold">
             {{ dashboardStore.data.noOfCategories }}
-          </span>
+          </Avatar>
         </template>
       </Card>
       <Card class="">
@@ -63,13 +60,9 @@
           <div v-if="dashboardStore.loading">
             <ProgressSpinner />
           </div>
-
-          <span
-            v-else
-            class="inline-block mx-6 mt-2 py-4 px-8 text-2xl font-bold text-white rounded bg-blue-400"
-          >
+          <Avatar v-else class="p-8 text-2xl font-bold">
             {{ dashboardStore.data.noOfQuestionnaires }}
-          </span>
+          </Avatar>
         </template>
       </Card>
       <Card class="">
@@ -78,13 +71,9 @@
           <div v-if="dashboardStore.loading">
             <ProgressSpinner />
           </div>
-
-          <span
-            v-else
-            class="inline-block mx-6 mt-2 py-4 px-8 text-2xl font-bold text-white rounded bg-blue-400"
-          >
+          <Avatar v-else class="p-8 text-2xl font-bold">
             {{ dashboardStore.data.noOfQuestions }}
-          </span>
+          </Avatar>
         </template>
       </Card>
     </div>
@@ -159,7 +148,7 @@
           <template #body="slotProps">
             {{
               moment(slotProps.data.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a",
+                "ddd, MMM D, yyyy, h:mm a"
               )
             }}
           </template>
@@ -171,9 +160,7 @@
 
 <script>
 import { onMounted } from "vue";
-
 import { useDashboardStore } from "@/stores/dashboard";
-
 import { useDashboard } from "@/composables/dashboard";
 
 import Card from "primevue/card";
@@ -181,7 +168,8 @@ import Chart from "primevue/chart";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import ProgressSpinner from "primevue/progressspinner";
-import Tag from "primevue/tag";
+import OverlayBadge from "primevue/overlaybadge";
+import Avatar from "primevue/avatar";
 
 import moment from "moment/moment";
 
@@ -192,7 +180,8 @@ export default {
     Column,
     DataTable,
     ProgressSpinner,
-    Tag,
+    OverlayBadge,
+    Avatar,
   },
   setup() {
     const dashboardStore = useDashboardStore();

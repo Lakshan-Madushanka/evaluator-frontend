@@ -62,9 +62,7 @@
                           :class="
                             columnVisibility[
                               snake(
-                                lowercaseFirstLetter(
-                                  slotProps['item']['label'],
-                                ),
+                                lowercaseFirstLetter(slotProps['item']['label'])
                               ).toLowerCase()
                             ]
                               ? 'pi pi-eye'
@@ -151,22 +149,20 @@
               />
             </template>
             <template #body="slotProps">
-              <!-- {{ slotProps.relationships }} -->
-
               <template
                 v-if="slotProps.data.relationships.categories.length > 0"
               >
                 <Tag
                   v-for="category in slotProps.data.relationships.categories"
                   :key="category.data.id"
-                  severity="success"
+                  severity="info"
                   class="mr-1"
                 >
                   {{
                     findRelations(
                       questionnairesStore.questionnaires.included,
                       category.data.id,
-                      category.data.type,
+                      category.data.type
                     ).attributes.name
                   }}
                 </Tag>
@@ -182,14 +178,16 @@
             :hidden="!columnVisibility.name"
           >
             <template #filter>
-              <span class="p-input-icon-right">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="filters.name"
-                  type="text"
-                  placeholder="Search"
-                  @keyup.enter="applyFilters"
-                />
+              <span>
+                <IconField>
+                  <InputIcon class="pi pi-search" />
+                  <InputText
+                    v-model="filters.name"
+                    type="text"
+                    placeholder="Search"
+                    @keyup.enter="applyFilters"
+                  />
+                </IconField>
               </span>
             </template>
             <template #body="slotProps">
@@ -220,12 +218,12 @@
               >
               <Tag
                 v-else-if="slotProps.data.attributes.difficulty === 'MEDIUM'"
-                severity="warning"
+                severity="warn"
                 >{{ slotProps.data.attributes.difficulty }}</Tag
               >
               <Tag
                 v-else-if="slotProps.data.attributes.difficulty === 'EASY'"
-                class="!bg-cyan-400"
+                severity="info"
                 >{{ slotProps.data.attributes.difficulty }}</Tag
               >
             </template>
@@ -273,10 +271,10 @@
             <template #body="slotProps">
               <Tag
                 v-if="slotProps.data.attributes.single_answers_type"
-                severity="success"
+                severity="info"
                 >Single</Tag
               >
-              <Tag v-else severity="success">Multiple</Tag>
+              <Tag v-else severity="info">Multiple</Tag>
             </template>
           </Column>
 
@@ -299,7 +297,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag class="!bg-indigo-500"
+              <Tag severity="info"
                 >{{ slotProps.data.attributes.allocated_time }} (m)</Tag
               >
             </template>
@@ -324,7 +322,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag class="!bg-orange-700" rounded
+              <Tag severity="info"
                 >{{ slotProps.data.attributes.no_of_questions }}
               </Tag>
             </template>
@@ -349,7 +347,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag class="!bg-orange-500" rounded
+              <Tag severity="info"
                 >{{ slotProps.data.attributes.no_of_easy_questions }}
               </Tag>
             </template>
@@ -374,7 +372,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag class="!bg-orange-500" rounded
+              <Tag severity="info"
                 >{{ slotProps.data.attributes.no_of_medium_questions }}
               </Tag>
             </template>
@@ -399,7 +397,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag class="!bg-orange-500" rounded
+              <Tag severity="info"
                 >{{ slotProps.data.attributes.no_of_hard_questions }}
               </Tag>
             </template>
@@ -412,7 +410,7 @@
             :hidden="!columnVisibility.no_of_assigned_questions"
           >
             <template #body="slotProps">
-              <Tag class="!bg-orange-700" rounded>{{
+              <Tag severity="info">{{
                 slotProps.data.attributes.no_of_assigned_questions
               }}</Tag>
             </template>
@@ -431,7 +429,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -444,7 +442,7 @@
             :hidden="!columnVisibility.actions"
           >
             <template #body="slotProps">
-              <span class="p-buttonset">
+              <span class="p-buttonset space-x-1">
                 <PrimeButton
                   class="p-button-sm"
                   icon="pi pi-eye"
@@ -543,6 +541,8 @@ import DataTable from "primevue/datatable";
 import PrimeButton from "primevue/button";
 import MenuComponent from "primevue/menu";
 import InputText from "primevue/inputtext";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 import ConfirmDialog from "primevue/confirmdialog";
 import Slider from "primevue/slider";
 import Tag from "primevue/tag";
@@ -568,6 +568,8 @@ export default {
     Paginator,
     Slider,
     Tag,
+    IconField,
+    InputIcon,
   },
   setup() {
     const confirm = useConfirm();
@@ -791,7 +793,7 @@ export default {
             });
           });
         }
-      },
+      }
     );
 
     watch(
@@ -824,7 +826,7 @@ export default {
           filters.no_of_hard_questions[1] = hardQuestionsCount;
           maxHardQuestionsCount.value = hardQuestionsCount;
         }
-      },
+      }
     );
 
     watch(query, (newQuery) => {

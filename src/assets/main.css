@@ -1,5 +1,9 @@
 @import "./base.css";
 
+html {
+  font-size: 14px;
+}
+
 #app {
   margin: 0;
   padding: 0;
