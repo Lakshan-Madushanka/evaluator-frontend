@@ -2,6 +2,7 @@
   <div class="relative flex bg-gray-100 min-h-screen">
     <div>
       <sidebar-menu
+        :collapsed="sideBarCollapse"
         :menu="menu"
         class="shadow-2xl"
         theme="white-theme"
@@ -25,7 +26,7 @@
 </template>
 
 <script>
-import { ref, toRefs, reactive, watch } from "vue";
+import { ref, toRefs, reactive, watch, onBeforeMount, onMounted } from "vue";
 
 import { useRoute } from "vue-router";
 
@@ -127,6 +128,16 @@ export default {
       },
     ]);
 
+    onBeforeMount(() => {
+      let shouldSidebarCollapse = localStorage.getItem("ssc");
+
+      if (!shouldSidebarCollapse) {
+        shouldSidebarCollapse = false;
+      }
+
+      sideBarCollapse.value = shouldSidebarCollapse === "true" ? true : false;
+    });
+
     watch(
       route,
       (newRoute) => {
@@ -176,11 +187,12 @@ export default {
           activeClasses.users = "";
         }
       },
-      { immediate: true },
+      { immediate: true }
     );
 
     function onToggleCollapse(event) {
       sideBarCollapse.value = event;
+      localStorage.setItem("ssc", event);
     }
 
     return { activeClasses, appStore, menu, onToggleCollapse, sideBarCollapse };
