@@ -432,7 +432,7 @@ import { useQuestionnairesQuestionsStore } from "@/stores/questionnaires/questio
 
 import Card from "primevue/card";
 import Dropdown from "primevue/dropdown";
-import Dialog from "primevue/dialog";
+import PrimeDialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
 import PrimeButton from "primevue/button";
