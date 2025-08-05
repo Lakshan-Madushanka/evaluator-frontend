@@ -1,3 +1,4 @@
+d
 <template>
   <div class="shadow-lg bg-white p-4 pb-8">
     <div class="flex flex-wrap items-center justify-center sm:justify-between">
@@ -54,12 +55,20 @@
         class="mb-2 !w-full !h-72"
       ></Skeleton>
 
-      <div v-else id="questionsList" ref="questionsListElm" class="shadow">
+      <div v-else class="shadow">
         <div
           class="flex justify-between px-4 items-center w-full py-8 bg-gray-100 border-y-2 border-neutral-200"
         >
-          <div class="text-lg font-bold">
+          <div class="text-lg font-bold flex items-centenr gap-4">
             <p>List of Questions ({{ getListQuestionsCount() }})</p>
+            <PrimeButton
+              severity="info"
+              icon="pi pi-search-plus"
+              rounded
+              size="small"
+              area-label="save"
+              @click="maximizeQuestionList = true"
+            />
           </div>
           <Dropdown
             v-model="selectedDiffculty"
@@ -69,6 +78,7 @@
           />
         </div>
 
+        <!--Question List-->
         <TransitionGroup name="list" tag="ul" class="h-[25rem] overflow-y-auto">
           <li
             v-for="(question, index) of data.questions"
@@ -131,7 +141,6 @@
           </li>
         </TransitionGroup>
       </div>
-
       <div class="mt-8 flex justify-center flex-wrap items-start">
         <PrimeButton
           :label="
@@ -168,6 +177,142 @@
         />
       </div>
     </div>
+
+    <PrimeDialog
+      v-if="maximizeQuestionList"
+      v-model:visible="maximizeQuestionList"
+      :closable="false"
+      :maximizable="true"
+      :dismissableMask="true"
+      modal
+      :style="{ width: '90vw', height: '100vh' }"
+    >
+      <template #header>
+        <div
+          class="flex justify-between px-4 items-center w-full py-8 bg-gray-100 border-y-2 border-neutral-200"
+        >
+          <div class="text-lg font-bold flex items-centenr gap-4">
+            <p>List of Questions ({{ getListQuestionsCount() }})</p>
+            <PrimeButton
+              icon="pi pi-search-minus"
+              severity="info"
+              rounded
+              size="small"
+              area-label="save"
+              @click="maximizeQuestionList = false"
+            />
+          </div>
+          <Dropdown
+            v-model="selectedDiffculty"
+            :options="difficultyFilterOptions"
+            option-label="name"
+            placeholder="Difficulty"
+          />
+        </div>
+      </template>
+
+      <!--Question List-->
+      <TransitionGroup name="list" tag="ul" class="h-[25rem]">
+        <li
+          v-for="(question, index) of data.questions"
+          :key="question.id"
+          :class="{ 'bg-blue-200': isQuestionSelected(question) }"
+          @click="selectQuestion($event, question)"
+        >
+          <div
+            v-if="question.show"
+            class="flex justify-between border-b-2 border-neutral-200 p-4 hover:cursor-pointer"
+          >
+            <div class="flex w-[75%]">
+              <span class="mr-2">{{ index + 1 }}).</span>
+              <p v-html="question.attributes.content"></p>
+            </div>
+            <div class="space-y-1">
+              <p>
+                ID
+                <Tag severity="secondary" size="small">{{
+                  question.attributes.pretty_id
+                }}</Tag>
+              </p>
+              <p>
+                Single answers type
+                <Tag severity="secondary" size="small">{{
+                  question.attributes.answers_type_single
+                }}</Tag>
+              </p>
+              <p>
+                Difficulty
+                <Tag severity="secondary" size="small">
+                  {{ question.attributes.hardness }}</Tag
+                >
+              </p>
+              <p>
+                Answers count
+                <Tag severity="secondary" size="small">
+                  {{ question.attributes.no_of_answers }}
+                </Tag>
+              </p>
+              <p>
+                Images count
+                <Tag severity="secondary" size="small">
+                  {{ question.attributes.images_count }}
+                </Tag>
+              </p>
+              <p class="mt-2">
+                Marks:
+                <InputNumber
+                  v-model="question.attributes.marks"
+                  input-class="w-16 h-10"
+                  show-buttons
+                  :min="1"
+                  :max="10"
+                  @click.stop.prevent
+                />
+              </p>
+            </div>
+          </div>
+        </li>
+      </TransitionGroup>
+      <!--Actions-->
+      <template #footer>
+        <div class="mt-8 flex justify-center flex-wrap items-center">
+          <PrimeButton
+            :label="
+              questionnairesQuestionsStore.status === 'syncing'
+                ? 'Syncing'
+                : 'Sync All'
+            "
+            icon="pi pi-history"
+            class="!mb-2 !mr-4 p-button-warning"
+            :loading="questionnairesQuestionsStore.status === 'syncing'"
+            @click="syncQuestions"
+          />
+          <span
+            v-if="data.questions.length > 0"
+            class="p-buttonset space-x-4 mr-4 mb-2"
+          >
+            <PrimeButton
+              label="Select All"
+              icon="pi pi-clone"
+              @click="selectAllQuestions"
+            />
+            <PrimeButton
+              label="Deselect All"
+              icon="pi pi-times"
+              @click="deselectAllQuestions"
+            />
+          </span>
+          <PrimeButton
+            v-if="selectedQuestions.length > 0"
+            icon="pi pi-trash"
+            label="Remove Selected"
+            class="p-button-warning"
+            @click="removeSelectedQuestions"
+          />
+        </div>
+      </template>
+    </PrimeDialog>
+
     <div class="mt-8">
       <p class="text-xl font-bold mb-4">Find Question</p>
       <div class="flex items-start">
@@ -287,6 +432,7 @@ import { useQuestionnairesQuestionsStore } from "@/stores/questionnaires/questio
 
 import Card from "primevue/card";
 import Dropdown from "primevue/dropdown";
+import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
 import PrimeButton from "primevue/button";
@@ -297,6 +443,7 @@ export default {
   components: {
     Card,
     Dropdown,
+    PrimeDialog,
     PrimeButton,
     Skeleton,
     Tag,
@@ -307,6 +454,8 @@ export default {
     const route = useRoute();
 
     const questionnairesQuestionsStore = useQuestionnairesQuestionsStore();
+
+    const maximizeQuestionList = ref(false);
 
     const difficultyFilterOptions = [
       { name: "All", value: 1 },
@@ -373,7 +522,7 @@ export default {
           setAssignedQuestionsCount(question, "increment");
           data.assignedQuestions.total++;
         });
-      },
+      }
     );
 
     function getData() {
@@ -436,7 +585,7 @@ export default {
 
       questionnairesQuestionsStore.checkQuestionEligibility(
         route.params.id,
-        questionId.value,
+        questionId.value
       );
     }
 
@@ -598,6 +747,7 @@ export default {
       selectAllQuestions,
       deselectAllQuestions,
       syncQuestions,
+      maximizeQuestionList,
     };
   },
 };
