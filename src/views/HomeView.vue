@@ -60,7 +60,7 @@ export default {
 
     const candidatesQuestionnairesStore = useCandidatesQuestionnairesStore();
 
-    const secretCode = ref("");
+    const secretCode = ref("8b92f38f-3fe8-4aa2-851c-40f1b0c30001");
     const searchButtonClicked = ref(false);
 
     watch(
@@ -69,7 +69,7 @@ export default {
         if (availableCode) {
           router.push({ name: "candidate.questionnaires.instructions" });
         }
-      },
+      }
     );
 
     function searchQuestionnaire() {

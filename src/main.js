@@ -23,6 +23,8 @@ import ToastService from "primevue/toastservice";
 import Tooltip from "primevue/tooltip";
 import ConfirmationService from "primevue/confirmationservice";
 
+import hljs from "highlight.js";
+
 // Custom directives
 import copyToClipboard from "./directives/copyToClipboard";
 
@@ -40,5 +42,6 @@ app.use(PrimeVue, {
 });
 app.use(ToastService);
 app.use(ConfirmationService);
+app.use(hljs.vuePlugin);
 
 app.mount("#app");

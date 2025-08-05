@@ -117,8 +117,13 @@
               <div class="text-black">
                 <div class="flex justify-between w-full">
                   <div class="flex w-[90%]">
-                    <p class="mr-2">{{ getQuestionNo(questionIndex) }}).</p>
-                    <p v-html="question.attributes.content"></p>
+                    <span class="mr-2"
+                      >{{ getQuestionNo(questionIndex) }}).</span
+                    >
+                    <div
+                      v-html="question.attributes.content"
+                      class="space-y-2"
+                    ></div>
                   </div>
                 </div>
                 <!--Question images-->
@@ -137,7 +142,7 @@
               </div>
 
               <!-- Answers -->
-              <div class="ml-8 mt-2">
+              <div class="ml-8 mt-8">
                 <div
                   v-for="(answer, answerIndex) in questionAnswers[question.id]"
                   :key="answer.id"
@@ -162,7 +167,7 @@
                   </div>
 
                   <div v-else class="flex items-center">
-                    <p class="mr-4">{{ answerIndex + 1 }}</p>
+                    <p class="mr-4">{{ answerIndex + 1 }}.</p>
                     <Checkbox
                       v-model="userAnswers[question.id]"
                       :input-id="answer.id"
@@ -199,7 +204,7 @@
 
     <Paginator
       v-model:first="paginator.offset"
-      :rows="10"
+      :rows="paginator.perPage"
       :total-records="candidatesQuestionnairesStore?.questions?.length"
       :rows-per-page-options="[10, 20, 30]"
       @page="onPageChange"
@@ -218,6 +223,7 @@ import {
   computed,
   onUnmounted,
   nextTick,
+  onUpdated,
 } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
@@ -237,11 +243,14 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 
 import VueCountdown from "@chenfengyuan/vue-countdown";
+import hljs from "highlight.js";
 
 import QuestionnaireSkeleton from "@/components/skeletons/QuestionnaireSkeleton.vue";
 import EvaluationView from "@/views/candidates/questionnaires/EvaluationView.vue";
 
 import { findRelations, formatMinutes } from "@/helpers";
+
+import "highlight.js/styles/stackoverflow-light.css";
 
 export default {
   components: {
@@ -286,6 +295,11 @@ export default {
 
     onMounted(() => {
       getQuestionsData();
+    });
+
+    onUpdated(() => {
+      highlightCodeBlock();
+      highlightInlineCode();
     });
 
     watch(
@@ -467,6 +481,20 @@ export default {
       clearInterval(minutesCounter);
     });
 
+    function highlightCodeBlock() {
+      hljs.configure({
+        cssSelector: "pre ",
+      });
+      hljs.highlightAll();
+    }
+
+    function highlightInlineCode() {
+      hljs.configure({
+        cssSelector: "code",
+      });
+      hljs.highlightAll();
+    }
+
     return {
       route,
       router,
@@ -497,3 +525,9 @@ export default {
   },
 };
 </script>
+
+<style>
+pre {
+  padding: 2px 4px !important;
+}
+</style>

@@ -123,6 +123,7 @@
           <vue-countdown
             v-slot="{ minutes, seconds }"
             :time="getRemainingTime()"
+            class="flex justify-center"
           >
             <span class="flex space-x-2">
               <span class="p-4 bg-white text-black font-bold"
