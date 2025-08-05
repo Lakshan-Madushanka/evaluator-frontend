@@ -27,7 +27,7 @@
                 id="questionnaire_id"
                 v-model="questionnaireId"
                 :class="[
-                  'w-full disabled:!text-pink-500',
+                  'w-full disabled:!text-[var(--p-primary-color)]',
 
                   {
                     '!font-bold': usersQuestionnairesStore.availableId,
@@ -123,14 +123,14 @@ export default {
         if (newStatus === "attached") {
           clearState();
         }
-      },
+      }
     );
 
     watch(
       () => props.display,
       (newValue) => {
         displayComponent.value = newValue;
-      },
+      }
     );
 
     function clearState() {
