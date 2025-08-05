@@ -7,7 +7,7 @@
   <template v-else>
     <!-- Header -->
     <header
-      class="bg-gray-400 p-4 mb-2 text-white flex flex-col items-center space-y-2 sm:space-y-0 sm:flex-row sm:justify-between sticky top-0 z-10"
+      class="bg-gray-100 shadow border p-4 text-black flex flex-col items-center space-y-2 sm:space-y-0 sm:flex-row sm:justify-between sticky top-0 z-10"
     >
       <div class="flex items-center justify-center">
         <p class="text-xl font-bold mr-2">
@@ -36,10 +36,10 @@
     <!-- Body -->
     <div
       v-if="candidatesQuestionnairesStore.questions"
-      class="xl:grid grid-cols-[18%_82%]"
+      :class="{ 'xl:grid grid-cols-[18%_82%]': showSidebar }"
     >
       <!-- Left side -->
-      <div class="shadow p-4 bg-white mt-4">
+      <div v-if="showSidebar" class="shadow p-4 bg-gray-50/10">
         <!-- Navigation map -->
         <div
           class="grid grid-cols-6 sm:grid-cols-10 xl:grid-cols-5 2xl:grid-cols-6 text-black dark:text-gray-400 text-center xl:sticky top-[6rem]"
@@ -76,6 +76,31 @@
             </PrimeButton>
           </div>
         </div>
+      </div>
+      <!--Sidebar toggler-->
+      <div
+        v-if="showSidebar"
+        class="fixed bottom-2 left-1 z-50 hidden xl:block"
+        @click="showSidebar = false"
+      >
+        <PrimeButton
+          icon="pi pi-chevron-circle-left"
+          severity="info"
+          rounded
+          aria-label="Save"
+        />
+      </div>
+      <div
+        v-else
+        class="fixed bottom-2 z-50 left-2"
+        @click="showSidebar = true"
+      >
+        <PrimeButton
+          icon="pi pi-chevron-circle-right"
+          severity="info"
+          rounded
+          aria-label="Save"
+        />
       </div>
 
       <!-- Right side -->
@@ -246,6 +271,7 @@ export default {
 
     const showAnswers = ref(true);
     const showMarks = ref(true);
+    const showSidebar = ref(true);
 
     let questionAnswers = reactive({});
     const userAnswers = ref({});
@@ -466,6 +492,7 @@ export default {
       showSubmitConfirmDialog,
       submit,
       onTimeElapsed,
+      showSidebar,
     };
   },
 };
