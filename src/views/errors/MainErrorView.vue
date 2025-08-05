@@ -120,14 +120,19 @@
             429 - Too many attempts
           </h1>
           <p class="text-slate-600 mt-5 lg:text-lg">Please try agian after</p>
-          <Countdown
-            :flip-animation="false"
-            label-size="1rem"
-            countdown-size="2rem"
-            :show-days="false"
-            :show-hours="false"
-            :deadline="getRemainingTime()"
-          />
+          <vue-countdown
+            v-slot="{ minutes, seconds }"
+            :time="getRemainingTime()"
+          >
+            <span class="flex space-x-2">
+              <span class="p-4 bg-white text-black font-bold"
+                >{{ minutes }} M
+              </span>
+              <span class="p-4 bg-white text-black font-bold"
+                >{{ seconds }} S</span
+              >
+            </span>
+          </vue-countdown>
         </template>
         <template v-else>
           <h1 class="mt-5 text-[36px] text-slate-800 font-bold lg:text-[50px]">
@@ -159,7 +164,7 @@
 import Button from "primevue/button";
 import { useRoute, useRouter } from "vue-router";
 import { uppercaseFirstLetter } from "@/helpers";
-import { Countdown } from "vue3-flip-countdown";
+import VueCountdown from "@chenfengyuan/vue-countdown";
 import moment from "moment";
 
 const route = useRoute();
@@ -168,6 +173,6 @@ const router = useRouter();
 const query = route.query;
 
 function getRemainingTime() {
-  return moment.unix(query.retryAfter).format("YYYY-MM-DD HH:mm:ss");
+  return moment.unix(query.retryAfter).milliseconds();
 }
 </script>

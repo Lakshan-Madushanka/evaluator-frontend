@@ -14,19 +14,22 @@
           {{ questionnaire?.name }}
         </p>
       </div>
-      <div v-once>
-        <Countdown
-          :flip-animation="true"
-          countdown-size="2rem"
-          :show-days="false"
-          :show-labels="false"
-          main-color="green"
-          second-flip-color="green"
-          main-flip-background-color="white"
-          second-flip-background-color="white"
-          :deadline="getRemainingTime()"
-          @time-elapsed="onTimeElapsed"
-        />
+      <div>
+        <vue-countdown
+          v-slot="{ hours, minutes, seconds }"
+          :time="getRemainingTime()"
+          @end="onTimeElapsed()"
+        >
+          <span class="flex space-x-2">
+            <span class="p-4 bg-white text-black font-bold">{{ hours }} H</span>
+            <span class="p-4 bg-white text-black font-bold"
+              >{{ minutes }} M
+            </span>
+            <span class="p-4 bg-white text-black font-bold"
+              >{{ seconds }} S</span
+            >
+          </span>
+        </vue-countdown>
       </div>
     </header>
 
@@ -63,8 +66,8 @@
               icon-pos="right"
               @click="showSubmitConfirmDialog"
             >
-              <div class="flex justify-between w-full px-2">
-                <span>Submit</span>
+              <div class="flex justify-between items-center w-full px-2">
+                <span class="font-bold">Submit</span>
                 <Tag severity="success">
                   {{ noOfAnsweredQuestions }} /
                   {{ questionnaire.no_of_questions }}
@@ -119,7 +122,7 @@
                     v-if="question.attributes.answers_type_single"
                     class="flex items-center"
                   >
-                    <p class="mr-4">{{ answerIndex + 1 }}</p>
+                    <p class="mr-4">{{ answerIndex + 1 }}.</p>
                     <RadioButton
                       v-model="userAnswers[question.id]"
                       :input-id="answer.id"
@@ -208,13 +211,12 @@ import Tag from "primevue/tag";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 
+import VueCountdown from "@chenfengyuan/vue-countdown";
+
 import QuestionnaireSkeleton from "@/components/skeletons/QuestionnaireSkeleton.vue";
 import EvaluationView from "@/views/candidates/questionnaires/EvaluationView.vue";
 
 import { findRelations, formatMinutes } from "@/helpers";
-
-import { Countdown } from "vue3-flip-countdown";
-import moment from "moment";
 
 export default {
   components: {
@@ -229,7 +231,7 @@ export default {
     Tag,
     QuestionnaireSkeleton,
     EvaluationView,
-    Countdown,
+    VueCountdown,
   },
   setup() {
     const route = useRoute();
@@ -268,7 +270,7 @@ export default {
           currrentPageRecords.value = getPaginatorRecords();
         }
       },
-      { immediate: true },
+      { immediate: true }
     );
 
     function getQuestionsData() {
@@ -299,12 +301,11 @@ export default {
     }, 60000);
 
     function getRemainingTime() {
-      return moment()
-        .add(
-          candidatesQuestionnairesStore.questionnaireInfo?.allocated_time,
-          "m",
-        )
-        .format("YYYY-MM-DD HH:mm:ss");
+      return (
+        candidatesQuestionnairesStore.questionnaireInfo?.allocated_time *
+        60 *
+        Math.pow(10, 3)
+      );
     }
 
     function setAnwers(newQuestions) {
@@ -315,7 +316,7 @@ export default {
           let relatedAnswer = findRelations(
             candidatesQuestionnairesStore.meta.included,
             answer.data.id,
-            answer.data.type,
+            answer.data.type
           );
           questionAnswers[question.id].push(relatedAnswer);
         }
@@ -341,7 +342,7 @@ export default {
 
       return candidatesQuestionnairesStore.questions?.slice(
         start_index,
-        end_index,
+        end_index
       );
     }
 
@@ -446,7 +447,7 @@ export default {
       currrentPageRecords,
       candidatesQuestionnairesStore,
       questionnaire: computed(
-        () => candidatesQuestionnairesStore.questionnaireInfo,
+        () => candidatesQuestionnairesStore.questionnaireInfo
       ),
       paginator,
       userAnswers,

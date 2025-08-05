@@ -72,19 +72,19 @@ export function formatDuration(duration, format) {
   let formattedTime = "";
 
   if (allocatedTime.hours() && allocatedTime.minutes()) {
-    formattedTime = `${allocatedTime.hours()}(hours) : ${allocatedTime.minutes()}(minutes)`;
+    formattedTime = `${allocatedTime.hours()} (hours) : ${allocatedTime.minutes()} (minutes)`;
   }
 
   if (allocatedTime.hours() && allocatedTime.minutes()) {
-    formattedTime = `${allocatedTime.hours()}(hours) : ${allocatedTime.minutes()}(minutes)`;
+    formattedTime = `${allocatedTime.hours()} (hours) : ${allocatedTime.minutes()} (minutes)`;
   }
 
   if (!allocatedTime.hours() && allocatedTime.minutes()) {
-    formattedTime = `${allocatedTime.minutes()}(minutes)`;
+    formattedTime = `${allocatedTime.minutes()} (minutes)`;
   }
 
   if (allocatedTime.hours() && !allocatedTime.minutes()) {
-    formattedTime = `${allocatedTime.hours()}(hours)`;
+    formattedTime = `${allocatedTime.hours()} (hours)`;
   }
 
   return formattedTime;
