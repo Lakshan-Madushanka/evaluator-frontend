@@ -231,7 +231,7 @@ export default {
       () => questionsAnswersStore.answers,
       (newAnswers) => {
         data.answers = JSON.parse(JSON.stringify(newAnswers));
-      }
+      },
     );
 
     function getData() {
