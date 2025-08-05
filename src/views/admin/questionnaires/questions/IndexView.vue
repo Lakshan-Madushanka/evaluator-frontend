@@ -373,7 +373,7 @@ export default {
           setAssignedQuestionsCount(question, "increment");
           data.assignedQuestions.total++;
         });
-      }
+      },
     );
 
     function getData() {
@@ -436,7 +436,7 @@ export default {
 
       questionnairesQuestionsStore.checkQuestionEligibility(
         route.params.id,
-        questionId.value
+        questionId.value,
       );
     }
 
