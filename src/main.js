@@ -25,6 +25,8 @@ import ConfirmationService from "primevue/confirmationservice";
 
 import hljs from "highlight.js";
 
+import VueObserveVisibility from "vue3-observe-visibility";
+
 // Custom directives
 import copyToClipboard from "./directives/copyToClipboard";
 
@@ -43,5 +45,6 @@ app.use(PrimeVue, {
 app.use(ToastService);
 app.use(ConfirmationService);
 app.use(hljs.vuePlugin);
+app.use(VueObserveVisibility);
 
 app.mount("#app");

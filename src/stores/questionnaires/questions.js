@@ -14,8 +14,9 @@ export const useQuestionnairesQuestionsStore = defineStore(
     const status = ref("");
     const errors = ref({});
     const questions = ref(null);
+    const eligibleQuestions = ref(null);
     const question = ref(null);
-    const meta = reactive({ included: null });
+    const meta = reactive({ meta: {}, included: null });
 
     async function getAll(id, query) {
       resetStatus(true, "", {});
@@ -31,6 +32,22 @@ export const useQuestionnairesQuestionsStore = defineStore(
       }
     }
 
+    async function getAllEligibleQuestions(id, query) {
+      resetStatus(true, "", {});
+      try {
+        const results =
+          await questionnaireRequests.getAllEligibleQuestionsRequest(id, query);
+        eligibleQuestions.value = results;
+        meta.meta = results.meta;
+
+        meta.included = results.included;
+      } catch (data) {
+        //
+      } finally {
+        loading.value = false;
+      }
+    }
+
     async function checkQuestionEligibility(questionnaireId, questionId) {
       resetStatus(false, "searching", {});
 
@@ -38,14 +55,14 @@ export const useQuestionnairesQuestionsStore = defineStore(
         const results =
           await questionnaireRequests.checkQuestionEligibilityRequest(
             questionnaireId,
-            questionId,
+            questionId
           );
 
         if (results.eligible === false) {
           errors.value.questionId = "Invalid or not eligible question id";
           appStore.setToast(
             "warn",
-            "Counld not find eligible question for id " + questionId,
+            "Counld not find eligible question for id " + questionId
           );
         }
         question.value = results.data;
@@ -60,16 +77,16 @@ export const useQuestionnairesQuestionsStore = defineStore(
       resetStatus(false, "syncing", {});
 
       try {
-        const results = await questionnaireRequests.syncQuestionsRequest(
+        await questionnaireRequests.syncQuestionsRequest(
           questionnaireId,
-          questions,
+          questions
         );
 
         appStore.setToast(
           "success",
           "Questions of questionnaire " +
             questionnaireId +
-            " synced successfully",
+            " synced successfully"
         );
       } catch (data) {
         //
@@ -82,7 +99,7 @@ export const useQuestionnairesQuestionsStore = defineStore(
       isLoading,
       statusValue,
       errorsValue,
-      questionValue = null,
+      questionValue = null
     ) {
       loading.value = isLoading;
       status.value = statusValue;
@@ -95,11 +112,13 @@ export const useQuestionnairesQuestionsStore = defineStore(
       status,
       errors,
       questions,
+      eligibleQuestions,
       question,
       meta,
       getAll,
+      getAllEligibleQuestions,
       checkQuestionEligibility,
       syncQuestions,
     };
-  },
+  }
 );

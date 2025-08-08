@@ -1,5 +1,6 @@
-d
 <template>
+  <ConfirmDialog />
+
   <div class="shadow-lg bg-white p-4 pb-8">
     <div class="flex flex-wrap items-center justify-center sm:justify-between">
       <h1 class="text-2xl font-bold uppercase mb-2">
@@ -183,7 +184,7 @@ d
       v-model:visible="maximizeQuestionList"
       :closable="false"
       :maximizable="true"
-      :dismissableMask="true"
+      :dismissable-mask="true"
       modal
       :style="{ width: '90vw', height: '100vh' }"
     >
@@ -420,6 +421,23 @@ d
         <template #footer> </template>
       </Card>
     </div>
+
+    <div v-if="showEligibleQuestionList" class="mt-16">
+      <EligibleQuestionsList
+        :questionnaire-id="route.params.id"
+        :refresh="shouldRefreshEligibleQuestionList"
+        @selection-change="onSelectionChange"
+        @add="onAdd"
+      />
+    </div>
+
+    <div
+      v-observe-visibility="{
+        callback: onEligibleQuestionListVisible,
+        once: true,
+      }"
+      class="invisible"
+    ></div>
   </div>
 </template>
 
@@ -431,6 +449,7 @@ import { useRoute } from "vue-router";
 import { useQuestionnairesQuestionsStore } from "@/stores/questionnaires/questions";
 
 import Card from "primevue/card";
+import ConfirmDialog from "primevue/confirmdialog";
 import Dropdown from "primevue/dropdown";
 import PrimeDialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
@@ -438,10 +457,14 @@ import InputNumber from "primevue/inputnumber";
 import PrimeButton from "primevue/button";
 import Skeleton from "primevue/skeleton";
 import Tag from "primevue/tag";
+import { useConfirm } from "primevue/useconfirm";
+
+import EligibleQuestionsList from "@/views/admin/questionnaires/questions/components/EligibleQuestionsList.vue";
 
 export default {
   components: {
     Card,
+    ConfirmDialog,
     Dropdown,
     PrimeDialog,
     PrimeButton,
@@ -449,13 +472,20 @@ export default {
     Tag,
     InputText,
     InputNumber,
+    EligibleQuestionsList,
   },
   setup() {
+    const confirm = useConfirm();
+
     const route = useRoute();
 
     const questionnairesQuestionsStore = useQuestionnairesQuestionsStore();
 
     const maximizeQuestionList = ref(false);
+
+    const showEligibleQuestionList = ref(false);
+
+    const shouldRefreshEligibleQuestionList = ref(false);
 
     const difficultyFilterOptions = [
       { name: "All", value: 1 },
@@ -520,13 +550,14 @@ export default {
         data.questions.forEach((question) => {
           question.show = true;
           setAssignedQuestionsCount(question, "increment");
-          data.assignedQuestions.total++;
         });
-      },
+      }
     );
 
     function getData() {
-      questionnairesQuestionsStore.getAll(route.params.id);
+      questionnairesQuestionsStore
+        .getAll(route.params.id)
+        .then(() => (shouldRefreshEligibleQuestionList.value = true));
     }
 
     function setAssignedQuestionsCount(question, operation) {
@@ -549,6 +580,13 @@ export default {
           data.assignedQuestions.hard--;
         }
       }
+
+      if (operation === "increment") {
+        data.assignedQuestions.total++;
+        return;
+      }
+
+      data.assignedQuestions.total--;
     }
 
     function removeSelectedQuestions() {
@@ -585,12 +623,14 @@ export default {
 
       questionnairesQuestionsStore.checkQuestionEligibility(
         route.params.id,
-        questionId.value,
+        questionId.value
       );
     }
 
-    function canAddToList() {
-      const question = questionnairesQuestionsStore.question;
+    function canAddToList(question = null) {
+      if (!question) {
+        question = questionnairesQuestionsStore.question;
+      }
       const difficulty = question.attributes.hardness;
 
       if (
@@ -644,13 +684,14 @@ export default {
       return false;
     }
 
-    function addToList() {
-      const question = questionnairesQuestionsStore.question;
+    function addToList(question = null) {
+      if (!question) {
+        question = questionnairesQuestionsStore.question;
+      }
       question.show = true;
       question.attributes.marks = 1;
       setAssignedQuestionsCount(question, "increment");
       data.questions.unshift(question);
-      data.assignedQuestions.total++;
     }
 
     function getListQuestionsCount() {
@@ -692,6 +733,7 @@ export default {
       data.assignedQuestions.medium = 0;
       data.assignedQuestions.hard = 0;
       data.assignedQuestions.total = 0;
+      shouldRefreshEligibleQuestionList.value = false;
       getData();
     }
 
@@ -721,8 +763,127 @@ export default {
     }
 
     function syncQuestions() {
-      questionnairesQuestionsStore.syncQuestions(route.params.id, {
-        questions: prepareQuestionsToSync(),
+      shouldRefreshEligibleQuestionList.value = false;
+
+      questionnairesQuestionsStore
+        .syncQuestions(route.params.id, {
+          questions: prepareQuestionsToSync(),
+        })
+        .then(() => {
+          shouldRefreshEligibleQuestionList.value = true;
+        });
+    }
+
+    function onEligibleQuestionListVisible(isVisible) {
+      if (isVisible) {
+        showEligibleQuestionList.value = true;
+      }
+    }
+
+    function onAdd(question) {
+      if (!canAddToList(question)) {
+        showWarningDialog(addToListError.value);
+        return;
+      }
+
+      addToList(question);
+      showSuccessDialog("Question is added to the list");
+    }
+
+    function onSelectionChange(questions) {
+      if (
+        questions.length >
+        route.query.no_of_total_questions - data.assignedQuestions.total
+      ) {
+        showWarningDialog("No of allowed questions limit exceeded!");
+        return;
+      }
+
+      const q = { hard: 0, easy: 0, medium: 0 };
+
+      for (let key in questions) {
+        if (data.questions.some((quest) => quest.id === questions[key]["id"])) {
+          showWarningDialog(
+            `Queestion with id ${questions[key]["id"]} already exists!`
+          );
+          return;
+        }
+        if (questions[key]["attributes"]["hardness"] === "EASY") {
+          q.easy++;
+        } else if (questions[key]["attributes"]["hardness"] === "MEDIUM") {
+          q.medium++;
+        } else {
+          q.hard++;
+        }
+        questions[key].show = true;
+        questions[key].attributes.marks = 1;
+      }
+
+      if (
+        data.assignedQuestions.easy + q.easy >
+        route.query.no_of_easy_questions
+      ) {
+        showWarningDialog("No of allowed easy questions limit exceeded!");
+        return;
+      }
+
+      if (
+        data.assignedQuestions.medium + q.medium >
+        route.query.no_of_medium_questions
+      ) {
+        showWarningDialog("No of allowed medium questions limit exceeded!");
+        return;
+      }
+
+      if (
+        data.assignedQuestions.hard + q.hard >
+        route.query.no_of_hard_questions
+      ) {
+        showWarningDialog("No of allowed hard questions limit exceeded!");
+        return;
+      }
+
+      data.questions = [...data.questions, ...questions];
+
+      questions.forEach((question) => {
+        setAssignedQuestionsCount(question, "increment");
+      });
+
+      showSuccessDialog(
+        "Selected questions added to list; Don't forget to sync!"
+      );
+    }
+
+    function showWarningDialog(msg) {
+      confirm.require({
+        message: msg,
+        header: "Warning",
+        icon: "pi pi-info-circle",
+        rejectLabel: "Cancel",
+        rejectProps: {
+          label: "Cancel",
+          severity: "warn",
+          outlined: true,
+        },
+        acceptProps: {
+          class: "!hidden",
+        },
+      });
+    }
+
+    function showSuccessDialog(msg) {
+      confirm.require({
+        message: msg,
+        header: "Success",
+        icon: "pi pi-check",
+        rejectProps: {
+          class: "!hidden",
+        },
+        acceptProps: {
+          label: "Back",
+          severity: "success",
+          outlined: true,
+        },
       });
     }
 
@@ -748,6 +909,11 @@ export default {
       deselectAllQuestions,
       syncQuestions,
       maximizeQuestionList,
+      showEligibleQuestionList,
+      onEligibleQuestionListVisible,
+      onSelectionChange,
+      shouldRefreshEligibleQuestionList,
+      onAdd,
     };
   },
 };
