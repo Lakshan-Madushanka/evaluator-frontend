@@ -1,4 +1,5 @@
 <template>
+  <ConfirmDialog />
   <div class="shadow-lg bg-white p-4 pb-8">
     <div class="flex flex-wrap items-center justify-center sm:justify-between">
       <h1 class="text-2xl font-bold uppercase mb-2">
@@ -184,6 +185,21 @@
         <template #footer> </template>
       </Card>
     </div>
+    <div v-if="showAnswerList" class="mt-16">
+      <AnswerList
+        :questionnaire-id="route.params.id"
+        :refresh="shouldRefreshAnswerList"
+        @selection-change="onSelectionChange"
+        @add="onSelectionChange"
+      />
+    </div>
+    <div
+      v-observe-visibility="{
+        callback: onAnswerListVisible,
+        once: true,
+      }"
+      class="invisible"
+    ></div>
   </div>
 </template>
 
@@ -196,24 +212,36 @@ import { useQuestionsAnswersStore } from "@/stores/questions/answers";
 
 import Card from "primevue/card";
 import Checkbox from "primevue/checkbox";
+import ConfirmDialog from "primevue/confirmdialog";
 import InputText from "primevue/inputtext";
 import PrimeButton from "primevue/button";
 import Skeleton from "primevue/skeleton";
 import Tag from "primevue/tag";
+import { useConfirm } from "primevue/useconfirm";
+
+import AnswerList from "@/views/admin/questions/Answers/components/AnswerList.vue";
 
 export default {
   components: {
     Card,
     Checkbox,
+    ConfirmDialog,
     PrimeButton,
     Skeleton,
     InputText,
     Tag,
+    AnswerList,
   },
   setup() {
     const route = useRoute();
 
+    const confirm = useConfirm();
+
     const questionsAnswersStore = useQuestionsAnswersStore();
+
+    const showAnswerList = ref(false);
+
+    const shouldRefreshAnswerList = ref(false);
 
     const data = reactive({
       answers: [],
@@ -231,11 +259,13 @@ export default {
       () => questionsAnswersStore.answers,
       (newAnswers) => {
         data.answers = JSON.parse(JSON.stringify(newAnswers));
-      },
+      }
     );
 
     function getData() {
-      questionsAnswersStore.getAll(route.params.id);
+      questionsAnswersStore.getAll(route.params.id).then(() => {
+        shouldRefreshAnswerList.value = true;
+      });
     }
 
     function removeSelectedAnswers() {
@@ -294,8 +324,10 @@ export default {
       return false;
     }
 
-    function addToList() {
-      const answer = questionsAnswersStore.answer;
+    function addToList(answer = null) {
+      if (!answer) {
+        answer = questionsAnswersStore.answer;
+      }
       answer.attributes.correct_answer = false;
       data.answers.unshift(answer);
     }
@@ -332,6 +364,7 @@ export default {
     }
 
     function reset() {
+      shouldRefreshAnswerList.value = false;
       selectedAnswers.value = [];
       questionId.value = "";
       queestionIdSearchButtonClicked.value = false;
@@ -369,7 +402,74 @@ export default {
       });
     }
 
+    function onAnswerListVisible(isVisible) {
+      if (isVisible) {
+        showAnswerList.value = true;
+      }
+    }
+
+    function onSelectionChange(answers) {
+      if (!Array.isArray(answers)) {
+        answers = [answers];
+      }
+
+      if (answers.length > route.query.total_answers - data.answers.length) {
+        showWarningDialog("No of allowed questions limit exceeded!");
+        return;
+      }
+
+      for (let ans of answers) {
+        if (checkAnswerExists(ans)) {
+          showWarningDialog("Answer already exists with id " + ans.id);
+          return;
+        }
+      }
+
+      answers.forEach((answer) => {
+        addToList(answer);
+      });
+
+      showSuccessDialog(
+        "Selected answers added to list; Don't forget to sync!"
+      );
+    }
+
+    function showWarningDialog(msg) {
+      confirm.require({
+        message: msg,
+        header: "Warning",
+        icon: "pi pi-info-circle",
+        rejectLabel: "Cancel",
+        rejectProps: {
+          label: "Cancel",
+          severity: "warn",
+          outlined: true,
+        },
+        acceptProps: {
+          class: "!hidden",
+        },
+      });
+    }
+
+    function showSuccessDialog(msg) {
+      confirm.require({
+        message: msg,
+        header: "Success",
+        icon: "pi pi-check",
+        rejectProps: {
+          class: "!hidden",
+        },
+        acceptProps: {
+          label: "Back",
+          severity: "success",
+          outlined: true,
+        },
+      });
+    }
+
     return {
+      showAnswerList,
+      shouldRefreshAnswerList,
       data,
       selectedAnswers,
       addToListError,
@@ -388,6 +488,8 @@ export default {
       selectAllAnswers,
       deselectAllAnswers,
       syncAnswers,
+      onAnswerListVisible,
+      onSelectionChange,
     };
   },
 };
