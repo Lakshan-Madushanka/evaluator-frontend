@@ -551,7 +551,7 @@ export default {
           question.show = true;
           setAssignedQuestionsCount(question, "increment");
         });
-      }
+      },
     );
 
     function getData() {
@@ -623,7 +623,7 @@ export default {
 
       questionnairesQuestionsStore.checkQuestionEligibility(
         route.params.id,
-        questionId.value
+        questionId.value,
       );
     }
 
@@ -804,7 +804,7 @@ export default {
       for (let key in questions) {
         if (data.questions.some((quest) => quest.id === questions[key]["id"])) {
           showWarningDialog(
-            `Queestion with id ${questions[key]["id"]} already exists!`
+            `Queestion with id ${questions[key]["id"]} already exists!`,
           );
           return;
         }
@@ -850,7 +850,7 @@ export default {
       });
 
       showSuccessDialog(
-        "Selected questions added to list; Don't forget to sync!"
+        "Selected questions added to list; Don't forget to sync!",
       );
     }
 
