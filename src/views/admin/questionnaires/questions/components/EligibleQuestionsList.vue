@@ -68,7 +68,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label'])
+                              lowercaseFirstLetter(slotProps['item']['label']),
                             ).toLowerCase()
                           ]
                             ? 'pi pi-eye'
@@ -158,7 +158,7 @@
                   findRelations(
                     questionsStore.meta.included,
                     category.data.id,
-                    category.data.type
+                    category.data.type,
                   )?.attributes.name
                 }}
               </Tag>
@@ -307,7 +307,7 @@
           <template #body="slotProps">
             {{
               moment(slotProps.data.attributes.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a"
+                "ddd, MMM D, yyyy, h:mm a",
               )
             }}</template
           >
@@ -583,7 +583,7 @@ export default {
         if (shouldRefresh) {
           reset();
         }
-      }
+      },
     );
 
     watch(
@@ -597,7 +597,7 @@ export default {
             });
           });
         }
-      }
+      },
     );
 
     watch(selectedQuestions, (newSelectedQuestions) => {

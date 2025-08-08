@@ -3,7 +3,7 @@ export const get_all_route = (id) =>
 
 export const get_route_to_check_question_eligibility = (
   questionnaireId,
-  questionId
+  questionId,
 ) => `administrative/questionnaires/${questionnaireId}/eligible/${questionId}`;
 
 export const get_all_eligible_questions = (questionnaireId) =>
