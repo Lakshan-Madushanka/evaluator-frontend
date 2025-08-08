@@ -19,8 +19,6 @@ export const useEvaluationsStore = defineStore("evaluations", () => {
       const response = await evaluationRequests.getOneRequest(id);
 
       evaluation.value = response.data.attributes;
-
-      console.log("data", response);
     } catch (data) {
       //
     } finally {
