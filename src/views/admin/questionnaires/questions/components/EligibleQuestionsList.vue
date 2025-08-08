@@ -175,10 +175,11 @@
         >
           <template #filter>
             <span>
-              <IconField>
+              <IconField class="!w-full">
                 <InputIcon class="pi pi-search" />
                 <InputText
                   v-model="filters.content"
+                  class="!w-full"
                   type="text"
                   placeholder="Search"
                   @keyup.enter="applyFilters"
