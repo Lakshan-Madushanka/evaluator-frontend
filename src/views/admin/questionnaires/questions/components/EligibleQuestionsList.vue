@@ -440,7 +440,7 @@ export default {
     const bulkActions = [
       {
         label: "Sync Questions",
-        icon: "pi pi-trash",
+        icon: "pi pi-sync",
         command: () => {
           let value = "";
           if (selectedQuestions.value.length === 1) {
