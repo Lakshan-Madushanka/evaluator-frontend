@@ -26,19 +26,25 @@
               class="w-full pr-4 flex justify-between border-b-2 border-neutral-100 border-opacity-100 py-1 dark:border-opacity-50"
             >
               <p class="">Super Admins</p>
-              <Tag>{{ dashboardStore.data.usersCount.superAdmins }}</Tag>
+              <Tag severity="secondary">{{
+                dashboardStore.data.usersCount.superAdmins
+              }}</Tag>
             </li>
             <li
               class="w-full pr-4 flex justify-between border-b-2 border-neutral-100 border-opacity-100 py-1 dark:border-opacity-50"
             >
               <p class="">Admins</p>
-              <Tag>{{ dashboardStore.data.usersCount.admins }}</Tag>
+              <Tag severity="secondary">{{
+                dashboardStore.data.usersCount.admins
+              }}</Tag>
             </li>
             <li
               class="w-full pr-4 flex justify-between border-b-2 border-neutral-100 border-opacity-100 py-1 dark:border-opacity-50"
             >
               <p class="">Candidates</p>
-              <Tag>{{ dashboardStore.data.usersCount.regular }}</Tag>
+              <Tag severity="secondary">{{
+                dashboardStore.data.usersCount.regular
+              }}</Tag>
             </li>
           </ul>
         </template>
@@ -148,7 +154,7 @@
           <template #body="slotProps">
             {{
               moment(slotProps.data.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a",
+                "ddd, MMM D, yyyy, h:mm a"
               )
             }}
           </template>
@@ -170,6 +176,7 @@ import DataTable from "primevue/datatable";
 import ProgressSpinner from "primevue/progressspinner";
 import OverlayBadge from "primevue/overlaybadge";
 import Avatar from "primevue/avatar";
+import { Tag } from "primevue";
 
 import moment from "moment/moment";
 
@@ -182,6 +189,7 @@ export default {
     ProgressSpinner,
     OverlayBadge,
     Avatar,
+    Tag,
   },
   setup() {
     const dashboardStore = useDashboardStore();
