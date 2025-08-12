@@ -36,7 +36,7 @@
                 placeholder="Questionnaire id"
                 type="search"
                 autofocus
-                :disabled="usersQuestionnairesStore.availableId"
+                :disabled="usersQuestionnairesStore.availableId ? true : false"
                 @keyup.enter="attachOrSearch"
                 @keydown="onQuestionnaireIdTextInputKeyDown"
                 @paste="onPasteQquestionnaireIdTextInput"
@@ -123,14 +123,14 @@ export default {
         if (newStatus === "attached") {
           clearState();
         }
-      },
+      }
     );
 
     watch(
       () => props.display,
       (newValue) => {
         displayComponent.value = newValue;
-      },
+      }
     );
 
     function clearState() {
