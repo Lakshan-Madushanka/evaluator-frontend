@@ -259,7 +259,7 @@ export default {
       () => questionsAnswersStore.answers,
       (newAnswers) => {
         data.answers = JSON.parse(JSON.stringify(newAnswers));
-      }
+      },
     );
 
     function getData() {
@@ -430,7 +430,7 @@ export default {
       });
 
       showSuccessDialog(
-        "Selected answers added to list; Don't forget to sync!"
+        "Selected answers added to list; Don't forget to sync!",
       );
     }
 
