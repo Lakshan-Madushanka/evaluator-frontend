@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { ref, toRefs, reactive, watch, onBeforeMount, onMounted } from "vue";
+import { ref, toRefs, reactive, watch, onBeforeMount, markRaw } from "vue";
 
 import { useRoute } from "vue-router";
 
@@ -67,7 +67,7 @@ export default {
         icon: "pi pi-fw pi-th-large",
       },
       {
-        component: Divider,
+        component: markRaw(Divider),
       },
       {
         href: { name: "home" },
@@ -82,7 +82,7 @@ export default {
         exact: true,
       },
       {
-        component: Divider,
+        component: markRaw(Divider),
       },
       {
         href: { name: "admin.users.index" },
@@ -187,7 +187,7 @@ export default {
           activeClasses.users = "";
         }
       },
-      { immediate: true },
+      { immediate: true }
     );
 
     function onToggleCollapse(event) {
