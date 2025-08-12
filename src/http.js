@@ -3,10 +3,13 @@ import moment from "moment/moment";
 import router from "./router/index";
 import { useAppStore } from "./stores/app";
 import { useAuthStore } from "./stores/auth";
+import Cookies from "js-cookie";
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true,
+  headers: {
+    "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+  },
 });
 
 instance.interceptors.response.use(
@@ -25,7 +28,7 @@ instance.interceptors.response.use(
       handleClientSideErrors(error);
       throw error;
     }
-  },
+  }
 );
 
 function handleClientSideErrors(errorResponse) {
