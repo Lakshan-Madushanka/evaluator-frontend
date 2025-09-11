@@ -15,25 +15,6 @@
           data-key="id"
           filter-display="row"
         >
-          <Column selection-mode="multiple">
-            <template #header>
-              <i
-                v-if="showBulkActions"
-                class="pi pi-ellipsis-v hover:cursor-pointer"
-                @click="toggleBulkActions"
-              >
-                <span class="font-bold">{{ selectedUsers.length }}</span>
-                records selected
-              </i>
-              <MenuComponent
-                id="overlay_menu"
-                ref="bulkActionMenu"
-                :model="bulkActions"
-                :popup="true"
-              />
-            </template>
-          </Column>
-
           <template #empty>
             <p
               v-if="!usersQuestionnairesStore.loading"
@@ -75,7 +56,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             )
                           ]
                             ? 'pi pi-eye'
@@ -134,6 +115,19 @@
             <template #body="slotProps"> {{ slotProps.data.id }}</template>
           </Column>
 
+          <!-- Code -->
+          <Column field="id" header="Code" :hidden="!columnVisibility.code">
+            <template #body="slotProps">
+              <div
+                :id="slotProps.data.attributes.code"
+                v-copy-to-clipboard="slotProps.data.attributes.code"
+                class="mr-6"
+              >
+                {{ slotProps.data.attributes.code }}
+              </div>
+            </template>
+          </Column>
+
           <!-- Attempts -->
           <Column
             field="attempts"
@@ -179,7 +173,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.started_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -199,7 +193,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.finished_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -219,7 +213,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.expires_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -250,7 +244,7 @@
               <Tag
                 v-if="
                   moment(slotProps.data.attributes.expires_at).isBefore(
-                    moment(),
+                    moment()
                   )
                 "
                 >Expired</Tag
@@ -272,7 +266,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -290,7 +284,7 @@
                   v-if="
                     shouldAlloweToResendNotiificaton(
                       slotProps.data.attributes.attempts,
-                      slotProps.data.attributes.expires_at,
+                      slotProps.data.attributes.expires_at
                     )
                   "
                   class="p-button-sm"
@@ -298,7 +292,7 @@
                   title="Resend notification"
                   @click="
                     resendNotification(
-                      slotProps.data.attributes.user_questionnaire_id,
+                      slotProps.data.attributes.user_questionnaire_id
                     )
                   "
                 />
@@ -410,6 +404,7 @@ export default {
 
     const columnVisibility = reactive({
       id: true,
+      code: true,
       attempts: true,
       started_at: true,
       finished_at: true,
@@ -424,6 +419,12 @@ export default {
         label: "Id",
         command: () => {
           columnVisibility.id = !columnVisibility.id;
+        },
+      },
+      {
+        label: "Code",
+        command: () => {
+          columnVisibility.code = !columnVisibility.code;
         },
       },
       {
@@ -569,7 +570,7 @@ export default {
         accept: () => {
           usersQuestionnairesStore.resendNotificatiion(
             route.params.id,
-            questionnaireId,
+            questionnaireId
           );
         },
         reject: () => {},
