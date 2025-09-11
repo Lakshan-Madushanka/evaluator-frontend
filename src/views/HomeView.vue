@@ -69,7 +69,7 @@ export default {
         if (availableCode) {
           router.push({ name: "candidate.questionnaires.instructions" });
         }
-      }
+      },
     );
 
     function searchQuestionnaire() {

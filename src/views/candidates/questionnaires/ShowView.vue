@@ -309,7 +309,7 @@ export default {
           currrentPageRecords.value = getPaginatorRecords();
         }
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     function getQuestionsData() {
@@ -355,7 +355,7 @@ export default {
           let relatedAnswer = findRelations(
             candidatesQuestionnairesStore.meta.included,
             answer.id,
-            answer.type
+            answer.type,
           );
           questionAnswers[question.id].push(relatedAnswer);
         }
@@ -381,7 +381,7 @@ export default {
 
       return candidatesQuestionnairesStore.questions?.slice(
         start_index,
-        end_index
+        end_index,
       );
     }
 
@@ -500,7 +500,7 @@ export default {
       currrentPageRecords,
       candidatesQuestionnairesStore,
       questionnaire: computed(
-        () => candidatesQuestionnairesStore.questionnaireInfo
+        () => candidatesQuestionnairesStore.questionnaireInfo,
       ),
       paginator,
       userAnswers,
