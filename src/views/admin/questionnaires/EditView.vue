@@ -544,7 +544,7 @@ export default {
             });
           });
         }
-      }
+      },
     );
 
     watch(
@@ -569,7 +569,7 @@ export default {
           setCategories(newQuestionnaire, relations);
           setAnswersType(newQuestionnaire);
         }
-      }
+      },
     );
 
     function setCategories(newQuestionnaire, relations) {
@@ -578,14 +578,14 @@ export default {
           let categoryRelation = findRelations(
             relations,
             category.id,
-            category.type
+            category.type,
           );
 
           state.categories.push({
             value: categoryRelation.id,
             name: categoryRelation.attributes.name,
           });
-        }
+        },
       );
     }
 
