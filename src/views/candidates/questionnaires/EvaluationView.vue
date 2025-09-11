@@ -52,7 +52,11 @@
               class="w-full border-b-2 flex justify-between border-neutral-100 border-opacity-100 py-4 dark:border-opacity-50"
             >
               <span>Time taken</span>
-              <Tag>{{ formatMinutes(evaluation.time_taken) }}</Tag>
+              <Tag>{{
+                evaluation.time_taken < 1
+                  ? "<1min"
+                  : formatMinutes(evaluation.time_taken)
+              }}</Tag>
             </li>
           </ul>
         </div>
@@ -93,7 +97,7 @@ export default {
       showEvaluation,
       candidatesQuestionnairesStore,
       evaluation: computed(
-        () => candidatesQuestionnairesStore.evaluation?.attributes,
+        () => candidatesQuestionnairesStore.evaluation?.attributes
       ),
       marks,
       onModalHide,

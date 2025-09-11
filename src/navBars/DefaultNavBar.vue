@@ -17,8 +17,8 @@
             'py-2 px-4 font-bold',
             'inline-block',
             {
-              'text-green-500': isActive,
-              'text-green-500': isExactActive,
+              'text-[var(--p-primary-color)]': isActive,
+              'text-[var(--p-primary-color)]': isExactActive,
             },
           ]"
           @click="navigate"

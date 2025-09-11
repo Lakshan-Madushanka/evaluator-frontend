@@ -62,9 +62,7 @@
                           :class="
                             columnVisibility[
                               snake(
-                                lowercaseFirstLetter(
-                                  slotProps['item']['label'],
-                                ),
+                                lowercaseFirstLetter(slotProps['item']['label'])
                               ).toLowerCase()
                             ]
                               ? 'pi pi-eye'
@@ -152,19 +150,20 @@
             </template>
             <template #body="slotProps">
               <template
-                v-if="slotProps.data.relationships.categories.length > 0"
+                v-if="slotProps.data.relationships.categories.data.length > 0"
               >
                 <Tag
-                  v-for="category in slotProps.data.relationships.categories"
-                  :key="category.data.id"
+                  v-for="category in slotProps.data.relationships.categories
+                    .data"
+                  :key="category.id"
                   severity="info"
                   class="mr-1"
                 >
                   {{
                     findRelations(
                       questionnairesStore.questionnaires.included,
-                      category.data.id,
-                      category.data.type,
+                      category.id,
+                      category.type
                     ).attributes.name
                   }}
                 </Tag>
@@ -431,7 +430,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -795,7 +794,7 @@ export default {
             });
           });
         }
-      },
+      }
     );
 
     watch(
@@ -828,7 +827,7 @@ export default {
           filters.no_of_hard_questions[1] = hardQuestionsCount;
           maxHardQuestionsCount.value = hardQuestionsCount;
         }
-      },
+      }
     );
 
     watch(query, (newQuery) => {

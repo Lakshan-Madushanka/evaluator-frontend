@@ -19,18 +19,18 @@
       >
         <template #item="slotProps">
           <img
-            :src="slotProps.item.original_url"
-            :alt="slotProps.item.alt"
-            :title="slotProps.item.name"
+            :src="slotProps.item.attributes.original_url"
+            :alt="slotProps.item.attributes.alt"
+            :title="slotProps.item.attributes.name"
             style="max-width: 100%"
             class="object-fill"
           />
         </template>
         <template #thumbnail="slotProps">
           <img
-            :src="slotProps.item.original_url"
-            :alt="slotProps.item.alt"
-            :title="slotProps.item.name"
+            :src="slotProps.item.attributes.original_url"
+            :alt="slotProps.item.attributes.alt"
+            :title="slotProps.item.attributes.name"
             class="max-w-[6rem]"
           />
         </template>
@@ -77,16 +77,16 @@
               <div class="">
                 <img
                   class="w-8 h-8"
-                  :src="slotProps.item.original_url"
-                  :alt="slotProps.item.name"
+                  :src="slotProps.item.attributes.original_url"
+                  :alt="slotProps.item.attributes.name"
                 />
               </div>
               <div class="">
-                <p>{{ slotProps.item.file_name }}</p>
+                <p>{{ slotProps.item.attributes.file_name }}</p>
                 <p>
                   {{
-                    moment(slotProps.item.created_at).format(
-                      "ddd, MMM D, yyyy, h:mm a",
+                    moment(slotProps.item.attributes.created_at).format(
+                      "ddd, MMM D, yyyy, h:mm a"
                     )
                   }}
                 </p>
@@ -173,7 +173,7 @@ export default {
           getImages();
           selectedImages.value = [];
         }
-      },
+      }
     );
 
     function getImages() {

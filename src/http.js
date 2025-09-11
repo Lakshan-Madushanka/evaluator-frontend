@@ -5,6 +5,9 @@ import { useAppStore } from "./stores/app";
 import { useAuthStore } from "./stores/auth";
 import Cookies from "js-cookie";
 
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
+
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
@@ -28,7 +31,7 @@ instance.interceptors.response.use(
       handleClientSideErrors(error);
       throw error;
     }
-  },
+  }
 );
 
 function handleClientSideErrors(errorResponse) {

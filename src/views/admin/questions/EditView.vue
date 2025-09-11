@@ -342,7 +342,7 @@ export default {
             });
           });
         }
-      },
+      }
     );
 
     watch(
@@ -358,15 +358,15 @@ export default {
           setCategories(newQuestion, relations);
           setAnswersType(newQuestion);
         }
-      },
+      }
     );
 
     function setCategories(newQuestion, relations) {
-      newQuestion.data.relationships.categories.forEach((category) => {
+      newQuestion.data.relationships.categories.data.forEach((category) => {
         let categoryRelation = findRelations(
           relations,
-          category.data.id,
-          category.data.type,
+          category.id,
+          category.type
         );
 
         state.categories.push({

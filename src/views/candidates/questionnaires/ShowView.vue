@@ -60,13 +60,12 @@
         <div class="mt-8 xl:sticky xl:top-[22rem]">
           <div class="flex justify-between items-center space-x-4 mb-2">
             <PrimeButton
-              class="!w-36"
-              size="small"
+              class="!w-44 !px-2"
               icon="pi pi-send"
               icon-pos="right"
               @click="showSubmitConfirmDialog"
             >
-              <div class="flex justify-between items-center w-full px-2">
+              <div class="flex justify-between items-center w-full space-x-2">
                 <span class="font-bold">Submit</span>
                 <Tag severity="success">
                   {{ noOfAnsweredQuestions }} /
@@ -128,14 +127,14 @@
                 </div>
                 <!--Question images-->
                 <div
-                  v-if="question.relationships.images?.length > 0"
+                  v-if="question.relationships.images.data.length > 0"
                   class="mt-4 flex flex-wrap justify-center space-y-2"
                 >
                   <PrimeImage
-                    v-for="questionImage in question.relationships.images"
+                    v-for="questionImage in question.relationships.images.data"
                     :key="questionImage.id"
-                    :src="questionImage.original_url"
-                    :alt="questionImage.file_name"
+                    :src="questionImage.attributes.original_url"
+                    :alt="questionImage.attributes.file_name"
                     preview
                   />
                 </div>
@@ -189,8 +188,8 @@
                     <PrimeImage
                       v-for="answerImage in answer.relationships.images"
                       :key="answerImage.id"
-                      :src="answerImage.original_url"
-                      :alt="answerImage.file_name"
+                      :src="answerImage.attributes.original_url"
+                      :alt="answerImage.attributes.file_name"
                       preview
                     />
                   </div>
@@ -310,7 +309,7 @@ export default {
           currrentPageRecords.value = getPaginatorRecords();
         }
       },
-      { immediate: true },
+      { immediate: true }
     );
 
     function getQuestionsData() {
@@ -352,11 +351,11 @@ export default {
       for (let question of newQuestions) {
         questionAnswers[question.id] = [];
 
-        for (let answer of question.relationships.onlyAnswers) {
+        for (let answer of question.relationships.onlyAnswers.data) {
           let relatedAnswer = findRelations(
             candidatesQuestionnairesStore.meta.included,
-            answer.data.id,
-            answer.data.type,
+            answer.id,
+            answer.type
           );
           questionAnswers[question.id].push(relatedAnswer);
         }
@@ -382,7 +381,7 @@ export default {
 
       return candidatesQuestionnairesStore.questions?.slice(
         start_index,
-        end_index,
+        end_index
       );
     }
 
@@ -501,7 +500,7 @@ export default {
       currrentPageRecords,
       candidatesQuestionnairesStore,
       questionnaire: computed(
-        () => candidatesQuestionnairesStore.questionnaireInfo,
+        () => candidatesQuestionnairesStore.questionnaireInfo
       ),
       paginator,
       userAnswers,

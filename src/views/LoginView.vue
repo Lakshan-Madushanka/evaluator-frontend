@@ -97,8 +97,8 @@ export default {
     const authStore = useAuthStore();
 
     const state = reactive({
-      email: "",
-      password: "",
+      email: "super-admin@company.com",
+      password: "superAdmin123",
       remember: false,
     });
 

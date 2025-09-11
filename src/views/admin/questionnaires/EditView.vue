@@ -544,7 +544,7 @@ export default {
             });
           });
         }
-      },
+      }
     );
 
     watch(
@@ -569,22 +569,24 @@ export default {
           setCategories(newQuestionnaire, relations);
           setAnswersType(newQuestionnaire);
         }
-      },
+      }
     );
 
     function setCategories(newQuestionnaire, relations) {
-      newQuestionnaire.data.relationships.categories.forEach((category) => {
-        let categoryRelation = findRelations(
-          relations,
-          category.data.id,
-          category.data.type,
-        );
+      newQuestionnaire.data.relationships.categories.data.forEach(
+        (category) => {
+          let categoryRelation = findRelations(
+            relations,
+            category.id,
+            category.type
+          );
 
-        state.categories.push({
-          value: categoryRelation.id,
-          name: categoryRelation.attributes.name,
-        });
-      });
+          state.categories.push({
+            value: categoryRelation.id,
+            name: categoryRelation.attributes.name,
+          });
+        }
+      );
     }
 
     function setDiffculty(newQuestionnaire) {

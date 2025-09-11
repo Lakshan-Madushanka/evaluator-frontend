@@ -15,8 +15,7 @@ export const useImagesStore = defineStore("images", () => {
 
     try {
       const response = await imageManagerRequests.getImagesRequest(id, type);
-      images.value = response;
-
+      console.log(response);
       images.value = response.data;
     } catch (data) {
       //

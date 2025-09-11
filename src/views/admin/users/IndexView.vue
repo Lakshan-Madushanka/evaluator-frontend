@@ -73,7 +73,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             )
                           ]
                             ? 'pi pi-eye'
@@ -215,7 +215,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -248,47 +248,48 @@
             :hidden="!columnVisibility.actions"
           >
             <template #body="slotProps">
-              <span
-                v-if="slotProps.data.attributes.role !== 'SUPER_ADMIN'"
-                class="p-buttonset space-x-1"
-              >
+              <span class="p-buttonset space-x-1">
                 <PrimeButton
                   class="p-button-sm"
                   icon="pi pi-calendar "
                   title="Assign Questionnaire"
                   @click="attachQuestionnaire(slotProps.data.id)"
                 />
-                <PrimeButton
-                  class="p-button-sm"
-                  icon="pi pi-file-edit"
-                  title="Edit"
-                  @click="
-                    () =>
-                      router.push({
-                        name: 'admin.users.edit',
-                        params: { id: slotProps.data.id },
-                      })
-                  "
-                />
-                <PrimeButton
-                  class="p-button-danger p-button-sm"
-                  icon="pi pi-trash "
-                  title="Delete"
-                  @click="deleteUser(slotProps.data.id)"
-                />
-              </span>
-
-              <span v-else class="p-buttonset">
-                <PrimeButton
-                  v-tooltip="'Use profile section to edit super admin.'"
-                  class="p-button-sm opacity-60"
-                  icon="pi pi-info-circle"
-                />
-                <PrimeButton
-                  v-tooltip="'Super admin cannot be deleted !'"
-                  class="p-button-sm p-button-danger opacity-60"
-                  icon="pi pi-info-circle"
-                />
+                <span
+                  v-if="slotProps.data.attributes.role !== 'SUPER_ADMIN'"
+                  class="space-x-1"
+                >
+                  <PrimeButton
+                    class="p-button-sm"
+                    icon="pi pi-file-edit"
+                    title="Edit"
+                    @click="
+                      () =>
+                        router.push({
+                          name: 'admin.users.edit',
+                          params: { id: slotProps.data.id },
+                        })
+                    "
+                  />
+                  <PrimeButton
+                    class="p-button-danger p-button-sm"
+                    icon="pi pi-trash "
+                    title="Delete"
+                    @click="deleteUser(slotProps.data.id)"
+                  />
+                </span>
+                <span v-else class="p-buttonset space-x-1">
+                  <PrimeButton
+                    v-tooltip="'Use profile section to edit super admin.'"
+                    class="p-button-sm opacity-60"
+                    icon="pi pi-info-circle"
+                  />
+                  <PrimeButton
+                    v-tooltip="'Super admin cannot be deleted !'"
+                    class="p-button-sm p-button-danger opacity-60"
+                    icon="pi pi-info-circle"
+                  />
+                </span>
               </span>
             </template>
           </Column>

@@ -25,7 +25,11 @@
         </div>
         <div>
           <Badge
-            :value="formatMinutes(evaluationsStore.evaluation?.time_taken)"
+            :value="
+              evaluationsStore.evaluation?.time_taken < 1
+                ? '<1min'
+                : formatMinutes(evaluationsStore.evaluation?.time_taken)
+            "
             severity="info"
             size="large"
           ></Badge>
@@ -83,7 +87,7 @@
                       >&nbsp; <i class="pi pi-times-circle text-red-500"></i
                     ></span>
                   </div>
-                  <p v-if="showMarks">
+                  <p>
                     <span class="hidden lg:inline">marks</span> ({{
                       question.attributes.marks
                     }})
@@ -91,14 +95,14 @@
                 </div>
                 <!--Question images-->
                 <div
-                  v-if="question.relationships.images?.length > 0"
+                  v-if="question.relationships.images.data.length > 0"
                   class="mt-4 flex flex-wrap justify-center space-y-2"
                 >
                   <PrimeImage
-                    v-for="questionImage in question.relationships.images"
+                    v-for="questionImage in question.relationships.images.data"
                     :key="questionImage.id"
-                    :src="questionImage.original_url"
-                    :alt="questionImage.file_name"
+                    :src="questionImage.attributes.original_url"
+                    :alt="questionImage.attributes.file_name"
                     preview
                   />
                 </div>
@@ -117,9 +121,20 @@
                   >
                     <p class="mr-4">{{ answerIndex + 1 }}</p>
                     <RadioButton
+                      v-if="
+                        evaluationsStore.evaluation.answers?.[question.id]?.[0]
+                      "
                       v-model="
                         evaluationsStore.evaluation.answers[question.id][0]
                       "
+                      :input-id="answer.id"
+                      :name="answer.id"
+                      :value="answer.id"
+                      class="mr-2"
+                      disabled
+                    />
+                    <RadioButton
+                      v-else
                       :input-id="answer.id"
                       :name="answer.id"
                       :value="answer.id"
@@ -160,14 +175,14 @@
 
                   <!-- Answer images -->
                   <div
-                    v-if="answer.relationships.images?.length > 0"
+                    v-if="answer.relationships.images.data.length > 0"
                     class="mt-4 flex flex-wrap justify-center space-y-2"
                   >
                     <PrimeImage
-                      v-for="answerImage in answer.relationships.images"
+                      v-for="answerImage in answer.relationships.images.data"
                       :key="answerImage.id"
-                      :src="answerImage.original_url"
-                      :alt="answerImage.file_name"
+                      :src="answerImage.attributes.original_url"
+                      :alt="answerImage.attributes.file_name"
                       preview
                     />
                   </div>
@@ -252,18 +267,18 @@ export default {
           setAnwers(newQuestions);
           currrentPageRecords.value = getPaginatorRecords();
         }
-      },
+      }
     );
 
     function setAnwers(newQuestions) {
       for (let question of newQuestions) {
         questionAnswers[question.id] = [];
 
-        for (let answer of question.relationships.answers) {
+        for (let answer of question.relationships.answers.data) {
           let relatedAnswer = findRelations(
             questionnairesQuestionsStore.meta.included,
-            answer.data.id,
-            answer.data.type,
+            answer.id,
+            answer.type
           );
           questionAnswers[question.id].push(relatedAnswer);
           setCorrectAnswer(question, relatedAnswer);
@@ -318,7 +333,7 @@ export default {
 
       return questionnairesQuestionsStore.questions?.slice(
         start_index,
-        end_index,
+        end_index
       );
     }
 
@@ -344,14 +359,14 @@ export default {
     function userHasCorrectAnswer(question) {
       if (question["attributes"]["answers_type_single"]) {
         return (
-          evaluationsStore.evaluation.answers[question.id][0] ===
+          evaluationsStore.evaluation.answers[question.id]?.[0] ===
           correctAnswers.value[question.id]
         );
       }
 
       return arraysHaveSameValues(
         correctAnswers.value[question.id],
-        evaluationsStore.evaluation.answers[question.id],
+        evaluationsStore.evaluation.answers[question.id]
       );
     }
 
@@ -363,7 +378,7 @@ export default {
       questionnairesStore,
       evaluationsStore,
       questionnaire: computed(
-        () => questionnairesStore.questionnaire?.data?.attributes,
+        () => questionnairesStore.questionnaire?.data?.attributes
       ),
       questionAnswers,
       correctAnswers,

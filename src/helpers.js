@@ -48,7 +48,7 @@ export function getCookie(name) {
 
 export function formatMinutes(minutes) {
   var hours = Math.floor(minutes / 60);
-  var mins = minutes % 60;
+  var mins = Math.floor(minutes % 60);
   var secs = Math.floor((minutes - hours * 60 - mins) * 60);
 
   if (hours < 10) {
