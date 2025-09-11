@@ -2,7 +2,7 @@
   <BackgroundOne class="!h-[calc(100vh)]" />
   <div class="h-[calc(100vh)] xl:w-2/3 flex justify-center items-center m-auto">
     <div
-      class="w-2/3 sm:bg-blue-400 text-center px-4 pt-8 text-white space-y-1 sm:space-y-4 shadow-2xl relative"
+      class="w-2/3 sm:bg-[var(--p-primary-color)] text-center px-4 pt-8 text-white space-y-1 sm:space-y-4 shadow-2xl relative"
     >
       <p class="hidden sm:block lg:text-2xl">👍Hi,</p>
       <p class="hidden sm:block lg:text-xl font-bold">
