@@ -219,7 +219,7 @@ import Skeleton from "primevue/skeleton";
 import Tag from "primevue/tag";
 import { useConfirm } from "primevue/useconfirm";
 
-import AnswerList from "@/views/admin/questions/Answers/components/AnswerList.vue";
+import AnswerList from "@/views/admin/questions/answers/components/AnswerList.vue";
 
 export default {
   components: {
@@ -259,7 +259,7 @@ export default {
       () => questionsAnswersStore.answers,
       (newAnswers) => {
         data.answers = JSON.parse(JSON.stringify(newAnswers));
-      },
+      }
     );
 
     function getData() {
@@ -430,7 +430,7 @@ export default {
       });
 
       showSuccessDialog(
-        "Selected answers added to list; Don't forget to sync!",
+        "Selected answers added to list; Don't forget to sync!"
       );
     }
 
