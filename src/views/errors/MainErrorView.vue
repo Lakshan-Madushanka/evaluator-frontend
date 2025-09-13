@@ -137,7 +137,8 @@
         </template>
         <template v-else>
           <h1 class="mt-5 text-[36px] text-slate-800 font-bold lg:text-[50px]">
-            {{ query.status }} - {{ query.statusText }}
+            {{ query.status }}
+            {{ query.statusText ? " - " + query.statusText : "" }}
           </h1>
           <p class="text-slate-600 mt-5 lg:text-lg">
             {{ query.message }}
