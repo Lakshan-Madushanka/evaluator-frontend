@@ -1,6 +1,6 @@
 <template>
   <main
-    class="bg-gradient-to-r from-rose-100 to-teal-100 h-[calc(100vh-3.6rem)]"
+    class="bg-gradient-to-r from-rose-100 to-teal-100 h-[calc(100vh-3.7rem)]"
   >
     <div
       class="h-full flex flex-col lg:flex-row justify-center items-center w-full"
@@ -69,7 +69,7 @@ export default {
         if (availableCode) {
           router.push({ name: "candidate.questionnaires.instructions" });
         }
-      },
+      }
     );
 
     function searchQuestionnaire() {
