@@ -241,7 +241,7 @@ export default {
           setAnwers(newQuestions);
           currrentPageRecords.value = getPaginatorRecords();
         }
-      },
+      }
     );
 
     watch(showAnswers, (showAnswers) => {
@@ -256,16 +256,16 @@ export default {
       for (let question of newQuestions) {
         questionAnswers[question.id] = [];
 
-        for (let answer of question.relationships.answers) {
+        for (let answer of question.relationships.answers.data) {
           let relatedAnswer = findRelations(
             questionnairesQuestionsStore.meta.included,
-            answer.data.id,
-            answer.data.type,
+            answer.id,
+            answer.type
           );
           questionAnswers[question.id].push(relatedAnswer);
           setCorrectAnswer(question, relatedAnswer);
           cachedCorrectAnswers = JSON.parse(
-            JSON.stringify(correctAnswers.value),
+            JSON.stringify(correctAnswers.value)
           );
         }
       }
@@ -315,7 +315,7 @@ export default {
 
       return questionnairesQuestionsStore.questions?.slice(
         start_index,
-        end_index,
+        end_index
       );
     }
 
@@ -345,7 +345,7 @@ export default {
       questionnairesQuestionsStore,
       questionnairesStore,
       questionnaire: computed(
-        () => questionnairesStore.questionnaire?.data?.attributes,
+        () => questionnairesStore.questionnaire?.data?.attributes
       ),
       showAnswers,
       showMarks,
