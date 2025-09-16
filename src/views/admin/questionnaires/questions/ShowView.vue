@@ -115,7 +115,9 @@
                     v-if="question.attributes.answers_type_single"
                     class="flex items-center"
                   >
-                    <p class="mr-4">{{ answerIndex + 1 }}</p>
+                    <p class="mr-4">
+                      {{ String.fromCharCode(97 + answerIndex) }}).
+                    </p>
                     <RadioButton
                       v-model="correctAnswers[question.id]"
                       :input-id="answer.id"
@@ -131,7 +133,9 @@
                   </div>
 
                   <div v-else class="flex items-center">
-                    <p class="mr-4">{{ answerIndex + 1 }}</p>
+                    <p class="mr-4">
+                      {{ String.fromCharCode(97 + answerIndex) }}).
+                    </p>
                     <Checkbox
                       v-model="correctAnswers[question.id]"
                       :input-id="answer.id"
@@ -241,7 +245,7 @@ export default {
           setAnwers(newQuestions);
           currrentPageRecords.value = getPaginatorRecords();
         }
-      },
+      }
     );
 
     watch(showAnswers, (showAnswers) => {
@@ -260,12 +264,12 @@ export default {
           let relatedAnswer = findRelations(
             questionnairesQuestionsStore.meta.included,
             answer.id,
-            answer.type,
+            answer.type
           );
           questionAnswers[question.id].push(relatedAnswer);
           setCorrectAnswer(question, relatedAnswer);
           cachedCorrectAnswers = JSON.parse(
-            JSON.stringify(correctAnswers.value),
+            JSON.stringify(correctAnswers.value)
           );
         }
       }
@@ -315,7 +319,7 @@ export default {
 
       return questionnairesQuestionsStore.questions?.slice(
         start_index,
-        end_index,
+        end_index
       );
     }
 
@@ -345,7 +349,7 @@ export default {
       questionnairesQuestionsStore,
       questionnairesStore,
       questionnaire: computed(
-        () => questionnairesStore.questionnaire?.data?.attributes,
+        () => questionnairesStore.questionnaire?.data?.attributes
       ),
       showAnswers,
       showMarks,

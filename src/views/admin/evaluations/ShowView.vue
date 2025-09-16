@@ -119,7 +119,9 @@
                     v-if="question.attributes.answers_type_single"
                     class="flex items-center"
                   >
-                    <p class="mr-4">{{ answerIndex + 1 }}</p>
+                    <p class="mr-4">
+                      {{ String.fromCharCode(97 + answerIndex) }}).
+                    </p>
                     <RadioButton
                       v-if="
                         evaluationsStore.evaluation.answers?.[question.id]?.[0]
@@ -153,7 +155,9 @@
                   </div>
 
                   <div v-else class="flex items-center">
-                    <p class="mr-4">{{ answerIndex + 1 }}</p>
+                    <p class="mr-4">
+                      {{ String.fromCharCode(97 + answerIndex) }}).
+                    </p>
                     <Checkbox
                       v-model="evaluationsStore.evaluation.answers[question.id]"
                       :input-id="answer.id"
@@ -267,7 +271,7 @@ export default {
           setAnwers(newQuestions);
           currrentPageRecords.value = getPaginatorRecords();
         }
-      },
+      }
     );
 
     function setAnwers(newQuestions) {
@@ -278,7 +282,7 @@ export default {
           let relatedAnswer = findRelations(
             questionnairesQuestionsStore.meta.included,
             answer.id,
-            answer.type,
+            answer.type
           );
           questionAnswers[question.id].push(relatedAnswer);
           setCorrectAnswer(question, relatedAnswer);
@@ -334,7 +338,7 @@ export default {
 
       return questionnairesQuestionsStore.questions?.slice(
         start_index,
-        end_index,
+        end_index
       );
     }
 
@@ -357,7 +361,7 @@ export default {
 
       return arraysHaveSameValues(
         correctAnswers.value[question.id],
-        evaluationsStore.evaluation.answers[question.id],
+        evaluationsStore.evaluation.answers[question.id]
       );
     }
 
@@ -381,7 +385,7 @@ export default {
       questionnairesStore,
       evaluationsStore,
       questionnaire: computed(
-        () => questionnairesStore.questionnaire?.data?.attributes,
+        () => questionnairesStore.questionnaire?.data?.attributes
       ),
       questionAnswers,
       correctAnswers,

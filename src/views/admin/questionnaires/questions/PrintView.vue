@@ -90,7 +90,7 @@
               v-if="question.attributes.answers_type_single"
               class="flex items-center"
             >
-              <p class="mr-4">{{ answerIndex + 1 }}</p>
+              <p class="mr-4">{{ String.fromCharCode(97 + answerIndex) }}).</p>
               <RadioButton
                 v-model="correctAnswers[question.id]"
                 :input-id="answer.id"
@@ -104,7 +104,7 @@
             </div>
 
             <div v-else class="flex items-center">
-              <p class="mr-4">{{ answerIndex + 1 }}</p>
+              <p class="mr-4">{{ String.fromCharCode(97 + answerIndex) }}).</p>
               <Checkbox
                 v-model="correctAnswers[question.id]"
                 :input-id="answer.id"

@@ -151,7 +151,9 @@
                     v-if="question.attributes.answers_type_single"
                     class="flex items-center"
                   >
-                    <p class="mr-4">{{ answerIndex + 1 }}.</p>
+                    <p class="mr-4">
+                      {{ String.fromCharCode(97 + answerIndex) }}).
+                    </p>
                     <RadioButton
                       v-model="userAnswers[question.id]"
                       :input-id="answer.id"
@@ -166,7 +168,9 @@
                   </div>
 
                   <div v-else class="flex items-center">
-                    <p class="mr-4">{{ answerIndex + 1 }}.</p>
+                    <p class="mr-4">
+                      {{ String.fromCharCode(97 + answerIndex) }}).
+                    </p>
                     <Checkbox
                       v-model="userAnswers[question.id]"
                       :input-id="answer.id"
@@ -309,7 +313,7 @@ export default {
           currrentPageRecords.value = getPaginatorRecords();
         }
       },
-      { immediate: true },
+      { immediate: true }
     );
 
     function getQuestionsData() {
@@ -355,7 +359,7 @@ export default {
           let relatedAnswer = findRelations(
             candidatesQuestionnairesStore.meta.included,
             answer.id,
-            answer.type,
+            answer.type
           );
           questionAnswers[question.id].push(relatedAnswer);
         }
@@ -381,7 +385,7 @@ export default {
 
       return candidatesQuestionnairesStore.questions?.slice(
         start_index,
-        end_index,
+        end_index
       );
     }
 
@@ -500,7 +504,7 @@ export default {
       currrentPageRecords,
       candidatesQuestionnairesStore,
       questionnaire: computed(
-        () => candidatesQuestionnairesStore.questionnaireInfo,
+        () => candidatesQuestionnairesStore.questionnaireInfo
       ),
       paginator,
       userAnswers,
