@@ -328,6 +328,15 @@ function getItems() {
           },
         },
       ];
+    case "admin.evaluations.show":
+      return [
+        {
+          label: "evaluations",
+          command: () => {
+            router.push({ name: "admin.evaluations.index" });
+          },
+        },
+      ];
     // End of Evaluations
 
     // Image Manager

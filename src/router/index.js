@@ -81,6 +81,10 @@ const AdminEvaluationIndexView = () =>
   import("../views/admin/evaluations/IndexView.vue");
 const AdminEvaluationShowView = () =>
   import("../views/admin/evaluations/ShowView.vue");
+
+// Questionnaires
+const AdminEvaluationsQuestionnairesPrintView = () =>
+  import("../views/admin/evaluations/PrintView.vue");
 // End of Evaluations
 
 // Image Manager =
@@ -169,6 +173,11 @@ const router = createRouter({
           path: "questionnaires/:id/questions/print",
           name: "admin.questionnaires.questions.print",
           component: AdminQuestionnairesQuestionsPrintView,
+        },
+        {
+          path: "evaluations/:evaluationId/questionnaires/:questionnaireId/print",
+          name: "admin.evaluations.questionnaires.print",
+          component: AdminEvaluationsQuestionnairesPrintView,
         },
       ],
     },
