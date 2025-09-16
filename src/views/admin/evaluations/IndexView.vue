@@ -99,7 +99,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label'])
+                              lowercaseFirstLetter(slotProps['item']['label']),
                             ).toLowerCase()
                           ]
                             ? 'pi pi-eye'
@@ -379,7 +379,7 @@
           <template #body="slotProps">
             {{
               moment(slotProps.data.attributes.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a"
+                "ddd, MMM D, yyyy, h:mm a",
               )
             }}
           </template>
@@ -400,7 +400,7 @@
                 @click="
                   showEvaluation(
                     slotProps.data.id,
-                    slotProps.data.attributes.questionnaire_id
+                    slotProps.data.attributes.questionnaire_id,
                   )
                 "
               />
@@ -650,7 +650,7 @@ export default {
           query: { ...query },
         });
       },
-      { deep: true }
+      { deep: true },
     );
 
     function loadData() {
