@@ -10,11 +10,11 @@
         class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between"
       >
         <div class="flex items-center justify-center">
-          <p class="text-xl font-bold mr-2">
+          <p class="text-xl font-bold mr-4">
             {{ questionnaire?.name }}
           </p>
           <i
-            class="pi pi-print !text-blue-600 hover:cursor-pointer"
+            class="pi pi-print !text-[var(--p-primary-color)] hover:cursor-pointer"
             style="font-size: 1.5rem"
             @click="showPrintView"
           ></i>

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="questionnairesQuestionsStore.loading || questionnairesStore.loading"
-    class="mx-2"
+    class="w-[210mm] h-[297mm] mx-auto"
   >
     <Skeleton height="8rem" class="mb-6" />
     <div class="bg-white flex flex-col items-center justify-center">
@@ -14,14 +14,18 @@
       />
     </div>
   </div>
-  <template v-else>
+  <div v-else class="w-[210mm] h-[297mm] mx-auto">
     <!-- Header -->
     <header class="p-4 mb-4 text-black border-b-2 border-black" @click="test">
       <div class="flex flex-col items-center justify-center space-y-2">
         <div class="flex items-center justify-center mb-4">
-          <p class="text-2xl font-bold mr-2 uppercase">
+          <p class="text-2xl font-bold mr-4 uppercase">
             {{ questionnaire?.name }}
           </p>
+          <i
+            @click="print"
+            class="print:!hidden pi pi-print !text-xl text-[var(--p-primary-color)] cursor-pointer"
+          />
         </div>
         <div
           class="flex flex-col justify-center items-center text-base font-bold w-[25rem]"
@@ -128,8 +132,9 @@
             </div>
           </div>
         </div>
-      </div></div
-  ></template>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -180,18 +185,18 @@ export default {
           setAnwers(newQuestions);
           currrentPageRecords.value = getPaginatorRecords();
         }
-      },
+      }
     );
 
     function setAnwers(newQuestions) {
       for (let question of newQuestions) {
         questionAnswers[question.id] = [];
 
-        for (let answer of question.relationships.answers) {
+        for (let answer of question.relationships.answers.data) {
           let relatedAnswer = findRelations(
             questionnairesQuestionsStore.meta.included,
-            answer.data.id,
-            answer.data.type,
+            answer.id,
+            answer.type
           );
           questionAnswers[question.id].push(relatedAnswer);
           if (route.query.showAnswers === "true") {
@@ -245,7 +250,7 @@ export default {
 
       return questionnairesQuestionsStore.questions?.slice(
         start_index,
-        end_index,
+        end_index
       );
     }
 
@@ -258,13 +263,17 @@ export default {
       onPageChange({ page: page - 1, rows: paginator.perPage });
     }
 
+    function print() {
+      window.print();
+    }
+
     return {
       route,
       currrentPageRecords,
       questionnairesStore,
       questionnairesQuestionsStore,
       questionnaire: computed(
-        () => questionnairesStore.questionnaire?.data?.attributes,
+        () => questionnairesStore.questionnaire?.data?.attributes
       ),
       questionAnswers,
       correctAnswers,
@@ -274,6 +283,7 @@ export default {
       navigate,
       paginator,
       formatMinutes,
+      print,
     };
   },
 };
