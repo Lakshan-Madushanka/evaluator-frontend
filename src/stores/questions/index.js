@@ -101,7 +101,7 @@ export const useQuestionsStore = defineStore("questions", () => {
 
       appStore.setToast(
         "success",
-        "Question created successfully with id " + response.data.id,
+        "Question created successfully with id " + response.data.id
       );
       errors.value = {};
     } catch (data) {
@@ -123,7 +123,7 @@ export const useQuestionsStore = defineStore("questions", () => {
 
       appStore.setToast(
         "success",
-        "Question with id " + response.data.id + " updated successfully",
+        "Question with id " + response.data.id + " updated successfully"
       );
       errors.value = {};
     } catch (data) {
@@ -148,7 +148,7 @@ export const useQuestionsStore = defineStore("questions", () => {
     } catch (data) {
       appStore.setToast(
         "error",
-        "Error occurred while deleting questions please try again",
+        "Error occurred while deleting questions please try again"
       );
     } finally {
       loading.value = false;
@@ -165,12 +165,12 @@ export const useQuestionsStore = defineStore("questions", () => {
       status.value = "deleted";
       appStore.setToast(
         "success",
-        `${payload.ids.length} no of questions deleted successfully`,
+        `${payload.ids.length} no of questions deleted successfully`
       );
     } catch (data) {
       appStore.setToast(
         "error",
-        "Error occurred while deleting questions please try again",
+        "Error occurred while deleting questions please try again"
       );
       status.value = "";
     } finally {
