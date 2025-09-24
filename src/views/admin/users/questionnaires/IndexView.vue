@@ -56,7 +56,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             )
                           ]
                             ? 'pi pi-eye'
@@ -176,7 +176,7 @@
               <span v-else>
                 {{
                   moment(slotProps.data.attributes.started_at).format(
-                    "ddd, MMM D, yyyy, h:mm a",
+                    "ddd, MMM D, yyyy, h:mm a"
                   )
                 }}
               </span>
@@ -200,7 +200,7 @@
               <span v-else>
                 {{
                   moment(slotProps.data.attributes.finished_at).format(
-                    "ddd, MMM D, yyyy, h:mm a",
+                    "ddd, MMM D, yyyy, h:mm a"
                   )
                 }}
               </span></template
@@ -221,7 +221,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.expires_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -252,7 +252,7 @@
               <Tag
                 v-if="
                   moment(slotProps.data.attributes.expires_at).isBefore(
-                    moment(),
+                    moment()
                   )
                 "
                 >Expired</Tag
@@ -274,7 +274,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -287,12 +287,12 @@
             :hidden="!columnVisibility.actions"
           >
             <template #body="slotProps">
-              <span class="p-buttonset">
+              <span class="p-buttonset space-x-1">
                 <PrimeButton
                   v-if="
                     shouldAlloweToResendNotiificaton(
                       slotProps.data.attributes.attempts,
-                      slotProps.data.attributes.expires_at,
+                      slotProps.data.attributes.expires_at
                     )
                   "
                   class="p-button-sm"
@@ -300,7 +300,19 @@
                   title="Resend notification"
                   @click="
                     resendNotification(
-                      slotProps.data.attributes.user_questionnaire_id,
+                      slotProps.data.attributes.user_questionnaire_id
+                    )
+                  "
+                />
+                <PrimeButton
+                  v-if="slotProps.data.attributes.attempts === 0"
+                  class="p-button-sm"
+                  icon="pi pi-trash "
+                  title="Revoke Access"
+                  severity="danger"
+                  @click="
+                    revokeAccess(
+                      slotProps.data.attributes.user_questionnaire_id
                     )
                   "
                 />
@@ -496,9 +508,7 @@ export default {
     ];
 
     onMounted(() => {
-      usersQuestionnairesStore.getAll(route.params.id, {
-        query: { pagination: { number: 1, size: 10 } },
-      });
+      getAll();
     });
 
     watch(query, (newQuery) => {
@@ -519,6 +529,12 @@ export default {
         });
       }
     });
+
+    function getAll() {
+      usersQuestionnairesStore.getAll(route.params.id, {
+        query: { pagination: { number: 1, size: 10 } },
+      });
+    }
 
     function onPage(event) {
       query.pagination.number = event.page + 1;
@@ -578,8 +594,28 @@ export default {
         accept: () => {
           usersQuestionnairesStore.resendNotificatiion(
             route.params.id,
-            questionnaireId,
+            questionnaireId
           );
+        },
+        reject: () => {},
+      });
+    }
+
+    function revokeAccess(userQuestionnaireId) {
+      confirm.require({
+        message:
+          "Do you want to revoke the access to the questionnaire for the user ?",
+        header: "Revoke Access",
+        icon: "pi pi-info-circle",
+        acceptClass: "p-button-danger",
+        acceptLabel: "Yes",
+        accept: async () => {
+          await usersQuestionnairesStore.revokeAccess(
+            route.params.id,
+            userQuestionnaireId
+          );
+
+          getAll();
         },
         reject: () => {},
       });
@@ -610,6 +646,7 @@ export default {
       router,
       shouldAlloweToResendNotiificaton,
       resendNotification,
+      revokeAccess,
     };
   },
 };

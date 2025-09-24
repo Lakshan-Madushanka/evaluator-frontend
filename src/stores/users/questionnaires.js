@@ -25,13 +25,13 @@ export const useUsersQuestionnairesStore = defineStore(
       try {
         const results = await usersQuestionnairesRequests.getAllRequest(
           userId,
-          payload,
+          payload
         );
         questionnaires.value = results;
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while obtaining questionnaire data please try again",
+          "Error occurred while obtaining questionnaire data please try again"
         );
       } finally {
         loading.value = false;
@@ -51,7 +51,7 @@ export const useUsersQuestionnairesStore = defineStore(
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while cheking availablity of the questionnaire please try again",
+          "Error occurred while cheking availablity of the questionnaire please try again"
         );
       } finally {
         status.value = "";
@@ -67,12 +67,12 @@ export const useUsersQuestionnairesStore = defineStore(
         status.value = "attached";
         appStore.setToast(
           "success",
-          `Questionnaire with ${availableId.value} attached to user ${userId}`,
+          `Questionnaire with ${availableId.value} attached to user ${userId}`
         );
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while attaching questionnaire please try again",
+          "Error occurred while attaching questionnaire please try again"
         );
       }
     }
@@ -84,16 +84,36 @@ export const useUsersQuestionnairesStore = defineStore(
       try {
         await usersQuestionnairesRequests.resendNotificarionRequest(
           userId,
-          questionnaireId,
+          questionnaireId
         );
         appStore.setToast(
           "success",
-          `Questionnaire attached notification resent to user ${userId}`,
+          `Questionnaire attached notification resent to user ${userId}`
         );
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while attaching questionnaire please try again",
+          "Error occurred while attaching questionnaire please try again"
+        );
+      } finally {
+        loading.value = false;
+      }
+    }
+
+    async function revokeAccess(userId, userQuestionnaireId) {
+      errors.questionnaireId = "";
+      loading.value = true;
+
+      try {
+        await usersQuestionnairesRequests.detach(userId, userQuestionnaireId);
+        appStore.setToast(
+          "success",
+          `Questionnaire revoked from the user ${userId}`
+        );
+      } catch (error) {
+        appStore.setToast(
+          "error",
+          "Error occurred while revoking questionnaire please try again"
         );
       } finally {
         loading.value = false;
@@ -116,7 +136,8 @@ export const useUsersQuestionnairesStore = defineStore(
       attach,
       getAll,
       resendNotificatiion,
+      revokeAccess,
       clearState,
     };
-  },
+  }
 );
