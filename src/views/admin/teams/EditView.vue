@@ -123,7 +123,7 @@ export default {
         if (newTeam) {
           state.name = newTeam.data.attributes.name;
         }
-      }
+      },
     );
 
     function refresh() {

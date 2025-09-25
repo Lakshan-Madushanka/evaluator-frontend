@@ -51,7 +51,7 @@ export const useTeamsStore = defineStore("teams", () => {
 
       appStore.setToast(
         "success",
-        "Team created successfully with id " + response.data.id
+        "Team created successfully with id " + response.data.id,
       );
       errors.value = {};
     } catch (data) {
@@ -73,7 +73,7 @@ export const useTeamsStore = defineStore("teams", () => {
 
       appStore.setToast(
         "success",
-        "Team with id " + response.data.id + " updated successfully"
+        "Team with id " + response.data.id + " updated successfully",
       );
       errors.value = {};
     } catch (data) {
@@ -98,7 +98,7 @@ export const useTeamsStore = defineStore("teams", () => {
     } catch (data) {
       appStore.setToast(
         "error",
-        "Error occurred while deleting team please try again"
+        "Error occurred while deleting team please try again",
       );
     } finally {
       loading.value = false;
