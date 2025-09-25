@@ -29,6 +29,46 @@ const home = {
 
 function getItems() {
   switch (route.name) {
+    // Teams
+    case "admin.teams.index":
+      return [
+        {
+          label: "teams",
+          command: () => {
+            router.push({ name: "admin.teams.index" });
+          },
+        },
+      ];
+    case "admin.teams.create":
+      return [
+        {
+          label: "teams",
+          command: () => {
+            router.push({ name: "admin.teams.index" });
+          },
+        },
+        {
+          label: "create",
+          command: () => {
+            router.push({ name: "admin.teams.create" });
+          },
+        },
+      ];
+    case "admin.teams.edit":
+      return [
+        {
+          label: "teams",
+          command: () => {
+            router.push({ name: "admin.teams.index" });
+          },
+        },
+        {
+          label: "edit",
+          command: () => {
+            router.push({ name: "admin.teams.edit" });
+          },
+        },
+      ];
     // Users
     case "admin.users.index":
       return [

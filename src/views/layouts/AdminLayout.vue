@@ -51,6 +51,7 @@ export default {
     const sideBarCollapse = ref(false);
 
     const activeClasses = reactive({
+      teams: "",
       users: "",
       categories: "",
       questionnaires: "",
@@ -85,10 +86,17 @@ export default {
         component: markRaw(Divider),
       },
       {
+        href: { name: "admin.teams.index" },
+        title: "Teams",
+        class: activeClassesRef.teams,
+        icon: "pi pi-fw pi-users",
+        exact: true,
+      },
+      {
         href: { name: "admin.users.index" },
         title: "Users",
         class: activeClassesRef.users,
-        icon: "pi pi-fw pi-users",
+        icon: "pi pi-fw pi-user",
         exact: true,
       },
       {
@@ -143,7 +151,15 @@ export default {
       (newRoute) => {
         const routeName = newRoute.name;
 
-        if (routeName.includes("users")) {
+        if (routeName.includes("teams")) {
+          activeClasses.teams = "vsm--link_active";
+          activeClasses.users = "";
+          activeClasses.answers = "";
+          activeClasses.questions = "";
+          activeClasses.categories = "";
+          activeClasses.questionnaires = "";
+          activeClasses.evaluations = "";
+        } else if (routeName.includes("users")) {
           activeClasses.users = "vsm--link_active";
           activeClasses.answers = "";
           activeClasses.questions = "";
@@ -187,7 +203,7 @@ export default {
           activeClasses.users = "";
         }
       },
-      { immediate: true },
+      { immediate: true }
     );
 
     function onToggleCollapse(event) {

@@ -18,6 +18,12 @@ const AdminDashboard = () => import("../views//admin/DashboardView.vue");
  Admin routes
 */
 
+//Teams
+const AdminTeamsIndexView = () => import("../views/admin/teams/IndexView.vue");
+const AdminCreateTeamsView = () =>
+  import("../views/admin/teams/CreateView.vue");
+const AdminEditTeamsView = () => import("../views/admin/teams/EditView.vue");
+
 //Users
 const AdminUsersIndexView = () => import("../views/admin/users/IndexView.vue");
 const AdminCreateUsersView = () =>
@@ -191,6 +197,22 @@ const router = createRouter({
           path: "",
           name: "admin.dashboard",
           component: AdminDashboard,
+        },
+        //-------------------------------------Teams------------------------------------------------------------------------------
+        {
+          path: "teams",
+          name: "admin.teams.index",
+          component: AdminTeamsIndexView,
+        },
+        {
+          path: "teams/create",
+          name: "admin.teams.create",
+          component: AdminCreateTeamsView,
+        },
+        {
+          path: "teams/:id/edit",
+          name: "admin.teams.edit",
+          component: AdminEditTeamsView,
         },
         //-------------------------------------Users------------------------------------------------------------------------------
         {
