@@ -230,7 +230,7 @@ export default {
           activeClasses.users = "";
         }
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     function onToggleCollapse(event) {
