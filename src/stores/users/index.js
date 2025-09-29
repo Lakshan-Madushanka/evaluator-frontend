@@ -51,7 +51,7 @@ export const useUsersStore = defineStore("users", () => {
 
       appStore.setToast(
         "success",
-        "User created successfully with id " + response.data.id,
+        "User created successfully with id " + response.data.id
       );
       errors.value = {};
     } catch (data) {
@@ -73,7 +73,7 @@ export const useUsersStore = defineStore("users", () => {
 
       appStore.setToast(
         "success",
-        "User with id " + response.data.id + " updated successfully",
+        "User with id " + response.data.id + " updated successfully"
       );
       errors.value = {};
     } catch (data) {
@@ -98,7 +98,7 @@ export const useUsersStore = defineStore("users", () => {
     } catch (data) {
       appStore.setToast(
         "error",
-        "Error occurred while deleting user please try again",
+        "Error occurred while deleting user please try again"
       );
     } finally {
       loading.value = false;
@@ -115,12 +115,12 @@ export const useUsersStore = defineStore("users", () => {
       status.value = "deleted";
       appStore.setToast(
         "success",
-        `${payload.ids.length} no of users deleted successfully`,
+        `${payload.ids.length} no of users deleted successfully`
       );
     } catch (data) {
       appStore.setToast(
         "error",
-        "Error occurred while deleting user please try again",
+        "Error occurred while deleting user please try again"
       );
     } finally {
       loading.value = false;

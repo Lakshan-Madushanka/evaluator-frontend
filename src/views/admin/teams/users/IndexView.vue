@@ -1,50 +1,5 @@
 <template>
   <ConfirmDialog></ConfirmDialog>
-  <AttachViewComponent
-    :display="displayAssignQuestionnaireView"
-    :user-id="userIdToAttachQuestionnaire"
-    @hide="displayAssignQuestionnaireView = $event"
-  />
-
-  <DialogModal
-    v-model:visible="displayAttachTeamsDialog"
-    modal
-    header="Attach Team(s)"
-    :style="{ width: '50vw' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
-    <div>
-      <p class="text-lg ld mb-4">Select Team(s)</p>
-      <MultiSelect
-        v-model="selectedTeams"
-        :options="availableTeams"
-        :loading="teamsStore.loading"
-        name="team"
-        optionLabel="name"
-        optionValue="id"
-        filter
-        placeholder="Select Team(s)"
-        class="w-full md:w-80"
-      />
-    </div>
-
-    <div class="flex justify-end gap-2">
-      <PrimeButton
-        type="button"
-        label="Cancel"
-        severity="info"
-        @click="displayAttachTeamsDialog = false"
-      ></PrimeButton>
-      <PrimeButton
-        type="button"
-        label="Attach"
-        severity="warn"
-        :disabled="selectedTeams.length === 0"
-        :loading="usersTeamsStore.status === 'attaching'"
-        @click="onConfirmTeamAttach"
-      ></PrimeButton>
-    </div>
-  </DialogModal>
 
   <BulkDeleteComponent
     :display-component="displayBulkDeleteComponent"
@@ -153,14 +108,6 @@
                     :disabled="Object.keys(filters).length === 0"
                     @click="applyFilters"
                   />
-                  <PrimeButton
-                    v-if="authStore.user.role === 'SUPER_ADMIN'"
-                    icon="pi pi-user-plus"
-                    label="New User"
-                    class="!py-1 !mr-4"
-                    icon-pos="right"
-                    @click="() => router.push({ name: 'admin.users.create' })"
-                  />
                 </div>
               </div>
             </div>
@@ -262,26 +209,6 @@
           </Column>
 
           <Column
-            field="teams"
-            header="Teams"
-            :hidden="!columnVisibility.teams"
-          >
-            <template #body="slotProps">
-              <router-link
-                class="inlne-block flex items-center justify-center hover:bg-transparent"
-                :to="{
-                  name: 'admin.users.teams.index',
-                  params: { id: slotProps.data.id },
-                }"
-              >
-                <i
-                  class="pi pi-eye p-1 !text-2xl hover:text-blue-500 hover:!text-[1.7rem]"
-                ></i>
-              </router-link>
-            </template>
-          </Column>
-
-          <Column
             field="questionnaires"
             header="Questionnaires"
             :hidden="!columnVisibility.questionnaires"
@@ -310,52 +237,11 @@
             <template #body="slotProps">
               <span class="p-buttonset space-x-1">
                 <PrimeButton
-                  class="p-button-sm"
-                  icon="pi pi-user-plus "
-                  title="Attach Team(s)"
-                  @click="attachTeams(slotProps.data.id)"
+                  class="p-button-danger p-button-sm"
+                  icon="pi pi-trash"
+                  title="Remove User"
+                  @click="removeUser(slotProps.data.id)"
                 />
-                <PrimeButton
-                  class="p-button-sm"
-                  icon="pi pi-calendar "
-                  title="Assign Questionnaire"
-                  @click="attachQuestionnaire(slotProps.data.id)"
-                />
-                <span
-                  v-if="slotProps.data.attributes.role !== 'SUPER_ADMIN'"
-                  class="space-x-1"
-                >
-                  <PrimeButton
-                    class="p-button-sm"
-                    icon="pi pi-file-edit"
-                    title="Edit"
-                    @click="
-                      () =>
-                        router.push({
-                          name: 'admin.users.edit',
-                          params: { id: slotProps.data.id },
-                        })
-                    "
-                  />
-                  <PrimeButton
-                    class="p-button-danger p-button-sm"
-                    icon="pi pi-trash "
-                    title="Delete"
-                    @click="deleteUser(slotProps.data.id)"
-                  />
-                </span>
-                <span v-else class="p-buttonset space-x-1">
-                  <PrimeButton
-                    v-tooltip="'Use profile section to edit super admin.'"
-                    class="p-button-sm opacity-60"
-                    icon="pi pi-info-circle"
-                  />
-                  <PrimeButton
-                    v-tooltip="'Super admin cannot be deleted !'"
-                    class="p-button-sm p-button-danger opacity-60"
-                    icon="pi pi-info-circle"
-                  />
-                </span>
               </span>
             </template>
           </Column>
@@ -385,23 +271,19 @@
 import { onMounted, ref, reactive, watch } from "vue";
 import Paginator from "@/components/PaginatorComponent.vue";
 
+import { useTeamsUsersStore } from "@/stores/teams/users";
 import { useAuthStore } from "@/stores/auth";
-import { useUsersStore } from "@/stores/users";
-import { useTeamsStore } from "@/stores/teams";
-import { useUsersTeamsStore } from "@/stores/users/teams";
 
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 import moment from "moment/moment";
 
 import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import DialogModal from "primevue/dialog";
 import PrimeButton from "primevue/button";
 import Tag from "primevue/tag";
 import MenuComponent from "primevue/menu";
-import MultiSelect from "primevue/multiselect";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 import ConfirmDialog from "primevue/confirmdialog";
@@ -412,7 +294,6 @@ import InputIcon from "primevue/inputicon";
 
 import BulkDeleteComponent from "@/components/BulkDeleteComponent.vue";
 import SortComponent from "@/components/SortComponent.vue";
-import AttachViewComponent from "./questionnaires/AttachView.vue";
 
 import { ROLES } from "@/constants";
 import { lowercaseFirstLetter, snake } from "@/helpers";
@@ -422,7 +303,6 @@ export default {
     AdminTableLayout,
     PrimeButton,
     DataTable,
-    DialogModal,
     Column,
     Tag,
     Paginator,
@@ -430,37 +310,20 @@ export default {
     InputText,
     Dropdown,
     MenuComponent,
-    MultiSelect,
     ConfirmDialog,
     BulkDeleteComponent,
-    AttachViewComponent,
     IconField,
     InputIcon,
   },
   setup() {
-    onMounted(() => {
-      usersStore.getAll({
-        query: { pagination: { number: 1, size: 10 } },
-      });
-    });
-
     const confirm = useConfirm();
     const toast = useToast();
 
-    const usersStore = useUsersStore();
+    const usersStore = useTeamsUsersStore();
     const authStore = useAuthStore();
-    const teamsStore = useTeamsStore();
-    const usersTeamsStore = useUsersTeamsStore();
 
     const router = useRouter();
-
-    const displayAttachTeamsDialog = ref(false);
-    let selectedUserIdToAttachTeams = "";
-    const availableTeams = ref([]);
-    const selectedTeams = ref([]);
-
-    const displayAssignQuestionnaireView = ref(false);
-    const userIdToAttachQuestionnaire = ref();
+    const route = useRoute();
 
     const query = reactive({
       sort: {},
@@ -479,12 +342,6 @@ export default {
         icon: "pi pi-filter",
         command: () => applyFilters(),
       },
-      {
-        label: "Add User",
-        icon: "pi pi-user-plus",
-        command: () => router.push({ name: "admin.users.create" }),
-        visible: authStore.user.role === "SUPER_ADMIN",
-      },
     ]);
 
     const columnVisibility = reactive({
@@ -493,7 +350,6 @@ export default {
       email: true,
       role: true,
       created_at: true,
-      teams: true,
       questionnaires: true,
       actions: true,
     });
@@ -530,12 +386,6 @@ export default {
         },
       },
       {
-        label: "Teams",
-        command: () => {
-          columnVisibility.teams = !columnVisibility.teams;
-        },
-      },
-      {
         label: "Questionnaires",
         command: () => {
           columnVisibility.questionnaires = !columnVisibility.questionnaires;
@@ -568,7 +418,7 @@ export default {
 
     const bulkActions = [
       {
-        label: "Delete selected",
+        label: "Remove selected users",
         icon: "pi pi-trash",
         command: () => {
           let value = "";
@@ -594,8 +444,16 @@ export default {
       },
     ];
 
+    onMounted(() => {
+      usersStore.getAll(route.params.id, {
+        query: { pagination: { number: 1, size: 10 } },
+      });
+    });
+
     watch(query, (newQuery) => {
-      usersStore.getAll({ query: { ...newQuery, filters: filters.value } });
+      usersStore.getAll(route.params.id, {
+        query: { ...newQuery, filters: filters.value },
+      });
     });
 
     // We need to reset show paginator if it is disabled
@@ -607,7 +465,9 @@ export default {
       if (newUsersStore.status === "deleted") {
         displayBulkDeleteComponent.value = false;
         selectedUsers.value = [];
-        usersStore.getAll({ query: { ...query, filters: filters.value } });
+        usersStore.getAll(route.params.id, {
+          query: { ...query, filters: filters.value },
+        });
       }
     });
 
@@ -619,17 +479,6 @@ export default {
       showBulkActions.value = false;
     });
 
-    watch(
-      () => usersTeamsStore.status,
-      (status) => {
-        console.log("status", status);
-
-        if (status === "attached") {
-          displayAttachTeamsDialog.value = false;
-        }
-      }
-    );
-
     function onPage(event) {
       query.pagination.number = event.page + 1;
       query.pagination.size = event.rows;
@@ -639,7 +488,9 @@ export default {
       query.pagination.number = 1;
       showPaginator.value = false; // Reset the pagination
 
-      usersStore.getAll({ query: { filters: filters.value, ...query } });
+      usersStore.getAll(route.params.id, {
+        query: { filters: filters.value, ...query },
+      });
     }
 
     function reset() {
@@ -656,7 +507,7 @@ export default {
       //Reset sort
       query.sort = {};
 
-      usersStore.getAll({
+      usersStore.getAll(route.params.id, {
         query: { pagination: { number: 1, size: 10 } },
       });
     }
@@ -673,84 +524,35 @@ export default {
       actionsMenuRef.value.toggle(event);
     }
 
-    function deleteUser(id) {
-      confirm.require({
-        message:
-          "Do you want to delete this record? [This action cannot be undone !]",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        iconClass: "bg-red-500",
-        acceptClass: "p-button-danger",
-        acceptLabel: "Yes Delete",
-        accept: () => {
-          usersStore.deleteUser(id);
-        },
-        reject: () => {},
-      });
-    }
-
     function onBulkDeleteConfirmed() {
       getSelectedUsersIds();
-      usersStore.bulkDeleteUsers({ ids: getSelectedUsersIds() });
+      usersStore.detachUsers(route.params.id, getSelectedUsersIds());
     }
 
     function getSelectedUsersIds() {
       let ids = [];
 
-      selectedUsers.value.forEach((element) => {
-        if (element.attributes.role !== "SUPER_ADMIN") {
-          ids.push(element.id);
-        }
+      selectedUsers.value.forEach((user) => {
+        ids.push(user.id);
       });
 
       return ids;
     }
 
-    function attachQuestionnaire(userId) {
-      displayAssignQuestionnaireView.value = true;
-      userIdToAttachQuestionnaire.value = userId;
+    function removeUsers(userIds) {
+      usersStore.detachUsers(route.params.id, userIds);
     }
 
-    async function attachTeams(userId) {
-      selectedUserIdToAttachTeams = userId;
-
-      selectedTeams.value = [];
-
-      displayAttachTeamsDialog.value = true;
-
-      await teamsStore.getAll();
-
-      const tmpAvailableTeams = [];
-
-      teamsStore.teams.data?.forEach((team) => {
-        tmpAvailableTeams.push({
-          name: team.attributes.name,
-          id: team.id,
-        });
-      });
-
-      availableTeams.value = tmpAvailableTeams;
-    }
-
-    function onConfirmTeamAttach() {
+    function removeUser(userId) {
       confirm.require({
-        message: "Do you want to attach selected teams(s) to the user",
-        header: "Attach Confirmation",
-        icon: "pi pi-exclamation-triangle",
-        rejectProps: {
-          label: "Cancel",
-          severity: "secondary",
-          outlined: true,
-        },
-        acceptProps: {
-          label: "Yes Attach",
-          severity: "warn",
-        },
+        message: "Do you want to remove the selected user from the team ?",
+        header: "Remove Confirmation",
+        icon: "pi pi-info-circle",
+        iconClass: "bg-red-500",
+        acceptClass: "p-button-danger",
+        acceptLabel: "Yes Remove",
         accept: () => {
-          usersTeamsStore.attachTeams(
-            selectedUserIdToAttachTeams,
-            selectedTeams.value
-          );
+          removeUsers([userId]);
         },
         reject: () => {},
       });
@@ -758,13 +560,6 @@ export default {
 
     return {
       usersStore,
-      teamsStore,
-      usersTeamsStore,
-      displayAttachTeamsDialog,
-      availableTeams,
-      selectedTeams,
-      displayAssignQuestionnaireView,
-      userIdToAttachQuestionnaire,
       onPage,
       moment,
       query,
@@ -779,7 +574,6 @@ export default {
       bulkActionMenu,
       bulkActions,
       toggleBulkActions,
-      deleteUser,
       displayBulkDeleteComponent,
       bulkDeleteValue,
       onBulkDeleteConfirmed,
@@ -794,9 +588,8 @@ export default {
       actions,
       toggleActionsMenu,
       router,
-      attachQuestionnaire,
-      attachTeams,
-      onConfirmTeamAttach,
+      removeUsers,
+      removeUser,
     };
   },
 };

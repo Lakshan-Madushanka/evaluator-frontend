@@ -24,6 +24,11 @@ const AdminCreateTeamsView = () =>
   import("../views/admin/teams/CreateView.vue");
 const AdminEditTeamsView = () => import("../views/admin/teams/EditView.vue");
 
+// Users
+const AdminTeamsUsersIndexView = () =>
+  import("../views/admin/teams/users/IndexView.vue");
+// End of Teams
+
 //Users
 const AdminUsersIndexView = () => import("../views/admin/users/IndexView.vue");
 const AdminCreateUsersView = () =>
@@ -33,6 +38,11 @@ const AdminEditUsersView = () => import("../views/admin/users/EditView.vue");
 // Questionnaires
 const AdminUsersQuestionnaireView = () =>
   import("../views/admin/users/questionnaires/IndexView.vue");
+
+const AdminUsersTeamsView = () =>
+  import("../views/admin/users/teams/IndexView.vue");
+
+// Teams
 // End users
 
 // Questions
@@ -46,7 +56,6 @@ const AdminQuestionsEditView = () =>
 // Answers
 const AdminQuestionsAnswersIndexView = () =>
   import("../views/admin/questions/answers/IndexView.vue");
-// And Answers
 // End Questions
 
 // Answers
@@ -214,6 +223,15 @@ const router = createRouter({
           name: "admin.teams.edit",
           component: AdminEditTeamsView,
         },
+
+        // Users
+        {
+          path: "teams/:id/users",
+          name: "admin.teams.users.index",
+          component: AdminTeamsUsersIndexView,
+        },
+        //-------------------------------------Enf of Teams------------------------------------------------------------------------------
+
         //-------------------------------------Users------------------------------------------------------------------------------
         {
           path: "users",
@@ -232,9 +250,15 @@ const router = createRouter({
         },
         // Questionnaires
         {
-          path: "/users/:id/questionnaires",
+          path: "users/:id/questionnaires",
           name: "admin.users.questionnaires.index",
           component: AdminUsersQuestionnaireView,
+        },
+        // Teams
+        {
+          path: "users/:id/teams",
+          name: "admin.users.teams.index",
+          component: AdminUsersTeamsView,
         },
         //----------------------------------End Users------------------------------------------------------------------------------
 

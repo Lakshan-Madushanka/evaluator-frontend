@@ -71,7 +71,7 @@ export default {
       () => props.displayComponent,
       (displayComponent) => {
         display.value = displayComponent;
-      },
+      }
     );
 
     function afterDialogHidden() {

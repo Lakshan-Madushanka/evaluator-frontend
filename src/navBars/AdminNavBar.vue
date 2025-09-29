@@ -69,6 +69,25 @@ function getItems() {
           },
         },
       ];
+    //Users
+    case "admin.teams.users.index":
+      return [
+        {
+          label: "teams",
+          command: () => {
+            router.push({ name: "admin.teams.index" });
+          },
+        },
+        {
+          label: "users",
+          command: () => {
+            router.push({ name: "admin.teams.users.index" });
+          },
+        },
+      ];
+    // End of Users
+    // End of Teams
+
     // Users
     case "admin.users.index":
       return [
@@ -129,6 +148,26 @@ function getItems() {
           command: () => {
             router.push({
               name: "admin.users.questionnaires.index",
+            });
+          },
+        },
+      ];
+    // Teams
+    case "admin.users.teams.index":
+      return [
+        {
+          label: "users",
+          command: () => {
+            router.push({
+              name: "admin.users.index",
+            });
+          },
+        },
+        {
+          label: "teams",
+          command: () => {
+            router.push({
+              name: "admin.users.teams.index",
             });
           },
         },

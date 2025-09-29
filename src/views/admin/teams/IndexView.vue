@@ -142,6 +142,27 @@
             >
           </Column>
 
+          <!--Show Users-->
+          <Column
+            field="users"
+            header="Users"
+            :hidden="!columnVisibility.users"
+          >
+            <template #body="slotProps">
+              <router-link
+                class="inlne-block mx-0 flex items-center justify-start hover:bg-transparent"
+                :to="{
+                  name: 'admin.teams.users.index',
+                  params: { id: slotProps.data.id },
+                }"
+              >
+                <i
+                  class="pi pi-eye p-1 !text-2xl hover:text-blue-500 hover:!text-[1.7rem]"
+                ></i>
+              </router-link>
+            </template>
+          </Column>
+
           <Column
             field="Actions"
             header="Actions"
@@ -149,6 +170,17 @@
           >
             <template #body="slotProps">
               <span class="p-buttonset space-x-1">
+                <PrimeButton
+                  class="p-button-sm"
+                  icon="pi pi-user-plus"
+                  title="Add Users"
+                  @click="
+                    () =>
+                      router.push({
+                        name: 'admin.users.index',
+                      })
+                  "
+                />
                 <PrimeButton
                   class="p-button-sm"
                   icon="pi pi-file-edit"
@@ -162,6 +194,7 @@
                   "
                 />
                 <PrimeButton
+                  v-if="authStore.user.role === 'SUPER_ADMIN'"
                   class="p-button-danger p-button-sm"
                   icon="pi pi-trash "
                   title="Delete"
@@ -179,6 +212,7 @@
 <script>
 import { onMounted, ref, reactive, watch } from "vue";
 
+import { useAuthStore } from "@/stores/auth";
 import { useTeamsStore } from "@/stores/teams/index";
 
 import { useRouter } from "vue-router";
@@ -216,6 +250,8 @@ export default {
   setup() {
     const confirm = useConfirm();
 
+    const authStore = useAuthStore();
+
     const teamsStore = useTeamsStore();
 
     const router = useRouter();
@@ -228,6 +264,7 @@ export default {
     const columnVisibility = reactive({
       id: true,
       name: true,
+      users: true,
       created_at: true,
       actions: true,
     });
@@ -248,6 +285,12 @@ export default {
         label: "Created at",
         command: () => {
           columnVisibility.created_at = !columnVisibility.created_at;
+        },
+      },
+      {
+        label: "Users",
+        command: () => {
+          columnVisibility.users = !columnVisibility.users;
         },
       },
       {
@@ -336,6 +379,7 @@ export default {
     }
 
     return {
+      authStore,
       teamsStore,
       moment,
       query,

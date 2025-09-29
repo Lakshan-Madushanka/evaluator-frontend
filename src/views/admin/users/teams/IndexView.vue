@@ -5,16 +5,16 @@
     <template #table>
       <div>
         <DataTable
-          :value="categoriesStore.categories && categoriesStore.categories.data"
+          :value="teamsStore.teams && teamsStore.teams.data"
           responsive-layout="scroll"
-          :loading="categoriesStore.loading"
+          :loading="teamsStore.loading"
           striped-rows
           data-key="id"
           filter-display="row"
         >
           <template #empty>
             <p
-              v-if="!categoriesStore.loading"
+              v-if="!teamsStore.loading"
               class="p-4 text-center text-2xl bg-blue-200"
             >
               No records found.
@@ -24,7 +24,7 @@
           <template #header>
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
-                <p class="mr-2">Categories</p>
+                <p class="mr-2">Teams</p>
                 <i
                   class="pi pi-eye text-blue-600 hover:cursor-pointer"
                   style="font-size: 2rem"
@@ -81,15 +81,6 @@
                     :disabled="Object.keys(filters).length === 0"
                     @click="applyFilters"
                   />
-                  <PrimeButton
-                    icon="pi pi-plus"
-                    label="New Category"
-                    class="!py-1 !mr-4"
-                    icon-pos="right"
-                    @click="
-                      () => router.push({ name: 'admin.categories.create' })
-                    "
-                  />
                 </div>
               </div>
             </div>
@@ -144,33 +135,25 @@
             >
           </Column>
 
+          <!--Show Users-->
+
           <Column
-            field="Actions"
-            header="Actions"
-            :hidden="!columnVisibility.actions"
+            field="users"
+            header="Users"
+            :hidden="!columnVisibility.users"
           >
             <template #body="slotProps">
-              <span class="p-buttonset space-x-1">
-                <PrimeButton
-                  class="p-button-sm"
-                  icon="pi pi-file-edit"
-                  title="Edit"
-                  @click="
-                    () =>
-                      router.push({
-                        name: 'admin.categories.edit',
-                        params: { id: slotProps.data.id },
-                      })
-                  "
-                />
-                <PrimeButton
-                  v-if="authStore.user.role === 'SUPER_ADMIN'"
-                  class="p-button-danger p-button-sm"
-                  icon="pi pi-trash "
-                  title="Delete"
-                  @click="deleteCategory(slotProps.data.id)"
-                />
-              </span>
+              <router-link
+                class="inlne-block flex items-center justify-start hover:bg-transparent"
+                :to="{
+                  name: 'admin.teams.users.index',
+                  params: { id: slotProps.data.id },
+                }"
+              >
+                <i
+                  class="pi pi-eye p-1 !text-2xl hover:text-blue-500 hover:!text-[1.7rem]"
+                ></i>
+              </router-link>
             </template>
           </Column>
         </DataTable>
@@ -182,10 +165,9 @@
 <script>
 import { onMounted, ref, reactive, watch } from "vue";
 
-import { useAuthStore } from "@/stores/auth";
-import { useCategoriesStore } from "@/stores/categories/index";
+import { useUsersTeamsStore } from "@/stores/users/teams";
 
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 import moment from "moment/moment";
 
@@ -196,7 +178,6 @@ import PrimeButton from "primevue/button";
 import MenuComponent from "primevue/menu";
 import InputText from "primevue/inputtext";
 import ConfirmDialog from "primevue/confirmdialog";
-import { useConfirm } from "primevue/useconfirm";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 
@@ -218,12 +199,10 @@ export default {
     InputIcon,
   },
   setup() {
-    const confirm = useConfirm();
-
-    const authStore = useAuthStore();
-    const categoriesStore = useCategoriesStore();
+    const teamsStore = useUsersTeamsStore();
 
     const router = useRouter();
+    const route = useRoute();
 
     const query = reactive({
       sort: {},
@@ -233,6 +212,7 @@ export default {
     const columnVisibility = reactive({
       id: true,
       name: true,
+      users: true,
       created_at: true,
       actions: true,
     });
@@ -253,6 +233,12 @@ export default {
         label: "Created at",
         command: () => {
           columnVisibility.created_at = !columnVisibility.created_at;
+        },
+      },
+      {
+        label: "Users",
+        command: () => {
+          columnVisibility.users = !columnVisibility.users;
         },
       },
       {
@@ -277,31 +263,28 @@ export default {
         icon: "pi pi-filter",
         command: () => applyFilters(),
       },
-      {
-        label: "New Category",
-        icon: "pi pi-plus",
-        command: () => router.push({ name: "admin.categories.create" }),
-      },
     ]);
 
     onMounted(() => {
-      categoriesStore.getAll();
+      getAllRequest(false);
     });
 
-    watch(categoriesStore, (newUsersStore) => {
-      if (newUsersStore.status === "deleted") {
-        categoriesStore.getAll({ query: { ...query, filters: filters.value } });
+    watch(query, () => {
+      getAllRequest();
+    });
+
+    function getAllRequest(withQuery = true) {
+      if (withQuery) {
+        teamsStore.getAll(route.params.id, {
+          query: { ...query, filters: filters.value },
+        });
+      } else {
+        teamsStore.getAll(route.params.id);
       }
-    });
-
-    watch(query, (newQuery) => {
-      categoriesStore.getAll({
-        query: { ...newQuery, filters: filters.value },
-      });
-    });
+    }
 
     function applyFilters() {
-      categoriesStore.getAll({ query: { filters: filters.value, ...query } });
+      getAllRequest();
     }
 
     function reset() {
@@ -311,9 +294,7 @@ export default {
       //Reset sort
       query.sort = {};
 
-      categoriesStore.getAll({
-        query: {},
-      });
+      getAllRequest(false);
     }
 
     function toggleActionsMenu(event) {
@@ -324,31 +305,13 @@ export default {
       columnsMenuRef.value.toggle(event);
     }
 
-    function deleteCategory(id) {
-      confirm.require({
-        message:
-          "Do you want to delete this record? [This action cannot be undone !]",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        iconClass: "bg-red-500",
-        acceptClass: "p-button-danger",
-        acceptLabel: "Yes Delete",
-        accept: () => {
-          categoriesStore.deleteCategory(id);
-        },
-        reject: () => {},
-      });
-    }
-
     return {
-      authStore,
-      categoriesStore,
+      teamsStore,
       moment,
       query,
       filters,
       applyFilters,
       reset,
-      deleteCategory,
       columns,
       columnsMenuRef,
       toggleColumnsMenu,

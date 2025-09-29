@@ -51,12 +51,14 @@ export default {
     const sideBarCollapse = ref(false);
 
     const activeClasses = reactive({
+      dashboard: "",
       teams: "",
       users: "",
       categories: "",
       questionnaires: "",
       questions: "",
       answers: "",
+      evaluations: "",
     });
     const activeClassesRef = toRefs(activeClasses);
 
@@ -79,6 +81,7 @@ export default {
       {
         href: { name: "admin.dashboard" },
         title: "Dashboard",
+        class: activeClassesRef.dashboard,
         icon: "pi pi-fw pi-th-large",
         exact: true,
       },
@@ -151,51 +154,75 @@ export default {
       (newRoute) => {
         const routeName = newRoute.name;
 
-        if (routeName.includes("teams")) {
+        console.log(routeName.includes("admin//teams"), routeName);
+
+        if (routeName.includes("admin.dashboard")) {
+          activeClasses.dashboard = "vsm--link_active";
+          activeClasses.teams = "";
+          activeClasses.users = "";
+          activeClasses.answers = "";
+          activeClasses.questions = "";
+          activeClasses.categories = "";
+          activeClasses.questionnaires = "";
+          activeClasses.evaluations = "";
+        } else if (routeName.includes("admin.teams")) {
           activeClasses.teams = "vsm--link_active";
+          activeClasses.dashboard = "";
           activeClasses.users = "";
           activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.categories = "";
           activeClasses.questionnaires = "";
           activeClasses.evaluations = "";
-        } else if (routeName.includes("users")) {
+        } else if (routeName.includes("admin.users")) {
           activeClasses.users = "vsm--link_active";
+          activeClasses.dashboard = "";
+          activeClasses.teams = "";
           activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.categories = "";
           activeClasses.questionnaires = "";
           activeClasses.evaluations = "";
-        } else if (routeName.includes("categories")) {
+        } else if (routeName.includes("admin.categories")) {
           activeClasses.categories = "vsm--link_active";
+          activeClasses.dashboard = "";
+          activeClasses.teams = "";
           activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.users = "";
           activeClasses.questionnaires = "";
           activeClasses.evaluations = "";
-        } else if (routeName.includes("questionnaires")) {
+        } else if (routeName.includes("admin.questionnaires")) {
           activeClasses.questionnaires = "vsm--link_active";
+          activeClasses.dashboard = "";
+          activeClasses.teams = "";
           activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.categories = "";
           activeClasses.users = "";
           activeClasses.evaluations = "";
-        } else if (routeName.includes("questions")) {
+        } else if (routeName.includes("admin.questions")) {
           activeClasses.questions = "vsm--link_active";
+          activeClasses.dashboard = "";
+          activeClasses.teams = "";
           activeClasses.answers = "";
           activeClasses.questionnaires = "";
           activeClasses.categories = "";
           activeClasses.users = "";
           activeClasses.evaluations = "";
-        } else if (routeName.includes("answers")) {
+        } else if (routeName.includes("admin.answers")) {
           activeClasses.answers = "vsm--link_active";
+          activeClasses.dashboard = "";
+          activeClasses.teams = "";
           activeClasses.questions = "";
           activeClasses.questionnaires = "";
           activeClasses.categories = "";
           activeClasses.users = "";
           activeClasses.evaluations = "";
-        } else if (routeName.includes("evaluations")) {
+        } else if (routeName.includes("admin.evaluations")) {
           activeClasses.evaluations = "vsm--link_active";
+          activeClasses.dashboard = "";
+          activeClasses.teams = "";
           activeClasses.answers = "";
           activeClasses.questions = "";
           activeClasses.questionnaires = "";
