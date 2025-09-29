@@ -38,7 +38,7 @@ export const useQuestionsAnswersStore = defineStore("questionsAnswers", () => {
         errors.value.answerId = "Invalid or not eligible answer id";
         appStore.setToast(
           "warn",
-          "Couldn't not find eligible answer for id " + answerId
+          "Couldn't not find eligible answer for id " + answerId,
         );
       }
       answer.value = results.answer;
@@ -57,7 +57,7 @@ export const useQuestionsAnswersStore = defineStore("questionsAnswers", () => {
 
       appStore.setToast(
         "success",
-        "Questions of questionnaire " + answerId + " synced successfully"
+        "Questions of questionnaire " + answerId + " synced successfully",
       );
     } catch (error) {
       //
@@ -73,7 +73,7 @@ export const useQuestionsAnswersStore = defineStore("questionsAnswers", () => {
     isLoading,
     statusValue,
     errorsValue,
-    answerValue = null
+    answerValue = null,
   ) {
     loading.value = isLoading;
     status.value = statusValue;

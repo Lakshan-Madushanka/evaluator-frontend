@@ -36,7 +36,7 @@ export const useTeamsUsersStore = defineStore("teamsUsers", () => {
 
       appStore.setToast(
         "success",
-        "Selected users of the team " + teamId + " detached successfully"
+        "Selected users of the team " + teamId + " detached successfully",
       );
     } catch (error) {
       //

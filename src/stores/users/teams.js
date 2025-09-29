@@ -37,7 +37,7 @@ export const useUsersTeamsStore = defineStore("usersTeams", () => {
 
       appStore.setToast(
         "success",
-        "Selected team(s) were attached to the users"
+        "Selected team(s) were attached to the users",
       );
     } catch (error) {
       //
@@ -53,7 +53,7 @@ export const useUsersTeamsStore = defineStore("usersTeams", () => {
     isLoading,
     statusValue,
     errorsValue,
-    answerValue = null
+    answerValue = null,
   ) {
     loading.value = isLoading;
     status.value = statusValue;
