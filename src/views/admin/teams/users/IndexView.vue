@@ -52,11 +52,11 @@
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
                 <p class="mr-2">Users</p>
-                <i
-                  class="pi pi-eye text-blue-600 hover:cursor-pointer"
-                  style="font-size: 2rem"
+                <Avatar
+                  class="hover:cursor-pointer"
+                  icon="pi pi-eye"
                   @click="toggleColumnsMenu"
-                ></i>
+                />
                 <MenuComponent
                   ref="columnsMenuRef"
                   :model="columns"
@@ -221,9 +221,7 @@
                   params: { id: slotProps.data.id },
                 }"
               >
-                <i
-                  class="pi pi-eye p-1 !text-2xl hover:text-blue-500 hover:!text-[1.7rem]"
-                ></i>
+                <Avatar icon="pi pi-eye" />
               </router-link>
             </template>
           </Column>
@@ -279,6 +277,8 @@ import { useRouter, useRoute } from "vue-router";
 import moment from "moment/moment";
 
 import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
+
+import Avatar from "primevue/avatar";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import PrimeButton from "primevue/button";
@@ -301,6 +301,7 @@ import { lowercaseFirstLetter, snake } from "@/helpers";
 export default {
   components: {
     AdminTableLayout,
+    Avatar,
     PrimeButton,
     DataTable,
     Column,

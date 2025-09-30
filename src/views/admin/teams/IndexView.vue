@@ -25,11 +25,12 @@
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
                 <p class="mr-2">Teams</p>
-                <i
-                  class="pi pi-eye text-blue-600 hover:cursor-pointer"
-                  style="font-size: 2rem"
+                <Avatar
+                  class="hover:cursor-pointer"
+                  icon="pi pi-eye"
                   @click="toggleColumnsMenu"
-                ></i>
+                />
+
                 <MenuComponent
                   ref="columnsMenuRef"
                   :model="columns"
@@ -41,7 +42,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             )
                           ]
                             ? 'pi pi-eye'
@@ -136,7 +137,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -156,9 +157,14 @@
                   params: { id: slotProps.data.id },
                 }"
               >
-                <i
-                  class="pi pi-eye p-1 !text-2xl hover:text-blue-500 hover:!text-[1.7rem]"
-                ></i>
+                <OverlayBadge
+                  :value="slotProps.data.attributes.users_count"
+                  severity="info"
+                  class="inline-flex"
+                  size="small"
+                >
+                  <Avatar icon="pi pi-eye" />
+                </OverlayBadge>
               </router-link>
             </template>
           </Column>
@@ -220,6 +226,9 @@ import { useRouter } from "vue-router";
 import moment from "moment/moment";
 
 import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
+
+import Avatar from "primevue/avatar";
+import OverlayBadge from "primevue/overlaybadge";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import PrimeButton from "primevue/button";
@@ -239,6 +248,8 @@ export default {
     AdminTableLayout,
     PrimeButton,
     DataTable,
+    Avatar,
+    OverlayBadge,
     Column,
     SortComponent,
     InputText,

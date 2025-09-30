@@ -42,11 +42,11 @@
           <div class="flex justify-between items-center text-2xl uppercase">
             <div class="flex">
               <p class="mr-2">Answers</p>
-              <i
-                class="pi pi-eye text-blue-600 hover:cursor-pointer"
-                style="font-size: 2rem"
+              <Avatar
+                class="hover:cursor-pointer"
+                icon="pi pi-eye"
                 @click="toggleColumnsMenu"
-              ></i>
+              />
               <MenuComponent
                 ref="columnsMenuRef"
                 :model="columns"
@@ -74,7 +74,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             ).toLowerCase()
                           ]
                             ? 'pi pi-eye'
@@ -230,7 +230,7 @@
           <template #body="slotProps">
             {{
               moment(slotProps.data.attributes.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a",
+                "ddd, MMM D, yyyy, h:mm a"
               )
             }}</template
           >
@@ -318,6 +318,8 @@ import { useRouter } from "vue-router";
 import { useAnswersStore } from "@/stores/answers";
 
 import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
+
+import Avatar from "primevue/avatar";
 import ConfirmDialog from "primevue/confirmdialog";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
@@ -345,6 +347,7 @@ import {
 export default {
   components: {
     AdminTableLayout,
+    Avatar,
     BulkDeleteComponent,
     ConfirmDialog,
     Column,
