@@ -31,7 +31,7 @@ instance.interceptors.response.use(
       handleClientSideErrors(error);
       throw error;
     }
-  },
+  }
 );
 
 function handleClientSideErrors(errorResponse) {
@@ -94,7 +94,7 @@ function handleServerSideErrors(errorResponse) {
 
   if (status === 429) {
     let retryAfterSeconds = errorResponse["response"]["headers"]["retry-after"];
-    query["retryAfter"] = moment().add(retryAfterSeconds, "seconds").unix();
+    query["retryAfter"] = retryAfterSeconds;
   }
 
   router.push({

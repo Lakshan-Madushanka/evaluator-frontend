@@ -125,14 +125,18 @@
             :time="getRemainingTime()"
             class="flex justify-center"
           >
-            <span class="flex space-x-2">
-              <span class="p-4 bg-white text-black font-bold"
+            <div class="flex space-x-4 mt-4">
+              <!-- <span class="p-4 bg-white text-black font-bold"
                 >{{ minutes }} M
               </span>
               <span class="p-4 bg-white text-black font-bold"
                 >{{ seconds }} S</span
-              >
-            </span>
+              > -->
+              <Badge severity="info" size="xlarge">{{ minutes }} minutes</Badge>
+              <Badge severity="info" size="xlarge"
+                >{{ seconds }} seconds
+              </Badge>
+            </div>
           </vue-countdown>
         </template>
         <template v-else>
@@ -164,10 +168,11 @@
 
 <script setup>
 import Button from "primevue/button";
+import Badge from "primevue/badge";
+
 import { useRoute, useRouter } from "vue-router";
 import { uppercaseFirstLetter } from "@/helpers";
 import VueCountdown from "@chenfengyuan/vue-countdown";
-import moment from "moment";
 
 const route = useRoute();
 const router = useRouter();
@@ -175,6 +180,6 @@ const router = useRouter();
 const query = route.query;
 
 function getRemainingTime() {
-  return moment.unix(query.retryAfter).milliseconds();
+  return parseInt(query.retryAfter) * 1000;
 }
 </script>
