@@ -133,14 +133,14 @@ export default {
         if (newStatus === "attached") {
           clearState();
         }
-      }
+      },
     );
 
     watch(
       () => props.display,
       (newValue) => {
         displayComponent.value = newValue;
-      }
+      },
     );
 
     function clearState() {
