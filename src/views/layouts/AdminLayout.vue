@@ -154,8 +154,6 @@ export default {
       (newRoute) => {
         const routeName = newRoute.name;
 
-        console.log(routeName.includes("admin//teams"), routeName);
-
         if (routeName.includes("admin.dashboard")) {
           activeClasses.dashboard = "vsm--link_active";
           activeClasses.teams = "";
@@ -230,7 +228,7 @@ export default {
           activeClasses.users = "";
         }
       },
-      { immediate: true },
+      { immediate: true }
     );
 
     function onToggleCollapse(event) {
