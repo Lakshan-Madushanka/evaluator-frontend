@@ -9,8 +9,10 @@
     <template #header>
       <div class="flex items-center">
         <p class="text-xl font-bold mr-4">
-          Attach a questionnaire to user
-          <span class="italic text-green-500">{{ props.userId }}</span> (id)
+          Attach a questionnaire to
+          {{ props.type === "user" ? "user" : "team" }}
+          <span class="italic text-green-500">{{ props.attachableId }}</span>
+          (id)
         </p>
       </div>
     </template>
@@ -30,13 +32,13 @@
                   'w-full disabled:!text-[var(--p-primary-color)]',
 
                   {
-                    '!font-bold': usersQuestionnairesStore.availableId,
+                    '!font-bold': questionnairesStore.availableId,
                   },
                 ]"
                 placeholder="Questionnaire id"
                 type="search"
                 autofocus
-                :disabled="usersQuestionnairesStore.availableId ? true : false"
+                :disabled="questionnairesStore.availableId ? true : false"
                 @keyup.enter="attachOrSearch"
                 @keydown="onQuestionnaireIdTextInputKeyDown"
                 @paste="onPasteQquestionnaireIdTextInput"
@@ -51,31 +53,27 @@
           Questionnaire id is required
         </p>
         <p
-          v-if="usersQuestionnairesStore.errors.questionnaireId"
+          v-if="questionnairesStore.errors.questionnaireId"
           class="text-red-500 text-sm mt-2"
         >
-          {{ usersQuestionnairesStore.errors.questionnaireId }}
+          {{ questionnairesStore.errors.questionnaireId }}
         </p>
       </div>
       <PrimeButton
-        v-if="!usersQuestionnairesStore.availableId"
+        v-if="!questionnairesStore.availableId"
         :label="
-          usersQuestionnairesStore.status === 'searching'
-            ? 'Searching'
-            : 'Search'
+          questionnairesStore.status === 'searching' ? 'Searching' : 'Search'
         "
-        :loading="usersQuestionnairesStore.status === 'searching'"
+        :loading="questionnairesStore.status === 'searching'"
         @click="search"
       />
       <div v-else>
         <PrimeButton
           class="!mr-2"
           :label="
-            usersQuestionnairesStore.status === 'attaching'
-              ? 'Attaching'
-              : 'Attach'
+            questionnairesStore.status === 'attaching' ? 'Attaching' : 'Attach'
           "
-          :loading="usersQuestionnairesStore.status === 'attaching'"
+          :loading="questionnairesStore.status === 'attaching'"
           @click="attach"
         />
 
@@ -93,6 +91,7 @@
 import { ref, watch, onMounted } from "vue";
 
 import { useUsersQuestionnairesStore } from "@/stores/users/questionnaires";
+import { useTeamsQuestionnairesStore } from "@/stores/teams/questionnaires";
 
 import PrimeButton from "primevue/button";
 import PrimeDialog from "primevue/dialog";
@@ -104,12 +103,23 @@ export default {
   components: { PrimeDialog, InputText, PrimeButton, IconField, InputIcon },
   props: {
     display: { type: Boolean, default: false },
-    userId: { type: String, default: null },
+    attachableId: { type: String, default: null },
+    type: { type: String, required: true },
   },
   emits: ["hide"],
 
   setup(props, { emit }) {
-    const usersQuestionnairesStore = useUsersQuestionnairesStore();
+    let questionnairesStore = null;
+
+    console.log("tye", props.type);
+
+    if (props.type === "user") {
+      questionnairesStore = useUsersQuestionnairesStore();
+    }
+
+    if (props.type === "team") {
+      questionnairesStore = useTeamsQuestionnairesStore();
+    }
 
     const displayComponent = ref(false);
     const questionnaireId = ref("");
@@ -118,23 +128,23 @@ export default {
     onMounted(() => clearState());
 
     watch(
-      () => usersQuestionnairesStore.status,
+      () => questionnairesStore.status,
       (newStatus) => {
         if (newStatus === "attached") {
           clearState();
         }
-      },
+      }
     );
 
     watch(
       () => props.display,
       (newValue) => {
         displayComponent.value = newValue;
-      },
+      }
     );
 
     function clearState() {
-      usersQuestionnairesStore.clearState();
+      questionnairesStore.clearState();
       questionnaireId.value = "";
       searchButtonClicked.value = "";
     }
@@ -161,13 +171,13 @@ export default {
       if (key === "/" || key === " " || key === "\\") {
         event.preventDefault();
       }
-      if (usersQuestionnairesStore.errors.questionnaireId) {
-        usersQuestionnairesStore.errors.questionnaireId = "";
+      if (questionnairesStore.errors.questionnaireId) {
+        questionnairesStore.errors.questionnaireId = "";
       }
     }
 
     function attachOrSearch() {
-      if (usersQuestionnairesStore.availableId) {
+      if (questionnairesStore.availableId) {
         attach();
       } else {
         search();
@@ -177,11 +187,11 @@ export default {
     function search() {
       searchButtonClicked.value = true;
       if (questionnaireId.value !== "") {
-        usersQuestionnairesStore.checkAvalability(questionnaireId.value);
+        questionnairesStore.checkAvailability(questionnaireId.value);
       }
     }
     function attach() {
-      usersQuestionnairesStore.attach(props.userId);
+      questionnairesStore.attach(props.attachableId);
     }
 
     return {
@@ -196,7 +206,7 @@ export default {
       clearState,
       questionnaireId,
       searchButtonClicked,
-      usersQuestionnairesStore,
+      questionnairesStore,
     };
   },
 };

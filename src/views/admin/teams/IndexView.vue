@@ -1,6 +1,13 @@
 <template>
   <ConfirmDialog></ConfirmDialog>
 
+  <AttachQuestionnaireViewComponent
+    type="team"
+    :display="displayAttachQuestionnairesDialog"
+    :attachable-id="selectedTeamIdToAttachQuestionnaire"
+    @hide="displayAttachQuestionnairesDialog = $event"
+  />
+
   <AdminTableLayout>
     <template #table>
       <div>
@@ -169,6 +176,7 @@
             </template>
           </Column>
 
+          <!--Actions-->
           <Column
             field="Actions"
             header="Actions"
@@ -186,6 +194,20 @@
                         name: 'admin.users.index',
                       })
                   "
+                />
+                <PrimeButton
+                  v-if="slotProps.data.attributes.users_count > 0"
+                  class="p-button-sm"
+                  icon="pi pi-question-circle"
+                  title="Add Questionnaires"
+                  @click="showAttachQuestionnaireDialog(slotProps.data.id)"
+                />
+                <PrimeButton
+                  v-if="slotProps.data.attributes.users_count === 0"
+                  class="p-button-sm"
+                  icon="pi pi-question-circle"
+                  title="Team should've at least one user to add Questionnaires"
+                  disabled
                 />
                 <PrimeButton
                   class="p-button-sm"
@@ -239,6 +261,7 @@ import { useConfirm } from "primevue/useconfirm";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 
+import AttachQuestionnaireViewComponent from "@/components/questionnaires/AttachView.vue";
 import SortComponent from "@/components/SortComponent.vue";
 
 import { lowercaseFirstLetter, snake } from "@/helpers";
@@ -251,6 +274,7 @@ export default {
     Avatar,
     OverlayBadge,
     Column,
+    AttachQuestionnaireViewComponent,
     SortComponent,
     InputText,
     MenuComponent,
@@ -266,6 +290,9 @@ export default {
     const teamsStore = useTeamsStore();
 
     const router = useRouter();
+
+    const displayAttachQuestionnairesDialog = ref(false);
+    const selectedTeamIdToAttachQuestionnaire = ref();
 
     const query = reactive({
       sort: {},
@@ -389,10 +416,16 @@ export default {
       });
     }
 
+    function showAttachQuestionnaireDialog(teamId) {
+      selectedTeamIdToAttachQuestionnaire.value = teamId;
+      displayAttachQuestionnairesDialog.value = true;
+    }
+
     return {
       authStore,
       teamsStore,
       moment,
+      selectedTeamIdToAttachQuestionnaire,
       query,
       filters,
       applyFilters,
@@ -408,6 +441,8 @@ export default {
       actions,
       actionsMenuRef,
       toggleActionsMenu,
+      displayAttachQuestionnairesDialog,
+      showAttachQuestionnaireDialog,
     };
   },
 };

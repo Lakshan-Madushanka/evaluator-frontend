@@ -1,5 +1,5 @@
 import { checkAvailability as checkAvailabilityRequest } from "@/api/requests/questionnaires/index";
-import * as usersQuestionnairesRequests from "@/api/requests/users/questionnaires";
+import * as teamsQuestionnairesRequests from "@/api/requests/teams/questionnaires";
 
 import { defineStore } from "pinia";
 
@@ -7,8 +7,8 @@ import { useAppStore } from "../app";
 
 import { ref, reactive } from "vue";
 
-export const useUsersQuestionnairesStore = defineStore(
-  "usersQuestionnaires",
+export const useTeamsQuestionnairesStore = defineStore(
+  "teamsQuestionnaires",
   () => {
     const appStore = useAppStore();
 
@@ -18,13 +18,13 @@ export const useUsersQuestionnairesStore = defineStore(
     const questionnaires = ref(null);
     const errors = reactive({ questionnaireId: "" });
 
-    async function getAll(userId, payload) {
+    async function getAll(teamId, payload) {
       clearState();
       loading.value = true;
 
       try {
-        const results = await usersQuestionnairesRequests.getAllRequest(
-          userId,
+        const results = await teamsQuestionnairesRequests.getAllRequest(
+          teamId,
           payload
         );
         questionnaires.value = results;
@@ -59,65 +59,22 @@ export const useUsersQuestionnairesStore = defineStore(
       }
     }
 
-    async function attach(userId) {
+    async function attach(teamId) {
       errors.questionnaireId = "";
       status.value = "attaching";
 
       try {
-        await usersQuestionnairesRequests.attach(userId, availableId.value);
+        await teamsQuestionnairesRequests.attach(teamId, availableId.value);
         status.value = "attached";
         appStore.setToast(
           "success",
-          `Questionnaire with ${availableId.value} attached to user ${userId}`
+          `Questionnaire with ${availableId.value} attached to team ${teamId}`
         );
       } catch (error) {
         appStore.setToast(
           "error",
           "Error occurred while attaching questionnaire please try again"
         );
-      }
-    }
-
-    async function resendNotificatiion(userId, questionnaireId) {
-      errors.questionnaireId = "";
-      loading.value = true;
-
-      try {
-        await usersQuestionnairesRequests.resendNotificarionRequest(
-          userId,
-          questionnaireId
-        );
-        appStore.setToast(
-          "success",
-          `Questionnaire attached notification resent to user ${userId}`
-        );
-      } catch (error) {
-        appStore.setToast(
-          "error",
-          "Error occurred while attaching questionnaire please try again"
-        );
-      } finally {
-        loading.value = false;
-      }
-    }
-
-    async function revokeAccess(userId, userQuestionnaireId) {
-      errors.questionnaireId = "";
-      loading.value = true;
-
-      try {
-        await usersQuestionnairesRequests.detach(userId, userQuestionnaireId);
-        appStore.setToast(
-          "success",
-          `Questionnaire revoked from the user ${userId}`
-        );
-      } catch (error) {
-        appStore.setToast(
-          "error",
-          "Error occurred while revoking questionnaire please try again"
-        );
-      } finally {
-        loading.value = false;
       }
     }
 
@@ -136,8 +93,6 @@ export const useUsersQuestionnairesStore = defineStore(
       checkAvailability,
       attach,
       getAll,
-      resendNotificatiion,
-      revokeAccess,
       clearState,
     };
   }

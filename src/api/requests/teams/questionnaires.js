@@ -1,0 +1,21 @@
+import * as teamQuestionnairesRoutes from "@/api/routes/teams/questionnaires";
+import { buildQueryString } from "@/api/queryStringBuilder";
+
+import http from "@/http";
+
+export async function getAllRequest(userId, payload) {
+  let query = buildQueryString(payload);
+  const response = await http.get(
+    teamQuestionnairesRoutes.get_all_route(userId) + query
+  );
+
+  return response;
+}
+
+export async function attach(teamId, questionnaireid) {
+  const response = await http.post(
+    teamQuestionnairesRoutes.get_attach_route(teamId, questionnaireid)
+  );
+
+  return response;
+}

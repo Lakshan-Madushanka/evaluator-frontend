@@ -1,8 +1,9 @@
 <template>
   <ConfirmDialog></ConfirmDialog>
-  <AttachViewComponent
+  <AttachQuestionnaireViewComponent
+    type="user"
     :display="displayAssignQuestionnaireView"
-    :user-id="userIdToAttachQuestionnaire"
+    :attachable-id="userIdToAttachQuestionnaire"
     @hide="displayAssignQuestionnaireView = $event"
   />
 
@@ -113,7 +114,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             )
                           ]
                             ? 'pi pi-eye'
@@ -255,7 +256,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -410,7 +411,7 @@ import InputIcon from "primevue/inputicon";
 
 import BulkDeleteComponent from "@/components/BulkDeleteComponent.vue";
 import SortComponent from "@/components/SortComponent.vue";
-import AttachViewComponent from "./questionnaires/AttachView.vue";
+import AttachQuestionnaireViewComponent from "@/components/questionnaires/AttachView.vue";
 
 import { ROLES } from "@/constants";
 import { lowercaseFirstLetter, snake } from "@/helpers";
@@ -432,7 +433,7 @@ export default {
     MultiSelect,
     ConfirmDialog,
     BulkDeleteComponent,
-    AttachViewComponent,
+    AttachQuestionnaireViewComponent,
     IconField,
     InputIcon,
   },
@@ -626,7 +627,7 @@ export default {
         if (status === "attached") {
           displayAttachTeamsDialog.value = false;
         }
-      },
+      }
     );
 
     function onPage(event) {
@@ -748,7 +749,7 @@ export default {
         accept: () => {
           usersTeamsStore.attachTeams(
             selectedUserIdToAttachTeams,
-            selectedTeams.value,
+            selectedTeams.value
           );
         },
         reject: () => {},
