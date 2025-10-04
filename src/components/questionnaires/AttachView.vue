@@ -111,8 +111,6 @@ export default {
   setup(props, { emit }) {
     let questionnairesStore = null;
 
-    console.log("tye", props.type);
-
     if (props.type === "user") {
       questionnairesStore = useUsersQuestionnairesStore();
     }

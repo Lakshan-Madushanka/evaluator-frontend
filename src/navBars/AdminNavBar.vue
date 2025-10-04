@@ -86,6 +86,23 @@ function getItems() {
         },
       ];
     // End of Users
+
+    //Questionnaires
+    case "admin.teams.questionnaires.index":
+      return [
+        {
+          label: "teams",
+          command: () => {
+            router.push({ name: "admin.teams.index" });
+          },
+        },
+        {
+          label: "questionnaires",
+          command: () => {
+            router.push({ name: "admin.teams.questionnaires.index" });
+          },
+        },
+      ];
     // End of Teams
 
     // Users

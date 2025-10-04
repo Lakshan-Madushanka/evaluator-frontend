@@ -1,27 +1,21 @@
 <template>
-  <ConfirmDialog></ConfirmDialog>
-
-  <AttachQuestionnaireViewComponent
-    type="team"
-    :display="displayAttachQuestionnairesDialog"
-    :attachable-id="selectedTeamIdToAttachQuestionnaire"
-    @hide="displayAttachQuestionnairesDialog = $event"
-  />
-
   <AdminTableLayout>
     <template #table>
       <div>
         <DataTable
-          :value="teamsStore.teams && teamsStore.teams.data"
+          :value="
+            teamsQuestionnairesStore.questionnaires &&
+            teamsQuestionnairesStore.questionnaires.data
+          "
           responsive-layout="scroll"
-          :loading="teamsStore.loading"
+          :loading="teamsQuestionnairesStore.loading"
           striped-rows
           data-key="id"
           filter-display="row"
         >
           <template #empty>
             <p
-              v-if="!teamsStore.loading"
+              v-if="!teamsQuestionnairesStore.loading"
               class="p-4 text-center text-2xl bg-blue-200"
             >
               No records found.
@@ -31,13 +25,12 @@
           <template #header>
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
-                <p class="mr-2">Teams</p>
+                <p class="mr-2">Questionnaires</p>
                 <Avatar
                   class="hover:cursor-pointer"
                   icon="pi pi-eye"
                   @click="toggleColumnsMenu"
                 />
-
                 <MenuComponent
                   ref="columnsMenuRef"
                   :model="columns"
@@ -50,7 +43,7 @@
                           columnVisibility[
                             snake(
                               lowercaseFirstLetter(slotProps['item']['label'])
-                            )
+                            ).toLowerCase()
                           ]
                             ? 'pi pi-eye'
                             : 'pi pi-eye-slash'
@@ -89,13 +82,6 @@
                     :disabled="Object.keys(filters).length === 0"
                     @click="applyFilters"
                   />
-                  <PrimeButton
-                    icon="pi pi-plus"
-                    label="New Team"
-                    class="!py-1 !mr-4"
-                    icon-pos="right"
-                    @click="() => router.push({ name: 'admin.teams.create' })"
-                  />
                 </div>
               </div>
             </div>
@@ -104,20 +90,33 @@
           <Column field="no" header="No">
             <template #body="slotProps"> {{ slotProps.index + 1 }}</template>
           </Column>
-          <Column field="id" header="Id" :hidden="!columnVisibility.id">
+          <Column
+            field="id"
+            header="Id"
+            :show-filter-menu="false"
+            :hidden="!columnVisibility.id"
+          >
+            <template #filter>
+              <span>
+                <IconField>
+                  <InputIcon class="pi pi-search" />
+                  <InputText
+                    v-model="filters.id"
+                    type="text"
+                    placeholder="Search"
+                    @keyup.enter="applyFilters"
+                  />
+                </IconField>
+              </span>
+            </template>
             <template #body="slotProps"> {{ slotProps.data.id }}</template>
           </Column>
           <Column
             field="name"
+            header="Name"
             :show-filter-menu="false"
             :hidden="!columnVisibility.name"
           >
-            <template #header>
-              <div class="flex justify-between items-center w-full">
-                <p>Name</p>
-                <SortComponent @direction-change="query.sort.name = $event" />
-              </div>
-            </template>
             <template #filter>
               <span>
                 <IconField>
@@ -132,15 +131,40 @@
               </span>
             </template>
             <template #body="slotProps">
-              {{ slotProps.data.attributes.name }}</template
+              {{ slotProps.data.attributes.questionnaire_name }}</template
             >
           </Column>
-
           <Column
-            field="created_at"
-            header="Created at"
-            :hidden="!columnVisibility.created_at"
+            field="total_users"
+            header="Total Users"
+            :hidden="!columnVisibility.total_users"
           >
+            <template #body="slotProps">
+              <Badge severity="info">{{
+                slotProps.data.attributes.total_users
+              }}</Badge>
+            </template>
+          </Column>
+          <Column
+            field="attempted_users"
+            header="Attempted Users"
+            :hidden="!columnVisibility.attempted_users"
+          >
+            <template #body="slotProps">
+              <Badge severity="info">{{
+                slotProps.data.attributes.attempted_users
+              }}</Badge>
+            </template>
+          </Column>
+          <Column field="created_at" :hidden="!columnVisibility.created_at">
+            <template #header>
+              <div class="flex justify-between items-center w-full">
+                <p>Created at</p>
+                <SortComponent
+                  @direction-change="query.sort.created_at = $event"
+                />
+              </div>
+            </template>
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
@@ -150,59 +174,24 @@
             >
           </Column>
 
-          <!--Show Users-->
-          <Column
-            field="users"
-            header="Users"
-            :hidden="!columnVisibility.users"
-          >
-            <template #body="slotProps">
-              <router-link
-                class="inlne-block mx-0 flex items-center justify-start hover:bg-transparent"
-                :to="{
-                  name: 'admin.teams.users.index',
-                  params: { id: slotProps.data.id },
-                }"
-              >
-                <OverlayBadge
-                  :value="slotProps.data.attributes.users_count"
-                  severity="info"
-                  class="inline-flex"
-                  size="small"
-                >
-                  <Avatar icon="pi pi-eye" />
-                </OverlayBadge>
-              </router-link>
-            </template>
-          </Column>
-
-          <!--Show Questionnaires-->
           <Column
             field="questionnaires"
             header="Questionnaires"
-            :hidden="!columnVisibility.users"
+            :hidden="!columnVisibility.questionnaires"
           >
             <template #body="slotProps">
               <router-link
-                class="inlne-block mx-0 flex items-center justify-center hover:bg-transparent"
+                class="inlne-block flex items-center justify-center hover:bg-transparent"
                 :to="{
-                  name: 'admin.teams.questionnaires.index',
+                  name: 'admin.users.questionnaires.index',
                   params: { id: slotProps.data.id },
                 }"
               >
-                <OverlayBadge
-                  :value="slotProps.data.attributes.questionnaires_count"
-                  severity="info"
-                  class="inline-flex"
-                  size="small"
-                >
-                  <Avatar icon="pi pi-eye" />
-                </OverlayBadge>
+                <Avatar icon="pi pi-eye" />
               </router-link>
             </template>
           </Column>
 
-          <!--Actions-->
           <Column
             field="Actions"
             header="Actions"
@@ -211,52 +200,40 @@
             <template #body="slotProps">
               <span class="p-buttonset space-x-1">
                 <PrimeButton
-                  class="p-button-sm"
-                  icon="pi pi-user-plus"
-                  title="Add Users"
-                  @click="
-                    () =>
-                      router.push({
-                        name: 'admin.users.index',
-                      })
-                  "
-                />
-                <PrimeButton
-                  v-if="slotProps.data.attributes.users_count > 0"
-                  class="p-button-sm"
-                  icon="pi pi-question-circle"
-                  title="Add Questionnaires"
-                  @click="showAttachQuestionnaireDialog(slotProps.data.id)"
-                />
-                <PrimeButton
-                  v-if="slotProps.data.attributes.users_count === 0"
-                  class="p-button-sm"
-                  icon="pi pi-question-circle"
-                  title="Team should've at least one user to add Questionnaires"
-                  disabled
-                />
-                <PrimeButton
-                  class="p-button-sm"
-                  icon="pi pi-file-edit"
-                  title="Edit"
-                  @click="
-                    () =>
-                      router.push({
-                        name: 'admin.teams.edit',
-                        params: { id: slotProps.data.id },
-                      })
-                  "
-                />
-                <PrimeButton
-                  v-if="authStore.user.role === 'SUPER_ADMIN'"
                   class="p-button-danger p-button-sm"
-                  icon="pi pi-trash "
-                  title="Delete"
-                  @click="deleteTeam(slotProps.data.id)"
+                  icon="pi pi-trash"
+                  title="Remove User"
+                  @click="removeUser(slotProps.data.id)"
                 />
               </span>
             </template>
           </Column>
+
+          <template #footer>
+            <Paginator
+              v-if="teamsQuestionnairesStore.users && showPaginator"
+              :rows="
+                teamsQuestionnairesStore.users &&
+                teamsQuestionnairesStore.users.meta.per_page
+              "
+              :total-records="
+                teamsQuestionnairesStore.users &&
+                teamsQuestionnairesStore.users.meta.total
+              "
+              @page="onPage"
+            >
+            </Paginator>
+            <p
+              class="hidden sm:flex p-2 relative bottom-[-20px] w-full justify-center lg:justify-end"
+            >
+              {{
+                teamsQuestionnairesStore.users
+                  ? teamsQuestionnairesStore.users.meta.total
+                  : 0
+              }}
+              records found.
+            </p>
+          </template>
         </DataTable>
       </div>
     </template>
@@ -265,73 +242,82 @@
 
 <script>
 import { onMounted, ref, reactive, watch } from "vue";
+import Paginator from "@/components/PaginatorComponent.vue";
 
+import { useTeamsQuestionnairesStore } from "@/stores/teams/questionnaires";
 import { useAuthStore } from "@/stores/auth";
-import { useTeamsStore } from "@/stores/teams/index";
 
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 import moment from "moment/moment";
 
 import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
 
 import Avatar from "primevue/avatar";
-import OverlayBadge from "primevue/overlaybadge";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import PrimeButton from "primevue/button";
+import Badge from "primevue/tag";
 import MenuComponent from "primevue/menu";
 import InputText from "primevue/inputtext";
-import ConfirmDialog from "primevue/confirmdialog";
-import { useConfirm } from "primevue/useconfirm";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 
-import AttachQuestionnaireViewComponent from "@/components/questionnaires/AttachView.vue";
 import SortComponent from "@/components/SortComponent.vue";
 
+import { ROLES } from "@/constants";
 import { lowercaseFirstLetter, snake } from "@/helpers";
 
 export default {
   components: {
     AdminTableLayout,
+    Avatar,
     PrimeButton,
     DataTable,
-    Avatar,
-    OverlayBadge,
     Column,
-    AttachQuestionnaireViewComponent,
+    Badge,
+    Paginator,
     SortComponent,
     InputText,
     MenuComponent,
-    ConfirmDialog,
     IconField,
     InputIcon,
   },
   setup() {
-    const confirm = useConfirm();
-
+    const teamsQuestionnairesStore = useTeamsQuestionnairesStore();
     const authStore = useAuthStore();
 
-    const teamsStore = useTeamsStore();
-
     const router = useRouter();
-
-    const displayAttachQuestionnairesDialog = ref(false);
-    const selectedTeamIdToAttachQuestionnaire = ref();
+    const route = useRoute();
 
     const query = reactive({
       sort: {},
+      pagination: { number: 1, size: 10 },
     });
 
-    const columnsMenuRef = ref();
+    const actionsMenuRef = ref();
+    const actions = ref([
+      {
+        label: "Refresh",
+        icon: "pi pi-refresh",
+        command: () => reset(),
+      },
+      {
+        label: "Apply Filters",
+        icon: "pi pi-filter",
+        command: () => applyFilters(),
+      },
+    ]);
+
     const columnVisibility = reactive({
       id: true,
       name: true,
-      users: true,
+      total_users: true,
+      attempted_users: true,
       created_at: true,
       actions: true,
     });
+    const columnsMenuRef = ref();
     const columns = ref([
       {
         label: "Id",
@@ -346,15 +332,21 @@ export default {
         },
       },
       {
-        label: "Created at",
+        label: "Total Users",
         command: () => {
-          columnVisibility.created_at = !columnVisibility.created_at;
+          columnVisibility.total_users = !columnVisibility.total_users;
         },
       },
       {
-        label: "Users",
+        label: "Attempted Users",
         command: () => {
-          columnVisibility.users = !columnVisibility.users;
+          columnVisibility.attempted_users = !columnVisibility.attempted_users;
+        },
+      },
+      {
+        label: "Created at",
+        command: () => {
+          columnVisibility.created_at = !columnVisibility.created_at;
         },
       },
       {
@@ -366,109 +358,86 @@ export default {
     ]);
 
     const filters = ref({});
-
-    const actionsMenuRef = ref();
-    const actions = ref([
-      {
-        label: "Refresh",
-        icon: "pi pi-refresh",
-        command: () => reset(),
-      },
-      {
-        label: "Apply Filters",
-        icon: "pi pi-filter",
-        command: () => applyFilters(),
-      },
-      {
-        label: "New Team",
-        icon: "pi pi-plus",
-        command: () => router.push({ name: "admin.teams.create" }),
-      },
-    ]);
+    const showPaginator = ref(true);
 
     onMounted(() => {
-      teamsStore.getAll();
-    });
-
-    watch(teamsStore, (newUsersStore) => {
-      if (newUsersStore.status === "deleted") {
-        teamsStore.getAll({ query: { ...query, filters: filters.value } });
-      }
+      teamsQuestionnairesStore.getAll(route.params.id, {
+        query: { pagination: { number: 1, size: 10 } },
+      });
     });
 
     watch(query, (newQuery) => {
-      teamsStore.getAll({
+      teamsQuestionnairesStore.getAll(route.params.id, {
         query: { ...newQuery, filters: filters.value },
       });
     });
 
+    // We need to reset show paginator if it is disabled
+    watch(teamsQuestionnairesStore, (newUsersStore) => {
+      if (!newUsersStore.loading) {
+        showPaginator.value = true;
+      }
+    });
+
+    function onPage(event) {
+      query.pagination.number = event.page + 1;
+      query.pagination.size = event.rows;
+    }
+
     function applyFilters() {
-      teamsStore.getAll({ query: { filters: filters.value, ...query } });
+      query.pagination.number = 1;
+      showPaginator.value = false; // Reset the pagination
+
+      teamsQuestionnairesStore.getAll(route.params.id, {
+        query: { filters: filters.value, ...query },
+      });
     }
 
     function reset() {
+      //Reset pagnator
+      showPaginator.value = false;
+      query.pagination = { number: 1, size: 10 };
+
       //Reset filters
       filters.value = {};
 
       //Reset sort
       query.sort = {};
 
-      teamsStore.getAll({
-        query: {},
+      teamsQuestionnairesStore.getAll(route.params.id, {
+        query: { pagination: { number: 1, size: 10 } },
       });
-    }
-
-    function toggleActionsMenu(event) {
-      actionsMenuRef.value.toggle(event);
     }
 
     function toggleColumnsMenu(event) {
       columnsMenuRef.value.toggle(event);
     }
 
-    function deleteTeam(id) {
-      confirm.require({
-        message:
-          "Do you want to delete this record? [This action cannot be undone !]",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        iconClass: "bg-red-500",
-        acceptClass: "p-button-danger",
-        acceptLabel: "Yes Delete",
-        accept: () => {
-          teamsStore.deleteTeam(id);
-        },
-        reject: () => {},
-      });
-    }
-
-    function showAttachQuestionnaireDialog(teamId) {
-      selectedTeamIdToAttachQuestionnaire.value = teamId;
-      displayAttachQuestionnairesDialog.value = true;
+    function toggleActionsMenu(event) {
+      actionsMenuRef.value.toggle(event);
     }
 
     return {
-      authStore,
-      teamsStore,
+      teamsQuestionnairesStore,
+      onPage,
       moment,
-      selectedTeamIdToAttachQuestionnaire,
       query,
       filters,
       applyFilters,
+      showPaginator,
       reset,
-      deleteTeam,
+      ROLES,
       columns,
       columnsMenuRef,
       toggleColumnsMenu,
       columnVisibility,
       lowercaseFirstLetter,
       snake,
-      router,
-      actions,
+      authStore,
       actionsMenuRef,
+      actions,
       toggleActionsMenu,
-      displayAttachQuestionnairesDialog,
-      showAttachQuestionnaireDialog,
+      router,
     };
   },
 };

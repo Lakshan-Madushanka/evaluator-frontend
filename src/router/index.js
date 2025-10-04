@@ -27,6 +27,10 @@ const AdminEditTeamsView = () => import("../views/admin/teams/EditView.vue");
 // Users
 const AdminTeamsUsersIndexView = () =>
   import("../views/admin/teams/users/IndexView.vue");
+
+// Users
+const AdminTeamsQuestionnairesIndexView = () =>
+  import("../views/admin/teams/questionnaires/IndexView.vue");
 // End of Teams
 
 //Users
@@ -229,6 +233,13 @@ const router = createRouter({
           path: "teams/:id/users",
           name: "admin.teams.users.index",
           component: AdminTeamsUsersIndexView,
+        },
+
+        // Questionnaires
+        {
+          path: "teams/:id/questionnaires",
+          name: "admin.teams.questionnaires.index",
+          component: AdminTeamsQuestionnairesIndexView,
         },
         //-------------------------------------Enf of Teams------------------------------------------------------------------------------
 
