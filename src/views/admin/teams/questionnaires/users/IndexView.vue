@@ -4,8 +4,8 @@
       <div>
         <DataTable
           :value="
-            teamsQuestionnairesStore.questionnaires &&
-            teamsQuestionnairesStore.questionnaires.data
+            teamsQuestionnairesStore.users &&
+            teamsQuestionnairesStore.users.data
           "
           responsive-layout="scroll"
           :loading="teamsQuestionnairesStore.loading"
@@ -25,7 +25,7 @@
           <template #header>
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
-                <p class="mr-2">Questionnaires</p>
+                <p class="mr-2">Users</p>
                 <Avatar
                   class="hover:cursor-pointer"
                   icon="pi pi-eye"
@@ -43,7 +43,9 @@
                           columnVisibility[
                             snake(
                               lowercaseFirstLetter(slotProps['item']['label'])
-                            ).toLowerCase()
+                            )
+                              .toLowerCase()
+                              .replaceAll(' ', '')
                           ]
                             ? 'pi pi-eye'
                             : 'pi pi-eye-slash'
@@ -91,26 +93,16 @@
             <template #body="slotProps"> {{ slotProps.index + 1 }}</template>
           </Column>
           <Column
-            field="id"
-            header="Id"
+            field="userId"
+            header="User ID"
             :show-filter-menu="false"
-            :hidden="!columnVisibility.id"
+            :hidden="!columnVisibility.user_id"
           >
-            <template #filter>
-              <span>
-                <IconField>
-                  <InputIcon class="pi pi-search" />
-                  <InputText
-                    v-model="filters.id"
-                    type="text"
-                    placeholder="Search"
-                    @keyup.enter="applyFilters"
-                  />
-                </IconField>
-              </span>
-            </template>
-            <template #body="slotProps"> {{ slotProps.data.id }}</template>
+            <template #body="slotProps">
+              {{ slotProps.data.attributes.user_id }}</template
+            >
           </Column>
+
           <Column
             field="name"
             header="Name"
@@ -131,69 +123,132 @@
               </span>
             </template>
             <template #body="slotProps">
-              {{ slotProps.data.attributes.questionnaire_name }}</template
-            >
-          </Column>
-          <Column
-            field="total_users"
-            header="Total Users"
-            :hidden="!columnVisibility.total_users"
-          >
-            <template #body="slotProps">
-              <Badge severity="info">{{
-                slotProps.data.attributes.total_users
-              }}</Badge>
-            </template>
-          </Column>
-          <Column
-            field="attempted_users"
-            header="Attempted Users"
-            :hidden="!columnVisibility.attempted_users"
-          >
-            <template #body="slotProps">
-              <Badge severity="info">{{
-                slotProps.data.attributes.attempted_users
-              }}</Badge>
+              <span severity="info" class="mr-1">
+                {{
+                  findRelations(
+                    teamsQuestionnairesStore.users.included,
+                    slotProps.data.relationships.user.data.id,
+                    slotProps.data.relationships.user.data.type
+                  ).attributes.name
+                }}
+              </span>
             </template>
           </Column>
 
-          <!--Show Users-->
           <Column
-            field="showResults"
-            header="Results"
-            :hidden="!columnVisibility.results"
+            field="email"
+            header="Email"
+            :show-filter-menu="false"
+            :hidden="!columnVisibility.email"
+          >
+            <template #filter>
+              <span>
+                <IconField>
+                  <InputIcon class="pi pi-search" />
+                  <InputText
+                    v-model="filters.email"
+                    type="text"
+                    placeholder="Search"
+                    @keyup.enter="applyFilters"
+                  />
+                </IconField>
+              </span>
+            </template>
+            <template #body="slotProps">
+              <span severity="info" class="mr-1">
+                {{
+                  findRelations(
+                    teamsQuestionnairesStore.users.included,
+                    slotProps.data.relationships.user.data.id,
+                    slotProps.data.relationships.user.data.type
+                  ).attributes.email
+                }}
+              </span>
+            </template>
+          </Column>
+
+          <!-- Attempts -->
+          <Column
+            field="attempts"
+            :show-filter-menu="false"
+            :hidden="!columnVisibility.attempts"
+            class="w-[25rem] !text-center"
+          >
+            <template #header>
+              <div class="text-start w-full">Attempted Status</div>
+            </template>
+            <template #filter>
+              <SelectButton
+                v-model="filters.attempted"
+                class="w-[25rem]"
+                :options="attemptsOptions"
+                option-value="value"
+                option-label="name"
+              />
+            </template>
+            <template #body="slotProps">
+              <i
+                v-if="slotProps.data.attributes.attempts > 0"
+                class="pi pi-check-circle !text-2xl text-green-500"
+              ></i>
+              <i
+                v-else
+                class="pi pi-times-circle !text-2xl text-yellow-500"
+              ></i>
+            </template>
+          </Column>
+
+          <Column
+            field="marks"
+            :show-filter-menu="false"
+            :hidden="!columnVisibility.marks"
+          >
+            <template #header>
+              <div class="flex justify-between items-center w-full">
+                <p>Marks(%)</p>
+                <SortComponent @direction-change="query.sort.marks = $event" />
+              </div>
+            </template>
+            <template #body="slotProps">
+              <Badge
+                v-if="slotProps.data.relationships.evaluation.data"
+                severity="info"
+                class="mr-1"
+              >
+                {{
+                  findRelations(
+                    teamsQuestionnairesStore.users.included,
+                    slotProps.data.relationships.evaluation.data.id,
+                    slotProps.data.relationships.evaluation.data.type
+                  ).attributes.marks_percentage
+                }}
+              </Badge>
+              <Badge v-else severity="info" class="mr-1"> N/A </Badge>
+            </template>
+          </Column>
+
+          <!--Show More Datails-->
+          <Column
+            field="showMore"
+            header="More Details"
+            :hidden="!columnVisibility.show_more"
           >
             <template #body="slotProps">
               <router-link
                 class="inlne-block mx-0 flex items-center justify-start hover:bg-transparent"
                 :to="{
-                  name: 'admin.teams.questionnaires.users.index',
+                  name: 'admin.users.questionnaires.index',
                   params: {
-                    id: slotProps.data.attributes.team_questionnaire_id,
+                    id: slotProps.data.attributes.user_id,
+                  },
+                  query: {
+                    uq_id: slotProps.data.attributes.user_questionnaire_id,
                   },
                 }"
               >
                 <Avatar icon="pi pi-eye" />
               </router-link>
             </template>
-          </Column>
-
-          <Column field="created_at" :hidden="!columnVisibility.created_at">
-            <template #header>
-              <div class="flex justify-between items-center w-full">
-                <p>Created at</p>
-                <SortComponent
-                  @direction-change="query.sort.created_at = $event"
-                />
-              </div>
-            </template>
-            <template #body="slotProps">
-              {{
-                moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a"
-                )
-              }}</template
-            >
           </Column>
 
           <template #footer>
@@ -244,6 +299,7 @@ import Avatar from "primevue/avatar";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import PrimeButton from "primevue/button";
+import SelectButton from "primevue/selectbutton";
 import Badge from "primevue/tag";
 import MenuComponent from "primevue/menu";
 import InputText from "primevue/inputtext";
@@ -253,7 +309,7 @@ import InputIcon from "primevue/inputicon";
 import SortComponent from "@/components/SortComponent.vue";
 
 import { ROLES } from "@/constants";
-import { lowercaseFirstLetter, snake } from "@/helpers";
+import { lowercaseFirstLetter, snake, findRelations } from "@/helpers";
 
 export default {
   components: {
@@ -263,6 +319,7 @@ export default {
     DataTable,
     Column,
     Badge,
+    SelectButton,
     Paginator,
     SortComponent,
     InputText,
@@ -276,6 +333,12 @@ export default {
 
     const router = useRouter();
     const route = useRoute();
+
+    const attemptsOptions = [
+      { name: "All", value: "" },
+      { name: "Attempted", value: "true" },
+      { name: "Not Attempted", value: "false" },
+    ];
 
     const query = reactive({
       sort: {},
@@ -297,19 +360,22 @@ export default {
     ]);
 
     const columnVisibility = reactive({
-      id: true,
+      user_id: true,
       name: true,
+      email: true,
+      marks: true,
       total_users: true,
+      attempts: true,
       attempted_users: true,
-      results: true,
       created_at: true,
+      show_more: true,
     });
     const columnsMenuRef = ref();
     const columns = ref([
       {
-        label: "Id",
+        label: "User ID",
         command: () => {
-          columnVisibility.id = !columnVisibility.id;
+          columnVisibility.user_id = !columnVisibility.user_id;
         },
       },
       {
@@ -319,9 +385,27 @@ export default {
         },
       },
       {
+        label: "Email",
+        command: () => {
+          columnVisibility.email = !columnVisibility.email;
+        },
+      },
+      {
+        label: "Marks",
+        command: () => {
+          columnVisibility.marks = !columnVisibility.marks;
+        },
+      },
+      {
         label: "Total Users",
         command: () => {
           columnVisibility.total_users = !columnVisibility.total_users;
+        },
+      },
+      {
+        label: "Attempts",
+        command: () => {
+          columnVisibility.attempts = !columnVisibility.attempts;
         },
       },
       {
@@ -331,15 +415,15 @@ export default {
         },
       },
       {
-        label: "Results",
-        command: () => {
-          columnVisibility.results = !columnVisibility.results;
-        },
-      },
-      {
         label: "Created at",
         command: () => {
           columnVisibility.created_at = !columnVisibility.created_at;
+        },
+      },
+      {
+        label: "Show More",
+        command: () => {
+          columnVisibility.show_more = !columnVisibility.show_more;
         },
       },
     ]);
@@ -348,15 +432,11 @@ export default {
     const showPaginator = ref(true);
 
     onMounted(() => {
-      teamsQuestionnairesStore.getAll(route.params.id, {
-        query: { pagination: { number: 1, size: 10 } },
-      });
+      getAllUsersRequest({ pagination: { number: 1, size: 10 } });
     });
 
     watch(query, (newQuery) => {
-      teamsQuestionnairesStore.getAll(route.params.id, {
-        query: { ...newQuery, filters: filters.value },
-      });
+      getAllUsersRequest({ ...newQuery, filters: filters.value });
     });
 
     // We need to reset show paginator if it is disabled
@@ -365,6 +445,15 @@ export default {
         showPaginator.value = true;
       }
     });
+
+    function getAllUsersRequest(query) {
+      teamsQuestionnairesStore.getAllUsers(route.params.id, {
+        query: {
+          ...query,
+          includes: ["evaluation", "user"],
+        },
+      });
+    }
 
     function onPage(event) {
       query.pagination.number = event.page + 1;
@@ -375,8 +464,9 @@ export default {
       query.pagination.number = 1;
       showPaginator.value = false; // Reset the pagination
 
-      teamsQuestionnairesStore.getAll(route.params.id, {
-        query: { filters: filters.value, ...query },
+      getAllUsersRequest({
+        filters: filters.value,
+        ...query,
       });
     }
 
@@ -391,9 +481,7 @@ export default {
       //Reset sort
       query.sort = {};
 
-      teamsQuestionnairesStore.getAll(route.params.id, {
-        query: { pagination: { number: 1, size: 10 } },
-      });
+      getAllUsersRequest({ pagination: { number: 1, size: 10 } });
     }
 
     function toggleColumnsMenu(event) {
@@ -408,6 +496,7 @@ export default {
       teamsQuestionnairesStore,
       onPage,
       moment,
+      attemptsOptions,
       query,
       filters,
       applyFilters,
@@ -425,6 +514,7 @@ export default {
       actions,
       toggleActionsMenu,
       router,
+      findRelations,
     };
   },
 };

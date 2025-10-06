@@ -16,6 +16,7 @@ export const useTeamsQuestionnairesStore = defineStore(
     const status = ref("");
     const availableId = ref(null);
     const questionnaires = ref(null);
+    const users = ref(null);
     const errors = reactive({ questionnaireId: "" });
 
     async function getAll(teamId, payload) {
@@ -25,13 +26,33 @@ export const useTeamsQuestionnairesStore = defineStore(
       try {
         const results = await teamsQuestionnairesRequests.getAllRequest(
           teamId,
-          payload,
+          payload
         );
         questionnaires.value = results;
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while obtaining questionnaire data please try again",
+          "Error occurred while obtaining questionnaire data please try again"
+        );
+      } finally {
+        loading.value = false;
+      }
+    }
+
+    async function getAllUsers(teamQuestionnaireId, payload) {
+      clearState();
+      loading.value = true;
+
+      try {
+        const results = await teamsQuestionnairesRequests.getAllUsersRequest(
+          teamQuestionnaireId,
+          payload
+        );
+        users.value = results;
+      } catch (error) {
+        appStore.setToast(
+          "error",
+          "Error occurred while obtaining questionnaire data please try again"
         );
       } finally {
         loading.value = false;
@@ -52,7 +73,7 @@ export const useTeamsQuestionnairesStore = defineStore(
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while cheking availablity of the questionnaire please try again",
+          "Error occurred while cheking availablity of the questionnaire please try again"
         );
       } finally {
         status.value = "";
@@ -68,12 +89,12 @@ export const useTeamsQuestionnairesStore = defineStore(
         status.value = "attached";
         appStore.setToast(
           "success",
-          `Questionnaire with ${availableId.value} attached to team ${teamId}`,
+          `Questionnaire with ${availableId.value} attached to team ${teamId}`
         );
       } catch (error) {
         appStore.setToast(
           "error",
-          "Error occurred while attaching questionnaire please try again",
+          "Error occurred while attaching questionnaire please try again"
         );
       }
     }
@@ -89,11 +110,13 @@ export const useTeamsQuestionnairesStore = defineStore(
       status,
       availableId,
       questionnaires,
+      users,
       errors,
       checkAvailability,
       attach,
       getAll,
+      getAllUsers,
       clearState,
     };
-  },
+  }
 );
