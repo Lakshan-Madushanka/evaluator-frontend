@@ -56,7 +56,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             )
                           ]
                             ? 'pi pi-eye'
@@ -110,8 +110,22 @@
           <Column
             field="id"
             header="Questionnaire Id"
+            :show-filter-menu="false"
             :hidden="!columnVisibility.id"
           >
+            <template #filter>
+              <span>
+                <IconField>
+                  <InputIcon class="pi pi-search" />
+                  <InputText
+                    v-model="filters.id"
+                    type="text"
+                    placeholder="Search"
+                    @keyup.enter="applyFilters"
+                  />
+                </IconField>
+              </span>
+            </template>
             <template #body="slotProps"> {{ slotProps.data.id }}</template>
           </Column>
 
@@ -161,7 +175,7 @@
 
           <!-- Started at -->
           <Column
-            field="expires_at"
+            field="started_at"
             :hidden="!columnVisibility.started_at"
             :show-filter-menu="false"
           >
@@ -171,12 +185,14 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag v-if="!slotProps.data.attributes.started_at">N/A</Tag>
+              <Tag v-if="!slotProps.data.attributes.started_at" severity="info"
+                >N/A</Tag
+              >
 
               <span v-else>
                 {{
                   moment(slotProps.data.attributes.started_at).format(
-                    "ddd, MMM D, yyyy, h:mm a",
+                    "ddd, MMM D, yyyy, h:mm a"
                   )
                 }}
               </span>
@@ -185,7 +201,7 @@
 
           <!-- Finished at -->
           <Column
-            field="expires_at"
+            field="finished_at"
             :hidden="!columnVisibility.finished_at"
             :show-filter-menu="false"
           >
@@ -195,12 +211,14 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag v-if="!slotProps.data.attributes.finished_at">N/A</Tag>
+              <Tag v-if="!slotProps.data.attributes.finished_at" severity="info"
+                >N/A</Tag
+              >
 
               <span v-else>
                 {{
                   moment(slotProps.data.attributes.finished_at).format(
-                    "ddd, MMM D, yyyy, h:mm a",
+                    "ddd, MMM D, yyyy, h:mm a"
                   )
                 }}
               </span></template
@@ -221,7 +239,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.expires_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
@@ -252,12 +270,13 @@
               <Tag
                 v-if="
                   moment(slotProps.data.attributes.expires_at).isBefore(
-                    moment(),
+                    moment()
                   )
                 "
+                severity="danger"
                 >Expired</Tag
               >
-              <Tag v-else>N/A</Tag>
+              <Tag v-else severity="info">N/A</Tag>
             </template>
           </Column>
 
@@ -274,10 +293,33 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
+          </Column>
+
+          <!--Show Evaluation-->
+          <Column
+            field="evaluation"
+            header="Evaluation"
+            :hidden="!columnVisibility.evaluation"
+          >
+            <template #body="slotProps">
+              <router-link
+                v-if="slotProps.data.attributes.attempts > 0"
+                class="inlne-block mx-0 flex items-center justify-start hover:bg-transparent"
+                :to="{
+                  name: 'admin.evaluations.index',
+                  query: {
+                    uq_id: slotProps.data.attributes.user_questionnaire_id,
+                  },
+                }"
+              >
+                <Avatar icon="pi pi-eye" />
+              </router-link>
+              <Tag v-else severity="info"> N/A </Tag>
+            </template>
           </Column>
 
           <!-- Actions -->
@@ -292,7 +334,7 @@
                   v-if="
                     shouldAlloweToResendNotiificaton(
                       slotProps.data.attributes.attempts,
-                      slotProps.data.attributes.expires_at,
+                      slotProps.data.attributes.expires_at
                     )
                   "
                   class="p-button-sm"
@@ -300,7 +342,7 @@
                   title="Resend notification"
                   @click="
                     resendNotification(
-                      slotProps.data.attributes.user_questionnaire_id,
+                      slotProps.data.attributes.user_questionnaire_id
                     )
                   "
                 />
@@ -312,7 +354,7 @@
                   severity="danger"
                   @click="
                     revokeAccess(
-                      slotProps.data.attributes.user_questionnaire_id,
+                      slotProps.data.attributes.user_questionnaire_id
                     )
                   "
                 />
@@ -369,6 +411,9 @@ import DataTable from "primevue/datatable";
 import PrimeButton from "primevue/button";
 import MenuComponent from "primevue/menu";
 import ConfirmDialog from "primevue/confirmdialog";
+import InputText from "primevue/inputtext";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 import SelectButton from "primevue/selectbutton";
 import Tag from "primevue/tag";
 import { useConfirm } from "primevue/useconfirm";
@@ -388,6 +433,9 @@ export default {
     Paginator,
     SortComponent,
     Tag,
+    InputText,
+    IconField,
+    InputIcon,
     MenuComponent,
     ConfirmDialog,
 
@@ -433,6 +481,7 @@ export default {
       finished_at: true,
       expires_at: true,
       expired_status: true,
+      evaluation: true,
       created_at: true,
       actions: true,
     });
@@ -482,6 +531,12 @@ export default {
         },
       },
       {
+        label: "Evaluation",
+        command: () => {
+          columnVisibility.evaluation = !columnVisibility.evaluation;
+        },
+      },
+      {
         label: "Created at",
         command: () => {
           columnVisibility.created_at = !columnVisibility.created_at;
@@ -511,6 +566,9 @@ export default {
     ];
 
     onMounted(() => {
+      if (route.query.uq_id) {
+        filters.value.uq_id = route.query.uq_id;
+      }
       getAll();
     });
 
@@ -535,7 +593,7 @@ export default {
 
     function getAll() {
       usersQuestionnairesStore.getAll(route.params.id, {
-        query: { pagination: { number: 1, size: 10 } },
+        query: { filters: filters.value, pagination: { number: 1, size: 10 } },
       });
     }
 
@@ -597,7 +655,7 @@ export default {
         accept: () => {
           usersQuestionnairesStore.resendNotificatiion(
             route.params.id,
-            questionnaireId,
+            questionnaireId
           );
         },
         reject: () => {},
@@ -615,7 +673,7 @@ export default {
         accept: async () => {
           await usersQuestionnairesStore.revokeAccess(
             route.params.id,
-            userQuestionnaireId,
+            userQuestionnaireId
           );
 
           getAll();
