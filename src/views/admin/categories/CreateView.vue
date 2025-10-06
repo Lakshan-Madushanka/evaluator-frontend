@@ -22,7 +22,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Name") }}
+                {{ error.$message.replace('Value', 'Name') }}
               </p>
             </div>
           </template>
@@ -39,9 +39,7 @@
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
           :label="categoriesStore.status === 'creating' ? 'Creating' : 'Create'"
@@ -64,57 +62,57 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive } from 'vue'
 
-import { useCategoriesStore } from "@/stores/categories";
+import { useCategoriesStore } from '@/stores/categories'
 
-import PrimeButton from "primevue/button";
-import InputText from "primevue/inputtext";
+import PrimeButton from 'primevue/button'
+import InputText from 'primevue/inputtext'
 
-import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 
-import FormLayout from "@/views/layouts/FormLayout.vue";
+import FormLayout from '@/views/layouts/FormLayout.vue'
 
 export default {
   components: {
     FormLayout,
     InputText,
-    PrimeButton,
+    PrimeButton
   },
   setup() {
-    const categoriesStore = useCategoriesStore();
+    const categoriesStore = useCategoriesStore()
 
     const state = reactive({
-      name: "",
-    });
+      name: ''
+    })
 
-    const createCategoryButtonClicked = ref(false);
+    const createCategoryButtonClicked = ref(false)
 
     const rules = {
-      name: { required },
-    };
+      name: { required }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     function createCategory() {
-      createCategoryButtonClicked.value = true;
+      createCategoryButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      categoriesStore.createCategory(state);
+      categoriesStore.createCategory(state)
     }
 
     function clearState() {
-      state.name = "";
+      state.name = ''
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      categoriesStore.errors = {};
+      categoriesStore.errors = {}
     }
 
     return {
@@ -123,8 +121,8 @@ export default {
       createCategory,
       clearState,
       createCategoryButtonClicked,
-      categoriesStore,
-    };
-  },
-};
+      categoriesStore
+    }
+  }
+}
 </script>

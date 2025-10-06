@@ -22,7 +22,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Name") }}
+                {{ error.$message.replace('Value', 'Name') }}
               </p>
             </div>
           </template>
@@ -61,7 +61,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Difficulty") }}
+                {{ error.$message.replace('Value', 'Difficulty') }}
                 {{ validationErrorMessages[error.$validator] }}
               </p>
             </div>
@@ -101,7 +101,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Caetegory") }}
+                {{ error.$message.replace('Value', 'Caetegory') }}
                 {{ validationErrorMessages[error.$validator] }}
               </p>
             </div>
@@ -124,10 +124,7 @@
             <Dropdown
               v-model="state.single_answers_type"
               :options="answersTypeOptions"
-              :class="[
-                'w-full',
-                { 'p-invalid': v$.single_answers_type.$invalid },
-              ]"
+              :class="['w-full', { 'p-invalid': v$.single_answers_type.$invalid }]"
               option-label="name"
               option-value="value"
               placeholder="Select answers type"
@@ -144,7 +141,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Answers Type") }}
+                {{ error.$message.replace('Value', 'Answers Type') }}
                 {{ validationErrorMessages[error.$validator] }}
               </p>
             </div>
@@ -152,8 +149,7 @@
           <!-- Server side errors -->
           <template v-if="questionnairesStore.errors.single_answers_type">
             <p
-              v-for="(error, index) in questionnairesStore.errors
-                .single_answers_type"
+              v-for="(error, index) in questionnairesStore.errors.single_answers_type"
               :key="index"
               class="text-red-500 text-sm"
             >
@@ -170,10 +166,7 @@
               <InputNumber
                 v-model="state.no_of_easy_questions"
                 input-id="minmax-buttons"
-                :class="[
-                  'w-full',
-                  { 'p-invalid': v$.no_of_easy_questions.$invalid },
-                ]"
+                :class="['w-full', { 'p-invalid': v$.no_of_easy_questions.$invalid }]"
                 :use-grouping="false"
                 :min="0"
                 show-buttons
@@ -189,15 +182,14 @@
                   :key="index"
                   class="text-red-500 text-sm"
                 >
-                  {{ error.$message.replace("Value", "No of Easy Questions") }}
+                  {{ error.$message.replace('Value', 'No of Easy Questions') }}
                 </p>
               </div>
             </template>
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.no_of_easy_questions">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .no_of_easy_questions"
+                v-for="(error, index) in questionnairesStore.errors.no_of_easy_questions"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -212,10 +204,7 @@
               <InputNumber
                 v-model="state.no_of_medium_questions"
                 input-id="minmax-buttons"
-                :class="[
-                  'w-full',
-                  { 'p-invalid': v$.no_of_medium_questions.$invalid },
-                ]"
+                :class="['w-full', { 'p-invalid': v$.no_of_medium_questions.$invalid }]"
                 :use-grouping="false"
                 :min="0"
                 show-buttons
@@ -231,17 +220,14 @@
                   :key="index"
                   class="text-red-500 text-sm"
                 >
-                  {{
-                    error.$message.replace("Value", "No of Medium Questions")
-                  }}
+                  {{ error.$message.replace('Value', 'No of Medium Questions') }}
                 </p>
               </div>
             </template>
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.no_of_medium_questions">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .no_of_medium_questions"
+                v-for="(error, index) in questionnairesStore.errors.no_of_medium_questions"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -256,10 +242,7 @@
               <InputNumber
                 v-model="state.no_of_hard_questions"
                 input-id="minmax-buttons"
-                :class="[
-                  'w-full',
-                  { 'p-invalid': v$.no_of_hard_questions.$invalid },
-                ]"
+                :class="['w-full', { 'p-invalid': v$.no_of_hard_questions.$invalid }]"
                 :use-grouping="false"
                 :min="0"
                 show-buttons
@@ -275,15 +258,14 @@
                   :key="index"
                   class="text-red-500 text-sm"
                 >
-                  {{ error.$message.replace("Value", "No of Hard Questions") }}
+                  {{ error.$message.replace('Value', 'No of Hard Questions') }}
                 </p>
               </div>
             </template>
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.no_of_hard_questions">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .no_of_hard_questions"
+                v-for="(error, index) in questionnairesStore.errors.no_of_hard_questions"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -298,10 +280,7 @@
               <InputNumber
                 v-model="state.no_of_questions"
                 input-id="minmax-buttons"
-                :class="[
-                  'w-full',
-                  { 'p-invalid': v$.no_of_questions.$invalid },
-                ]"
+                :class="['w-full', { 'p-invalid': v$.no_of_questions.$invalid }]"
                 :use-grouping="false"
                 :min="0"
                 show-buttons
@@ -318,19 +297,18 @@
                   class="text-red-500 text-sm"
                 >
                   {{
-                    error.$validator === "equalTo"
-                      ? "Total no of questions must be equal to sum of easy, medium and hard questions"
-                      : ""
+                    error.$validator === 'equalTo'
+                      ? 'Total no of questions must be equal to sum of easy, medium and hard questions'
+                      : ''
                   }}
-                  {{ error.$message.replace("Value", "No of total questions") }}
+                  {{ error.$message.replace('Value', 'No of total questions') }}
                 </p>
               </div>
             </template>
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.no_of_questions">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .no_of_questions"
+                v-for="(error, index) in questionnairesStore.errors.no_of_questions"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -364,7 +342,7 @@
                   :key="index"
                   class="text-red-500 text-sm"
                 >
-                  {{ error.$message.replace("Value", "Allocated time") }}
+                  {{ error.$message.replace('Value', 'Allocated time') }}
                   {{ validationErrorMessages[error.$validator] }}
                 </p>
               </div>
@@ -372,8 +350,7 @@
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.allocated_time">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .allocated_time"
+                v-for="(error, index) in questionnairesStore.errors.allocated_time"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -384,14 +361,10 @@
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
-          :label="
-            questionnairesStore.status === 'creating' ? 'Creating' : 'Create'
-          "
+          :label="questionnairesStore.status === 'creating' ? 'Creating' : 'Create'"
           icon="pi pi-plus"
           icon-pos="right"
           :disabled="v$.$invalid && createQuestionnaireButtonClicked"
@@ -411,26 +384,23 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue'
 
-import { useQuestionnairesStore } from "@/stores/questionnaires";
-import { useCategoriesStore } from "@/stores/categories";
+import { useQuestionnairesStore } from '@/stores/questionnaires'
+import { useCategoriesStore } from '@/stores/categories'
 
-import Dropdown from "primevue/dropdown";
-import InputText from "primevue/inputtext";
-import InputNumber from "primevue/inputnumber";
-import MultiSelect from "primevue/multiselect";
-import PrimeButton from "primevue/button";
+import Dropdown from 'primevue/dropdown'
+import InputText from 'primevue/inputtext'
+import InputNumber from 'primevue/inputnumber'
+import MultiSelect from 'primevue/multiselect'
+import PrimeButton from 'primevue/button'
 
-import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, maxLength } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, maxLength } from '@vuelidate/validators'
 
-import FormLayout from "@/views/layouts/FormLayout.vue";
+import FormLayout from '@/views/layouts/FormLayout.vue'
 
-import {
-  exists as existsRule,
-  messages as validationErrorMessages,
-} from "@/validationRules";
+import { exists as existsRule, messages as validationErrorMessages } from '@/validationRules'
 
 export default {
   components: {
@@ -439,72 +409,70 @@ export default {
     InputText,
     PrimeButton,
     InputNumber,
-    MultiSelect,
+    MultiSelect
   },
   setup() {
-    const questionnairesStore = useQuestionnairesStore();
-    const categoriesStore = useCategoriesStore();
+    const questionnairesStore = useQuestionnairesStore()
+    const categoriesStore = useCategoriesStore()
 
     const initialState = {
-      name: "",
-      difficulty: "",
+      name: '',
+      difficulty: '',
       categories: [],
-      single_answers_type: "",
+      single_answers_type: '',
       no_of_easy_questions: null,
       no_of_medium_questions: null,
       no_of_hard_questions: null,
       no_of_questions: null,
-      allocated_time: null,
-    };
+      allocated_time: null
+    }
 
     const state = reactive({
-      ...initialState,
-    });
+      ...initialState
+    })
 
-    const createQuestionnaireButtonClicked = ref(false);
+    const createQuestionnaireButtonClicked = ref(false)
 
     const difficultyOptions = [
-      { name: "Easy", value: 1 },
-      { name: "Medium", value: 2 },
-      { name: "Hard", value: 3 },
-    ];
+      { name: 'Easy', value: 1 },
+      { name: 'Medium', value: 2 },
+      { name: 'Hard', value: 3 }
+    ]
 
     const answersTypeOptions = [
-      { name: "Single", value: "true" },
-      { name: "Multiple", value: "false" },
-    ];
+      { name: 'Single', value: 'true' },
+      { name: 'Multiple', value: 'false' }
+    ]
 
-    const categoriesOptions = ref([]);
+    const categoriesOptions = ref([])
 
     const equalToRule = (value) => {
       let total =
-        state.no_of_easy_questions +
-        state.no_of_medium_questions +
-        state.no_of_hard_questions;
+        state.no_of_easy_questions + state.no_of_medium_questions + state.no_of_hard_questions
 
-      return value === total || value === null;
-    };
+      return value === total || value === null
+    }
 
     const rules = {
       name: { required, minLength: minLength(3), maxLength: maxLength(50) },
       categories: { required },
       difficulty: { required, exists: existsRule([1, 2, 3]) },
-      single_answers_type: { required, exists: existsRule(["true", "false"]) },
+      single_answers_type: { required, exists: existsRule(['true', 'false']) },
       no_of_easy_questions: { required },
       no_of_medium_questions: { required },
       no_of_hard_questions: { required },
       no_of_questions: {
         required,
-        equalTo: equalToRule,
+        equalTo: equalToRule
       },
-      allocated_time: { required },
-    };
+      allocated_time: { required }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     onMounted(() => {
-      categoriesStore.getAll();
-    });
+      categoriesStore.getAll()
+    })
 
     watch(
       () => categoriesStore.categories,
@@ -513,43 +481,42 @@ export default {
           newCategories.data.forEach((category) => {
             categoriesOptions.value.push({
               name: category.attributes.name,
-              value: category.id,
-            });
-          });
+              value: category.id
+            })
+          })
         }
-      },
-    );
+      }
+    )
 
     function prepareFormData() {
-      let selectedCategories = [];
-      let single_answers_type =
-        state.single_answers_type === "true" ? true : false;
+      let selectedCategories = []
+      let single_answers_type = state.single_answers_type === 'true' ? true : false
 
       state.categories.forEach((category) => {
-        selectedCategories.push(category.value);
-      });
+        selectedCategories.push(category.value)
+      })
 
-      return { ...state, categories: selectedCategories, single_answers_type };
+      return { ...state, categories: selectedCategories, single_answers_type }
     }
 
     function createQuestionnaire() {
-      createQuestionnaireButtonClicked.value = true;
+      createQuestionnaireButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      questionnairesStore.createQuestionnaire(prepareFormData());
+      questionnairesStore.createQuestionnaire(prepareFormData())
     }
 
     function clearState() {
-      Object.assign(state, { ...initialState });
+      Object.assign(state, { ...initialState })
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      questionnairesStore.errors = {};
+      questionnairesStore.errors = {}
     }
 
     return {
@@ -562,8 +529,8 @@ export default {
       createQuestionnaire,
       clearState,
       createQuestionnaireButtonClicked,
-      questionnairesStore,
-    };
-  },
-};
+      questionnairesStore
+    }
+  }
+}
 </script>

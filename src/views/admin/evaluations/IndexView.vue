@@ -33,21 +33,14 @@
     </p>
 
     <div class="!mt-4 flex justify-center">
-      <PrimeButton
-        label="Search"
-        icon="pi pi-search"
-        icon-pos="right"
-        @click="search"
-      />
+      <PrimeButton label="Search" icon="pi pi-search" icon-pos="right" @click="search" />
     </div>
   </PrimeDialog>
 
   <AdminTableLayout>
     <template #table>
       <DataTable
-        :value="
-          evaluationsStore.evaluations && evaluationsStore.evaluations.data
-        "
+        :value="evaluationsStore.evaluations && evaluationsStore.evaluations.data"
         responsive-layout="scroll"
         :loading="evaluationsStore.loading"
         striped-rows
@@ -55,10 +48,7 @@
         filter-display="row"
       >
         <template #empty>
-          <p
-            v-if="!evaluationsStore.loading"
-            class="p-4 text-center text-2xl bg-blue-200"
-          >
+          <p v-if="!evaluationsStore.loading" class="p-4 text-center text-2xl bg-blue-200">
             No records found.
           </p>
         </template>
@@ -67,40 +57,24 @@
           <div class="flex justify-between items-center text-2xl uppercase">
             <div class="flex">
               <p class="mr-2">Evaluations</p>
-              <Avatar
-                class="hover:cursor-pointer"
-                icon="pi pi-eye"
-                @click="toggleColumnsMenu"
-              />
-              <MenuComponent
-                ref="columnsMenuRef"
-                :model="columns"
-                :popup="true"
-              >
+              <Avatar class="hover:cursor-pointer" icon="pi pi-eye" @click="toggleColumnsMenu" />
+              <MenuComponent ref="columnsMenuRef" :model="columns" :popup="true">
                 <template #item="slotProps">
-                  <div
-                    class="flex items-center p-2 hover:cursor-pointer w-full"
-                  >
+                  <div class="flex items-center p-2 hover:cursor-pointer w-full">
                     <div
                       v-if="slotProps['item']['label'] === 'Bulk Controllers'"
                       class="flex justify-between w-full text-sm text-blue-400"
                     >
-                      <span
-                        class="hover:text-blue-800"
-                        @click="displayAllColumns"
+                      <span class="hover:text-blue-800" @click="displayAllColumns"
                         >Display All</span
                       >
-                      <span class="hover:text-blue-800" @click="hideAllColumns"
-                        >Hide All</span
-                      >
+                      <span class="hover:text-blue-800" @click="hideAllColumns">Hide All</span>
                     </div>
                     <template v-else>
                       <i
                         :class="
                           columnVisibility[
-                            snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
-                            ).toLowerCase()
+                            snake(lowercaseFirstLetter(slotProps['item']['label'])).toLowerCase()
                           ]
                             ? 'pi pi-eye'
                             : 'pi pi-eye-slash'
@@ -119,11 +93,7 @@
                 class="pi pi-align-justify hover:cursor-pointer lg:!hidden"
                 @click="toggleActionsMenu"
               ></i>
-              <MenuComponent
-                ref="actionsMenuRef"
-                :model="actions"
-                :popup="true"
-              />
+              <MenuComponent ref="actionsMenuRef" :model="actions" :popup="true" />
 
               <div class="hidden lg:flex">
                 <PrimeButton
@@ -256,9 +226,7 @@
             </div>
           </template>
           <template #body="slotProps">
-            <Tag severity="info"
-              >{{ slotProps.data.attributes.marks_percentage }}
-            </Tag>
+            <Tag severity="info">{{ slotProps.data.attributes.marks_percentage }} </Tag>
           </template>
         </Column>
 
@@ -283,7 +251,7 @@
             <Tag severity="info">
               {{
                 slotProps.data.attributes.time_taken < 1
-                  ? "<1min"
+                  ? '<1min'
                   : formatMinutes(slotProps.data.attributes.time_taken, true)
               }}
             </Tag>
@@ -308,9 +276,7 @@
           </template>
 
           <template #body="slotProps">
-            <Tag severity="info">{{
-              slotProps.data.attributes.no_of_correct_answers
-            }}</Tag>
+            <Tag severity="info">{{ slotProps.data.attributes.no_of_correct_answers }}</Tag>
           </template>
         </Column>
 
@@ -332,9 +298,7 @@
           </template>
 
           <template #body="slotProps">
-            <Tag severity="info">{{
-              slotProps.data.attributes.total_points_earned
-            }}</Tag>
+            <Tag severity="info">{{ slotProps.data.attributes.total_points_earned }}</Tag>
           </template>
         </Column>
 
@@ -356,9 +320,7 @@
           </template>
 
           <template #body="slotProps">
-            <Tag severity="info">{{
-              slotProps.data.attributes.total_points_allocated
-            }}</Tag>
+            <Tag severity="info">{{ slotProps.data.attributes.total_points_allocated }}</Tag>
           </template>
         </Column>
 
@@ -376,10 +338,7 @@
                 title="Show evaluation"
                 severity="contrast"
                 @click="
-                  showEvaluation(
-                    slotProps.data.id,
-                    slotProps.data.attributes.questionnaire_id,
-                  )
+                  showEvaluation(slotProps.data.id, slotProps.data.attributes.questionnaire_id)
                 "
               />
             </span>
@@ -387,11 +346,7 @@
         </Column>
 
         <!-- Created at -->
-        <Column
-          field="created at"
-          :show-filter-menu="false"
-          :hidden="!columnVisibility.created_at"
-        >
+        <Column field="created at" :show-filter-menu="false" :hidden="!columnVisibility.created_at">
           <template #header>
             <div class="flex justify-between items-center w-full">
               <p class="mr-4">Created at</p>
@@ -403,36 +358,22 @@
           </template>
 
           <template #body="slotProps">
-            {{
-              moment(slotProps.data.attributes.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a",
-              )
-            }}
+            {{ moment(slotProps.data.attributes.created_at).format('ddd, MMM D, yyyy, h:mm a') }}
           </template>
         </Column>
 
         <template #footer>
           <Paginator
             v-if="evaluationsStore.evaluations && showPaginator"
-            :rows="
-              evaluationsStore.evaluations &&
-              evaluationsStore.evaluations.meta.per_page
-            "
-            :total-records="
-              evaluationsStore.evaluations &&
-              evaluationsStore.evaluations.meta.total
-            "
+            :rows="evaluationsStore.evaluations && evaluationsStore.evaluations.meta.per_page"
+            :total-records="evaluationsStore.evaluations && evaluationsStore.evaluations.meta.total"
             @page="onPaginatorChange"
           >
           </Paginator>
           <p
             class="hidden sm:flex p-2 relative bottom-[-20px] w-full justify-center lg:justify-end"
           >
-            {{
-              evaluationsStore.evaluations
-                ? evaluationsStore.evaluations.meta.total
-                : 0
-            }}
+            {{ evaluationsStore.evaluations ? evaluationsStore.evaluations.meta.total : 0 }}
             records found.
           </p>
         </template>
@@ -442,31 +383,31 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue'
 
-import { useRouter, useRoute } from "vue-router";
+import { useRouter, useRoute } from 'vue-router'
 
-import { useEvaluationsStore } from "@/stores/evaluations";
+import { useEvaluationsStore } from '@/stores/evaluations'
 
-import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
-import Paginator from "@/components/PaginatorComponent.vue";
-import SortComponent from "@/components/SortComponent.vue";
+import AdminTableLayout from '@/views/layouts/AdminTableLayout.vue'
+import Paginator from '@/components/PaginatorComponent.vue'
+import SortComponent from '@/components/SortComponent.vue'
 
-import Avatar from "primevue/avatar";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
-import PrimeDialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
-import MenuComponent from "primevue/menu";
-import PrimeButton from "primevue/button";
-import Slider from "primevue/slider";
-import Tag from "primevue/tag";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
+import Avatar from 'primevue/avatar'
+import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
+import PrimeDialog from 'primevue/dialog'
+import InputText from 'primevue/inputtext'
+import MenuComponent from 'primevue/menu'
+import PrimeButton from 'primevue/button'
+import Slider from 'primevue/slider'
+import Tag from 'primevue/tag'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
 
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
-import { lowercaseFirstLetter, snake, formatMinutes } from "@/helpers";
+import { lowercaseFirstLetter, snake, formatMinutes } from '@/helpers'
 
 export default {
   components: {
@@ -483,36 +424,36 @@ export default {
     SortComponent,
     Tag,
     IconField,
-    InputIcon,
+    InputIcon
   },
   setup() {
-    const router = useRouter();
-    const route = useRoute();
+    const router = useRouter()
+    const route = useRoute()
 
-    const evaluationsStore = useEvaluationsStore();
+    const evaluationsStore = useEvaluationsStore()
 
-    const resetting = ref(false);
+    const resetting = ref(false)
 
-    const showSearchDialog = ref(false);
-    const searchData = ref(["", ""]);
-    const searchButtonClicked = ref(false);
+    const showSearchDialog = ref(false)
+    const searchData = ref(['', ''])
+    const searchButtonClicked = ref(false)
 
     //Paginator
-    const showPaginator = ref(true);
+    const showPaginator = ref(true)
 
     //query
-    const initialFilters = { marks_percentage: [0, 100] };
-    const initialSort = {};
-    const initialPagination = { number: 1, size: 10 };
+    const initialFilters = { marks_percentage: [0, 100] }
+    const initialSort = {}
+    const initialPagination = { number: 1, size: 10 }
 
     const query = reactive({
       filters: { ...initialFilters },
       sort: {},
-      pagination: { ...initialPagination },
-    });
+      pagination: { ...initialPagination }
+    })
 
     // Set coulmns visibility
-    const columnsMenuRef = ref();
+    const columnsMenuRef = ref()
     const columnVisibility = reactive({
       no: true,
       id: true,
@@ -525,232 +466,222 @@ export default {
       total_points_allocated: true,
       no_of_answered_questions: true,
       created_at: true,
-      show_evaluation: true,
-    });
+      show_evaluation: true
+    })
     const columns = ref([
       {
-        label: "Bulk Controllers",
-        command: () => {},
+        label: 'Bulk Controllers',
+        command: () => {}
       },
       {
-        label: "No",
+        label: 'No',
         command: () => {
-          columnVisibility.no = !columnVisibility.no;
-        },
+          columnVisibility.no = !columnVisibility.no
+        }
       },
       {
-        label: "Id",
+        label: 'Id',
         command: () => {
-          columnVisibility.id = !columnVisibility.id;
-        },
+          columnVisibility.id = !columnVisibility.id
+        }
       },
       {
-        label: "User Id",
+        label: 'User Id',
         command: () => {
-          columnVisibility.user_id = !columnVisibility.user_id;
-        },
+          columnVisibility.user_id = !columnVisibility.user_id
+        }
       },
       {
-        label: "Questionnaire Id",
+        label: 'Questionnaire Id',
         command: () => {
-          columnVisibility.questionnaire_id =
-            !columnVisibility.questionnaire_id;
-        },
+          columnVisibility.questionnaire_id = !columnVisibility.questionnaire_id
+        }
       },
       {
-        label: "Marks Percentage",
+        label: 'Marks Percentage',
         command: () => {
-          columnVisibility.marks_percentage =
-            !columnVisibility.marks_percentage;
-        },
+          columnVisibility.marks_percentage = !columnVisibility.marks_percentage
+        }
       },
       {
-        label: "Time taken",
+        label: 'Time taken',
         command: () => {
-          columnVisibility.time_taken = !columnVisibility.time_taken;
-        },
+          columnVisibility.time_taken = !columnVisibility.time_taken
+        }
       },
       {
-        label: "No of correct answers",
+        label: 'No of correct answers',
         command: () => {
-          columnVisibility.no_of_correct_answers =
-            !columnVisibility.no_of_correct_answers;
-        },
+          columnVisibility.no_of_correct_answers = !columnVisibility.no_of_correct_answers
+        }
       },
       {
-        label: "Total points earned",
+        label: 'Total points earned',
         command: () => {
-          columnVisibility.total_points_earned =
-            !columnVisibility.total_points_earned;
-        },
+          columnVisibility.total_points_earned = !columnVisibility.total_points_earned
+        }
       },
       {
-        label: "Total points allocated",
+        label: 'Total points allocated',
         command: () => {
-          columnVisibility.total_points_allocated =
-            !columnVisibility.total_points_allocated;
-        },
+          columnVisibility.total_points_allocated = !columnVisibility.total_points_allocated
+        }
       },
       {
-        label: "No of answered questions",
+        label: 'No of answered questions',
         command: () => {
-          columnVisibility.no_of_answered_questions =
-            !columnVisibility.no_of_answered_questions;
-        },
+          columnVisibility.no_of_answered_questions = !columnVisibility.no_of_answered_questions
+        }
       },
       {
-        label: "Show Evaluation",
+        label: 'Show Evaluation',
         command: () => {
-          columnVisibility.show_evaluation = !columnVisibility.show_evaluation;
-        },
+          columnVisibility.show_evaluation = !columnVisibility.show_evaluation
+        }
       },
       {
-        label: "Created at",
+        label: 'Created at',
         command: () => {
-          columnVisibility.created_at = !columnVisibility.created_at;
-        },
-      },
-    ]);
+          columnVisibility.created_at = !columnVisibility.created_at
+        }
+      }
+    ])
 
     //Actions menu
-    const actionsMenuRef = ref();
+    const actionsMenuRef = ref()
     const actions = ref([
       {
-        label: "Refresh",
-        icon: "pi pi-refresh",
-        command: () => reset(),
+        label: 'Refresh',
+        icon: 'pi pi-refresh',
+        command: () => reset()
       },
       {
-        label: "Apply Filters",
-        icon: "pi pi-filter",
-        command: () => applyFilters(),
+        label: 'Apply Filters',
+        icon: 'pi pi-filter',
+        command: () => applyFilters()
       },
       {
-        label: "Search",
-        icon: "pi pi-search",
+        label: 'Search',
+        icon: 'pi pi-search',
         command: () => {
-          showSearchDialog.value = true;
-        },
-      },
-    ]);
+          showSearchDialog.value = true
+        }
+      }
+    ])
 
     onMounted(() => {
       if (route.query.uq_id) {
-        query.filters.uq_id = route.query.uq_id;
-        loadData(true);
+        query.filters.uq_id = route.query.uq_id
+        loadData(true)
       } else {
-        loadData();
+        loadData()
       }
-    });
+    })
 
     watch(evaluationsStore, function (newStore) {
       if (!newStore.loading) {
-        resetting.value = false;
-        showPaginator.value = true;
+        resetting.value = false
+        showPaginator.value = true
       }
-    });
+    })
 
     watch(
       [() => query.sort, () => query.pagination],
       () => {
         if (resetting.value === true) {
-          return;
+          return
         }
 
         evaluationsStore.getAll({
-          query: { ...query },
-        });
+          query: { ...query }
+        })
       },
-      { deep: true },
-    );
+      { deep: true }
+    )
 
     function loadData(withFilters = false) {
       if (!withFilters) {
         evaluationsStore.getAll({
-          query: { pagination: initialPagination },
-        });
+          query: { pagination: initialPagination }
+        })
       } else {
         evaluationsStore.getAll({
-          query: { filters: query.filters, pagination: initialPagination },
-        });
+          query: { filters: query.filters, pagination: initialPagination }
+        })
       }
     }
 
     function toggleColumnsMenu(event) {
-      columnsMenuRef.value.toggle(event);
+      columnsMenuRef.value.toggle(event)
     }
 
     function toggleActionsMenu(event) {
-      actionsMenuRef.value.toggle(event);
+      actionsMenuRef.value.toggle(event)
     }
 
     function displayAllColumns() {
       for (let visibility in columnVisibility) {
-        columnVisibility[visibility] = true;
+        columnVisibility[visibility] = true
       }
     }
 
     function hideAllColumns() {
       for (let visibility in columnVisibility) {
-        columnVisibility[visibility] = false;
+        columnVisibility[visibility] = false
       }
     }
 
     function onPaginatorChange(event) {
-      const pagination = {};
-      pagination.number = event.page + 1;
-      pagination.size = event.rows;
+      const pagination = {}
+      pagination.number = event.page + 1
+      pagination.size = event.rows
 
-      query.pagination = pagination;
+      query.pagination = pagination
     }
 
     function applyFilters() {
-      evaluationsStore.getAll({ query: { ...query } });
+      evaluationsStore.getAll({ query: { ...query } })
     }
 
     function reset() {
-      resetting.value = true;
-      showPaginator.value = false;
+      resetting.value = true
+      showPaginator.value = false
 
-      query.pagination = { ...initialPagination };
-      query.sort = { ...initialSort };
-      query.filters = { ...initialFilters };
+      query.pagination = { ...initialPagination }
+      query.sort = { ...initialSort }
+      query.filters = { ...initialFilters }
 
-      loadData();
+      loadData()
     }
 
     function search() {
-      searchButtonClicked.value = true;
+      searchButtonClicked.value = true
 
       if (!validateSearchData()) {
-        return;
+        return
       }
 
-      showSearchDialog.value = false;
+      showSearchDialog.value = false
 
       evaluationsStore.getAll({
-        query: { filters: { user_questionnaire: searchData } },
-      });
+        query: { filters: { user_questionnaire: searchData } }
+      })
     }
 
     function validateSearchData() {
-      if (
-        searchData.value[0] === "" &&
-        searchData.value[1] === "" &&
-        searchButtonClicked.value
-      ) {
-        return false;
+      if (searchData.value[0] === '' && searchData.value[1] === '' && searchButtonClicked.value) {
+        return false
       }
 
-      return true;
+      return true
     }
 
     function showEvaluation(evaluationId, questionnaireId) {
       const routeData = router.resolve({
-        name: "admin.evaluations.show",
-        params: { evaluationId, questionnaireId },
-      });
-      window.open(routeData.href, "_blank");
+        name: 'admin.evaluations.show',
+        params: { evaluationId, questionnaireId }
+      })
+      window.open(routeData.href, '_blank')
     }
 
     return {
@@ -778,8 +709,8 @@ export default {
       lowercaseFirstLetter,
       moment,
       showEvaluation,
-      formatMinutes,
-    };
-  },
-};
+      formatMinutes
+    }
+  }
+}
 </script>

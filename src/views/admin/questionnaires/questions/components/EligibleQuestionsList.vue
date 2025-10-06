@@ -3,10 +3,7 @@
     <template #table>
       <DataTable
         v-model:selection="selectedQuestions"
-        :value="
-          questionsStore.eligibleQuestions &&
-          questionsStore.eligibleQuestions.data
-        "
+        :value="questionsStore.eligibleQuestions && questionsStore.eligibleQuestions.data"
         responsive-layout="scroll"
         :loading="questionsStore.loading"
         striped-rows
@@ -36,40 +33,24 @@
           <div class="flex justify-between items-center text-2xl uppercase">
             <div class="flex">
               <p class="mr-2">Questions</p>
-              <Avatar
-                class="hover:cursor-pointer"
-                icon="pi pi-eye"
-                @click="toggleColumnsMenu"
-              />
-              <MenuComponent
-                ref="columnsMenuRef"
-                :model="columns"
-                :popup="true"
-              >
+              <Avatar class="hover:cursor-pointer" icon="pi pi-eye" @click="toggleColumnsMenu" />
+              <MenuComponent ref="columnsMenuRef" :model="columns" :popup="true">
                 <template #item="slotProps">
-                  <div
-                    class="flex items-center p-2 hover:cursor-pointer w-full"
-                  >
+                  <div class="flex items-center p-2 hover:cursor-pointer w-full">
                     <div
                       v-if="slotProps['item']['label'] === 'Bulk Controllers'"
                       class="flex justify-between w-full text-sm text-blue-400"
                     >
-                      <span
-                        class="hover:text-blue-800"
-                        @click="displayAllColumns"
+                      <span class="hover:text-blue-800" @click="displayAllColumns"
                         >Display All</span
                       >
-                      <span class="hover:text-blue-800" @click="hideAllColumns"
-                        >Hide All</span
-                      >
+                      <span class="hover:text-blue-800" @click="hideAllColumns">Hide All</span>
                     </div>
                     <template v-else>
                       <i
                         :class="
                           columnVisibility[
-                            snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
-                            ).toLowerCase()
+                            snake(lowercaseFirstLetter(slotProps['item']['label'])).toLowerCase()
                           ]
                             ? 'pi pi-eye'
                             : 'pi pi-eye-slash'
@@ -88,11 +69,7 @@
                 class="pi pi-align-justify hover:cursor-pointer lg:!hidden"
                 @click="toggleActionsMenu"
               ></i>
-              <MenuComponent
-                ref="actionsMenuRef"
-                :model="actions"
-                :popup="true"
-              />
+              <MenuComponent ref="actionsMenuRef" :model="actions" :popup="true" />
 
               <div class="hidden lg:flex">
                 <PrimeButton
@@ -133,11 +110,7 @@
         </Column>
 
         <!-- Category -->
-        <Column
-          header="Category"
-          :show-filter-menu="false"
-          :hidden="!columnVisibility.category"
-        >
+        <Column header="Category" :show-filter-menu="false" :hidden="!columnVisibility.category">
           <template #filter>
             <Dropdown
               v-model="filters['categories.name']"
@@ -147,9 +120,7 @@
             />
           </template>
           <template #body="slotProps">
-            <template
-              v-if="slotProps.data.relationships.categories.data.length > 0"
-            >
+            <template v-if="slotProps.data.relationships.categories.data.length > 0">
               <Tag
                 v-for="category in slotProps.data.relationships.categories.data"
                 :key="category.id"
@@ -157,11 +128,8 @@
                 class="mr-1"
               >
                 {{
-                  findRelations(
-                    questionsStore.meta.included,
-                    category.id,
-                    category.type,
-                  )?.attributes.name
+                  findRelations(questionsStore.meta.included, category.id, category.type)
+                    ?.attributes.name
                 }}
               </Tag>
             </template>
@@ -191,13 +159,9 @@
           </template>
           <template #body="slotProps">
             <div class="flex justify-between items-center relative">
-              <p
-                v-html="formatText(slotProps.data.attributes.content, 100)"
-              ></p>
+              <p v-html="formatText(slotProps.data.attributes.content, 100)"></p>
               <div class="group">
-                <i
-                  class="pi pi-eye !block hover:text-blue-600 hover:cursor-pointer !text-xl"
-                >
+                <i class="pi pi-eye !block hover:text-blue-600 hover:cursor-pointer !text-xl">
                   <p
                     class="p-4 bg-black text-white hidden group-hover:block absolute left-0 top-[-1rem] whitespace-normal z-10"
                     v-html="slotProps.data.attributes.content"
@@ -224,11 +188,7 @@
           </template>
 
           <template #body="slotProps">
-            <Tag
-              v-if="slotProps.data.attributes.answers_type_single"
-              severity="info"
-              >Single</Tag
-            >
+            <Tag v-if="slotProps.data.attributes.answers_type_single" severity="info">Single</Tag>
             <Tag v-else severity="info">Multiple</Tag>
           </template>
         </Column>
@@ -249,21 +209,15 @@
           </template>
 
           <template #body="slotProps">
-            <Tag
-              v-if="slotProps.data.attributes.hardness === 'HARD'"
-              severity="danger"
-              >{{ slotProps.data.attributes.hardness }}</Tag
-            >
-            <Tag
-              v-else-if="slotProps.data.attributes.hardness === 'MEDIUM'"
-              severity="warning"
-              >{{ slotProps.data.attributes.hardness }}</Tag
-            >
-            <Tag
-              v-else-if="slotProps.data.attributes.hardness === 'EASY'"
-              severity="info"
-              >{{ slotProps.data.attributes.hardness }}</Tag
-            >
+            <Tag v-if="slotProps.data.attributes.hardness === 'HARD'" severity="danger">{{
+              slotProps.data.attributes.hardness
+            }}</Tag>
+            <Tag v-else-if="slotProps.data.attributes.hardness === 'MEDIUM'" severity="warning">{{
+              slotProps.data.attributes.hardness
+            }}</Tag>
+            <Tag v-else-if="slotProps.data.attributes.hardness === 'EASY'" severity="info">{{
+              slotProps.data.attributes.hardness
+            }}</Tag>
           </template>
         </Column>
 
@@ -276,9 +230,7 @@
           body-class="!text-center"
         >
           <template #body="slotProps">
-            <Tag severity="info">{{
-              slotProps.data.attributes.no_of_answers
-            }}</Tag>
+            <Tag severity="info">{{ slotProps.data.attributes.no_of_answers }}</Tag>
           </template>
         </Column>
 
@@ -291,9 +243,7 @@
           body-class="!text-center"
         >
           <template #body="slotProps">
-            <Tag severity="info">{{
-              slotProps.data.attributes.images_count
-            }}</Tag>
+            <Tag severity="info">{{ slotProps.data.attributes.images_count }}</Tag>
           </template>
         </Column>
 
@@ -302,26 +252,18 @@
           <template #header>
             <div class="flex justify-between items-center w-full text-bold">
               <p>Created at</p>
-              <SortComponent
-                @direction-change="query.sort.created_at = $event"
-              />
+              <SortComponent @direction-change="query.sort.created_at = $event" />
             </div>
           </template>
           <template #body="slotProps">
             {{
-              moment(slotProps.data.attributes.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a",
-              )
+              moment(slotProps.data.attributes.created_at).format('ddd, MMM D, yyyy, h:mm a')
             }}</template
           >
         </Column>
 
         <!-- Actions -->
-        <Column
-          field="Actions"
-          header="Actions"
-          :hidden="!columnVisibility.actions"
-        >
+        <Column field="Actions" header="Actions" :hidden="!columnVisibility.actions">
           <template #body="slotProps">
             <span class="p-buttonset space-x-1">
               <PrimeButton
@@ -335,10 +277,7 @@
         </Column>
 
         <template #empty>
-          <p
-            v-if="!questionsStore.loading"
-            class="p-4 text-center text-2xl bg-blue-200"
-          >
+          <p v-if="!questionsStore.loading" class="p-4 text-center text-2xl bg-blue-200">
             No records found.
           </p>
         </template>
@@ -347,12 +286,10 @@
           <Paginator
             v-if="questionsStore.eligibleQuestions && showPaginator"
             :rows="
-              questionsStore.eligibleQuestions &&
-              questionsStore.eligibleQuestions.meta.per_page
+              questionsStore.eligibleQuestions && questionsStore.eligibleQuestions.meta.per_page
             "
             :total-records="
-              questionsStore.eligibleQuestions &&
-              questionsStore.eligibleQuestions.meta.total
+              questionsStore.eligibleQuestions && questionsStore.eligibleQuestions.meta.total
             "
             @page="onPage"
           >
@@ -360,11 +297,7 @@
           <p
             class="hidden sm:flex p-2 relative bottom-[-20px] w-full justify-center lg:justify-end"
           >
-            {{
-              questionsStore.eligibleQuestions
-                ? questionsStore.eligibleQuestions.meta.total
-                : 0
-            }}
+            {{ questionsStore.eligibleQuestions ? questionsStore.eligibleQuestions.meta.total : 0 }}
             records found.
           </p>
         </template>
@@ -374,37 +307,32 @@
 </template>
 
 <script>
-import { onMounted, watch, ref, reactive } from "vue";
+import { onMounted, watch, ref, reactive } from 'vue'
 
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router'
 
-import { useQuestionnairesQuestionsStore } from "@/stores/questionnaires/questions";
-import { useCategoriesStore } from "@/stores/categories/index";
+import { useQuestionnairesQuestionsStore } from '@/stores/questionnaires/questions'
+import { useCategoriesStore } from '@/stores/categories/index'
 
-import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
+import AdminTableLayout from '@/views/layouts/AdminTableLayout.vue'
 
-import Avatar from "primevue/avatar";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
-import Dropdown from "primevue/dropdown";
-import MenuComponent from "primevue/menu";
-import PrimeButton from "primevue/button";
-import InputText from "primevue/inputtext";
-import Tag from "primevue/tag";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
+import Avatar from 'primevue/avatar'
+import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
+import Dropdown from 'primevue/dropdown'
+import MenuComponent from 'primevue/menu'
+import PrimeButton from 'primevue/button'
+import InputText from 'primevue/inputtext'
+import Tag from 'primevue/tag'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
 
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
-import SortComponent from "@/components/SortComponent.vue";
-import Paginator from "@/components/PaginatorComponent.vue";
+import SortComponent from '@/components/SortComponent.vue'
+import Paginator from '@/components/PaginatorComponent.vue'
 
-import {
-  lowercaseFirstLetter,
-  snake,
-  findRelations,
-  formatText,
-} from "@/helpers";
+import { lowercaseFirstLetter, snake, findRelations, formatText } from '@/helpers'
 
 export default {
   components: {
@@ -420,72 +348,72 @@ export default {
     SortComponent,
     Tag,
     IconField,
-    InputIcon,
+    InputIcon
   },
   props: {
     questionnaireId: { type: String, required: true },
-    refresh: { type: Boolean, default: false },
+    refresh: { type: Boolean, default: false }
   },
-  emits: ["selection-change", "add"],
+  emits: ['selection-change', 'add'],
   setup(props, { emit }) {
-    const router = useRouter();
+    const router = useRouter()
 
-    const questionsStore = useQuestionnairesQuestionsStore();
-    const categoriesStore = useCategoriesStore();
+    const questionsStore = useQuestionnairesQuestionsStore()
+    const categoriesStore = useCategoriesStore()
 
-    const showPaginator = ref(true);
-    const resetButtonClicked = ref(false);
+    const showPaginator = ref(true)
+    const resetButtonClicked = ref(false)
 
-    const selectedQuestions = ref();
+    const selectedQuestions = ref()
 
     // Bulk Actions
-    const showBulkActions = ref(false);
-    const bulkActionMenu = ref();
-    const displayBulkDeleteComponent = ref(false);
-    const bulkDeleteValue = ref("");
+    const showBulkActions = ref(false)
+    const bulkActionMenu = ref()
+    const displayBulkDeleteComponent = ref(false)
+    const bulkDeleteValue = ref('')
     const bulkActions = [
       {
-        label: "Sync Questions",
-        icon: "pi pi-sync",
+        label: 'Sync Questions',
+        icon: 'pi pi-sync',
         command: () => {
-          let value = "";
+          let value = ''
           if (selectedQuestions.value.length === 1) {
-            value = selectedQuestions.value[0]["attributes"]["pretty_id"];
+            value = selectedQuestions.value[0]['attributes']['pretty_id']
           } else {
-            value = selectedQuestions.value.length + " " + "records";
+            value = selectedQuestions.value.length + ' ' + 'records'
           }
 
-          bulkDeleteValue.value = value;
-          displayBulkDeleteComponent.value = true;
+          bulkDeleteValue.value = value
+          displayBulkDeleteComponent.value = true
 
-          emit("selection-change", selectedQuestions.value);
-        },
-      },
-    ];
+          emit('selection-change', selectedQuestions.value)
+        }
+      }
+    ]
 
     // Filter dropdown options
-    const categoriesFilterOptions = reactive([{ name: "All", value: null }]);
+    const categoriesFilterOptions = reactive([{ name: 'All', value: null }])
 
     const answersTypeFilterOptions = reactive([
-      { name: "All", value: null },
-      { name: "Single", value: true },
-      { name: "Multiple", value: false },
-    ]);
+      { name: 'All', value: null },
+      { name: 'Single', value: true },
+      { name: 'Multiple', value: false }
+    ])
     const difficultyFilterOptions = reactive([
-      { name: "All", value: null },
-      { name: "Easy", value: "EASY" },
-      { name: "Medium", value: "MEDIUM" },
-      { name: "Hard", value: "HARD" },
-    ]);
+      { name: 'All', value: null },
+      { name: 'Easy', value: 'EASY' },
+      { name: 'Medium', value: 'MEDIUM' },
+      { name: 'Hard', value: 'HARD' }
+    ])
 
     // Query
-    const filters = ref({ ["categories.name"]: categoriesFilterOptions[0] });
-    const initialQuery = { sort: {}, pagination: { number: 1, size: 10 } };
-    const query = reactive(JSON.parse(JSON.stringify(initialQuery)));
-    const includes = ["categories"];
+    const filters = ref({ ['categories.name']: categoriesFilterOptions[0] })
+    const initialQuery = { sort: {}, pagination: { number: 1, size: 10 } }
+    const query = reactive(JSON.parse(JSON.stringify(initialQuery)))
+    const includes = ['categories']
 
     // Column visibility
-    const columnsMenuRef = ref();
+    const columnsMenuRef = ref()
     const columnVisibility = reactive({
       id: true,
       category: true,
@@ -495,102 +423,102 @@ export default {
       no_of_answers: true,
       no_of_images: true,
       created_at: true,
-      actions: true,
-    });
+      actions: true
+    })
 
     const columns = ref([
       {
-        label: "Id",
+        label: 'Id',
         command: () => {
-          columnVisibility.id = !columnVisibility.id;
-        },
+          columnVisibility.id = !columnVisibility.id
+        }
       },
       {
-        label: "Category",
+        label: 'Category',
         command: () => {
-          columnVisibility.category = !columnVisibility.category;
-        },
+          columnVisibility.category = !columnVisibility.category
+        }
       },
       {
-        label: "Content",
+        label: 'Content',
         command: () => {
-          columnVisibility.content = !columnVisibility.content;
-        },
+          columnVisibility.content = !columnVisibility.content
+        }
       },
 
       {
-        label: "Answers Type",
+        label: 'Answers Type',
         command: () => {
-          columnVisibility.answers_type = !columnVisibility.answers_type;
-        },
+          columnVisibility.answers_type = !columnVisibility.answers_type
+        }
       },
       {
-        label: "Difficulty",
+        label: 'Difficulty',
         command: () => {
-          columnVisibility.difficulty = !columnVisibility.difficulty;
-        },
+          columnVisibility.difficulty = !columnVisibility.difficulty
+        }
       },
       {
-        label: "No of Answers",
+        label: 'No of Answers',
         command: () => {
-          columnVisibility.no_of_answers = !columnVisibility.no_of_answers;
-        },
+          columnVisibility.no_of_answers = !columnVisibility.no_of_answers
+        }
       },
 
       {
-        label: "No of Images",
+        label: 'No of Images',
         command: () => {
-          columnVisibility.no_of_images = !columnVisibility.no_of_images;
-        },
+          columnVisibility.no_of_images = !columnVisibility.no_of_images
+        }
       },
       {
-        label: "Created at",
+        label: 'Created at',
         command: () => {
-          columnVisibility.created_at = !columnVisibility.created_at;
-        },
+          columnVisibility.created_at = !columnVisibility.created_at
+        }
       },
       {
-        label: "Actions",
+        label: 'Actions',
         command: () => {
-          columnVisibility.actions = !columnVisibility.actions;
-        },
-      },
-    ]);
+          columnVisibility.actions = !columnVisibility.actions
+        }
+      }
+    ])
 
     // Actions (display for mobile devices)
-    const actionsMenuRef = ref();
+    const actionsMenuRef = ref()
     const actions = ref([
       {
-        label: "Refresh",
-        icon: "pi pi-refresh",
-        command: () => reset(),
+        label: 'Refresh',
+        icon: 'pi pi-refresh',
+        command: () => reset()
       },
       {
-        label: "Apply Filters",
-        icon: "pi pi-filter",
-        command: () => applyFilters(),
+        label: 'Apply Filters',
+        icon: 'pi pi-filter',
+        command: () => applyFilters()
       },
       {
-        label: "New Question",
-        icon: "pi pi-plus",
-        command: () => router.push({ name: "admin.questions.create" }),
-      },
-    ]);
+        label: 'New Question',
+        icon: 'pi pi-plus',
+        command: () => router.push({ name: 'admin.questions.create' })
+      }
+    ])
 
     //------------------------------------------------------------------------------------------------------------------------------------------------
 
     onMounted(() => {
-      initQuery();
-    });
+      initQuery()
+    })
 
     watch(
       () => props.refresh,
       (shouldRefresh) => {
         if (shouldRefresh) {
-          reset();
+          reset()
         }
-      },
-    );
+      }
+    )
 
     watch(
       () => categoriesStore.categories,
@@ -599,99 +527,99 @@ export default {
           newCategories.data.forEach((category) => {
             categoriesFilterOptions.push({
               name: category.attributes.name,
-              value: category.attributes.name,
-            });
-          });
+              value: category.attributes.name
+            })
+          })
         }
-      },
-    );
+      }
+    )
 
     watch(selectedQuestions, (newSelectedQuestions) => {
       if (newSelectedQuestions && newSelectedQuestions.length > 0) {
-        showBulkActions.value = true;
-        return;
+        showBulkActions.value = true
+        return
       }
-      showBulkActions.value = false;
-    });
+      showBulkActions.value = false
+    })
 
     watch(query, (newQuery) => {
       if (resetButtonClicked.value) {
-        return;
+        return
       }
       questionsStore.getAllEligibleQuestions(props.questionnaireId, {
-        query: { ...newQuery, filters: filters.value, includes },
-      });
-    });
+        query: { ...newQuery, filters: filters.value, includes }
+      })
+    })
 
     function toggleColumnsMenu(event) {
-      columnsMenuRef.value.toggle(event);
+      columnsMenuRef.value.toggle(event)
     }
 
     function applyFilters() {
-      query.pagination.number = 1;
-      showPaginator.value = false;
+      query.pagination.number = 1
+      showPaginator.value = false
 
       questionsStore.getAllEligibleQuestions(props.questionnaireId, {
-        query: { filters: filters.value, ...query, includes },
-      });
+        query: { filters: filters.value, ...query, includes }
+      })
     }
 
     function initQuery() {
       questionsStore
         .getAllEligibleQuestions(props.questionnaireId, {
-          query: { ...query, includes },
+          query: { ...query, includes }
         })
         .then(() => {
-          showPaginator.value = true;
-        });
-      categoriesStore.getAll();
+          showPaginator.value = true
+        })
+      categoriesStore.getAll()
     }
 
     function onPage(event) {
-      query.pagination.number = event.page + 1;
-      query.pagination.size = event.rows;
+      query.pagination.number = event.page + 1
+      query.pagination.size = event.rows
     }
 
     function toggleBulkActions(event) {
-      bulkActionMenu.value.toggle(event);
+      bulkActionMenu.value.toggle(event)
     }
 
     function reset() {
-      selectedQuestions.value = null;
+      selectedQuestions.value = null
 
-      bulkDeleteValue.value = "";
+      bulkDeleteValue.value = ''
 
-      resetButtonClicked.value = true;
+      resetButtonClicked.value = true
       //Reset filters
-      filters.value = {};
+      filters.value = {}
 
       //Reset query
-      Object.assign(query, JSON.parse(JSON.stringify(initialQuery)));
+      Object.assign(query, JSON.parse(JSON.stringify(initialQuery)))
 
       //Reset paginator
-      showPaginator.value = false;
+      showPaginator.value = false
 
-      initQuery();
+      initQuery()
     }
 
     function displayAllColumns() {
       for (let visibility in columnVisibility) {
-        columnVisibility[visibility] = true;
+        columnVisibility[visibility] = true
       }
     }
 
     function hideAllColumns() {
       for (let visibility in columnVisibility) {
-        columnVisibility[visibility] = false;
+        columnVisibility[visibility] = false
       }
     }
 
     function toggleActionsMenu(event) {
-      actionsMenuRef.value.toggle(event);
+      actionsMenuRef.value.toggle(event)
     }
 
     function add(question) {
-      emit("add", question);
+      emit('add', question)
     }
 
     return {
@@ -729,8 +657,8 @@ export default {
       bulkDeleteValue,
       toggleBulkActions,
       toggleActionsMenu,
-      add,
-    };
-  },
-};
+      add
+    }
+  }
+}
 </script>

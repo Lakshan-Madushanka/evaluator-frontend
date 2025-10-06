@@ -86,10 +86,7 @@
           </Column>
 
           <template #empty>
-            <p
-              v-if="!usersStore.loading"
-              class="p-4 text-center text-2xl bg-blue-200"
-            >
+            <p v-if="!usersStore.loading" class="p-4 text-center text-2xl bg-blue-200">
               No records found.
             </p>
           </template>
@@ -98,25 +95,13 @@
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
                 <p class="mr-2">Users</p>
-                <Avatar
-                  class="hover:cursor-pointer"
-                  icon="pi pi-eye"
-                  @click="toggleColumnsMenu"
-                />
-                <MenuComponent
-                  ref="columnsMenuRef"
-                  :model="columns"
-                  :popup="true"
-                >
+                <Avatar class="hover:cursor-pointer" icon="pi pi-eye" @click="toggleColumnsMenu" />
+                <MenuComponent ref="columnsMenuRef" :model="columns" :popup="true">
                   <template #item="slotProps">
                     <div class="flex items-center p-2 hover:cursor-pointer">
                       <i
                         :class="
-                          columnVisibility[
-                            snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
-                            )
-                          ]
+                          columnVisibility[snake(lowercaseFirstLetter(slotProps['item']['label']))]
                             ? 'pi pi-eye'
                             : 'pi pi-eye-slash'
                         "
@@ -133,11 +118,7 @@
                   class="pi pi-align-justify hover:cursor-pointer lg:!hidden"
                   @click="toggleActionsMenu"
                 ></i>
-                <MenuComponent
-                  ref="actionsMenuRef"
-                  :model="actions"
-                  :popup="true"
-                />
+                <MenuComponent ref="actionsMenuRef" :model="actions" :popup="true" />
 
                 <div class="hidden lg:flex">
                   <PrimeButton
@@ -192,9 +173,7 @@
                 </IconField>
               </span>
             </template>
-            <template #body="slotProps">
-              {{ slotProps.data.attributes.name }}</template
-            >
+            <template #body="slotProps"> {{ slotProps.data.attributes.name }}</template>
           </Column>
           <Column
             field="email"
@@ -215,9 +194,7 @@
                 </IconField>
               </span>
             </template>
-            <template #body="slotProps">
-              {{ slotProps.data.attributes.email }}</template
-            >
+            <template #body="slotProps"> {{ slotProps.data.attributes.email }}</template>
           </Column>
           <Column
             v-if="authStore.user.role === 'SUPER_ADMIN'"
@@ -226,11 +203,7 @@
             :hidden="!columnVisibility.role"
           >
             <template #filter
-              ><Dropdown
-                v-model="filters.role"
-                :options="roles"
-                option-label="name"
-              />
+              ><Dropdown v-model="filters.role" :options="roles" option-label="name" />
             </template>
             <template #header>
               <div class="flex justify-between w-full items-center">
@@ -240,7 +213,7 @@
             </template>
             <template #body="slotProps">
               <Tag severity="info">
-                {{ ROLES[slotProps.data.attributes.role]["name"] }}
+                {{ ROLES[slotProps.data.attributes.role]['name'] }}
               </Tag>
             </template>
           </Column>
@@ -248,31 +221,23 @@
             <template #header>
               <div class="flex justify-between items-center w-full">
                 <p>Created at</p>
-                <SortComponent
-                  @direction-change="query.sort.created_at = $event"
-                />
+                <SortComponent @direction-change="query.sort.created_at = $event" />
               </div>
             </template>
             <template #body="slotProps">
               {{
-                moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
-                )
+                moment(slotProps.data.attributes.created_at).format('ddd, MMM D, yyyy, h:mm a')
               }}</template
             >
           </Column>
 
-          <Column
-            field="teams"
-            header="Teams"
-            :hidden="!columnVisibility.teams"
-          >
+          <Column field="teams" header="Teams" :hidden="!columnVisibility.teams">
             <template #body="slotProps">
               <router-link
                 class="inlne-block flex items-center justify-center hover:bg-transparent"
                 :to="{
                   name: 'admin.users.teams.index',
-                  params: { id: slotProps.data.id },
+                  params: { id: slotProps.data.id }
                 }"
               >
                 <Avatar icon="pi pi-eye" />
@@ -290,7 +255,7 @@
                 class="inlne-block flex items-center justify-center hover:bg-transparent"
                 :to="{
                   name: 'admin.users.questionnaires.index',
-                  params: { id: slotProps.data.id },
+                  params: { id: slotProps.data.id }
                 }"
               >
                 <Avatar icon="pi pi-eye" />
@@ -318,10 +283,7 @@
                   title="Assign Questionnaire"
                   @click="attachQuestionnaire(slotProps.data.id)"
                 />
-                <span
-                  v-if="slotProps.data.attributes.role !== 'SUPER_ADMIN'"
-                  class="space-x-1"
-                >
+                <span v-if="slotProps.data.attributes.role !== 'SUPER_ADMIN'" class="space-x-1">
                   <PrimeButton
                     class="p-button-sm"
                     icon="pi pi-file-edit"
@@ -330,7 +292,7 @@
                       () =>
                         router.push({
                           name: 'admin.users.edit',
-                          params: { id: slotProps.data.id },
+                          params: { id: slotProps.data.id }
                         })
                     "
                   />
@@ -368,8 +330,7 @@
             <p
               class="hidden sm:flex p-2 relative bottom-[-20px] w-full justify-center lg:justify-end"
             >
-              {{ usersStore.users ? usersStore.users.meta.total : 0 }} records
-              found.
+              {{ usersStore.users ? usersStore.users.meta.total : 0 }} records found.
             </p>
           </template>
         </DataTable>
@@ -379,42 +340,42 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, watch } from "vue";
-import Paginator from "@/components/PaginatorComponent.vue";
+import { onMounted, ref, reactive, watch } from 'vue'
+import Paginator from '@/components/PaginatorComponent.vue'
 
-import { useAuthStore } from "@/stores/auth";
-import { useUsersStore } from "@/stores/users";
-import { useTeamsStore } from "@/stores/teams";
-import { useUsersTeamsStore } from "@/stores/users/teams";
+import { useAuthStore } from '@/stores/auth'
+import { useUsersStore } from '@/stores/users'
+import { useTeamsStore } from '@/stores/teams'
+import { useUsersTeamsStore } from '@/stores/users/teams'
 
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router'
 
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
-import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
+import AdminTableLayout from '@/views/layouts/AdminTableLayout.vue'
 
-import Avatar from "primevue/avatar";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
-import DialogModal from "primevue/dialog";
-import PrimeButton from "primevue/button";
-import Tag from "primevue/tag";
-import MenuComponent from "primevue/menu";
-import MultiSelect from "primevue/multiselect";
-import InputText from "primevue/inputtext";
-import Dropdown from "primevue/dropdown";
-import ConfirmDialog from "primevue/confirmdialog";
-import { useConfirm } from "primevue/useconfirm";
-import { useToast } from "primevue/usetoast";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
+import Avatar from 'primevue/avatar'
+import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
+import DialogModal from 'primevue/dialog'
+import PrimeButton from 'primevue/button'
+import Tag from 'primevue/tag'
+import MenuComponent from 'primevue/menu'
+import MultiSelect from 'primevue/multiselect'
+import InputText from 'primevue/inputtext'
+import Dropdown from 'primevue/dropdown'
+import ConfirmDialog from 'primevue/confirmdialog'
+import { useConfirm } from 'primevue/useconfirm'
+import { useToast } from 'primevue/usetoast'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
 
-import BulkDeleteComponent from "@/components/BulkDeleteComponent.vue";
-import SortComponent from "@/components/SortComponent.vue";
-import AttachQuestionnaireViewComponent from "@/components/questionnaires/AttachView.vue";
+import BulkDeleteComponent from '@/components/BulkDeleteComponent.vue'
+import SortComponent from '@/components/SortComponent.vue'
+import AttachQuestionnaireViewComponent from '@/components/questionnaires/AttachView.vue'
 
-import { ROLES } from "@/constants";
-import { lowercaseFirstLetter, snake } from "@/helpers";
+import { ROLES } from '@/constants'
+import { lowercaseFirstLetter, snake } from '@/helpers'
 
 export default {
   components: {
@@ -435,57 +396,57 @@ export default {
     BulkDeleteComponent,
     AttachQuestionnaireViewComponent,
     IconField,
-    InputIcon,
+    InputIcon
   },
   setup() {
     onMounted(() => {
       usersStore.getAll({
-        query: { pagination: { number: 1, size: 10 } },
-      });
-    });
+        query: { pagination: { number: 1, size: 10 } }
+      })
+    })
 
-    const confirm = useConfirm();
-    const toast = useToast();
+    const confirm = useConfirm()
+    const toast = useToast()
 
-    const usersStore = useUsersStore();
-    const authStore = useAuthStore();
-    const teamsStore = useTeamsStore();
-    const usersTeamsStore = useUsersTeamsStore();
+    const usersStore = useUsersStore()
+    const authStore = useAuthStore()
+    const teamsStore = useTeamsStore()
+    const usersTeamsStore = useUsersTeamsStore()
 
-    const router = useRouter();
+    const router = useRouter()
 
-    const displayAttachTeamsDialog = ref(false);
-    let selectedUserIdToAttachTeams = "";
-    const availableTeams = ref([]);
-    const selectedTeams = ref([]);
+    const displayAttachTeamsDialog = ref(false)
+    let selectedUserIdToAttachTeams = ''
+    const availableTeams = ref([])
+    const selectedTeams = ref([])
 
-    const displayAssignQuestionnaireView = ref(false);
-    const userIdToAttachQuestionnaire = ref();
+    const displayAssignQuestionnaireView = ref(false)
+    const userIdToAttachQuestionnaire = ref()
 
     const query = reactive({
       sort: {},
-      pagination: { number: 1, size: 10 },
-    });
+      pagination: { number: 1, size: 10 }
+    })
 
-    const actionsMenuRef = ref();
+    const actionsMenuRef = ref()
     const actions = ref([
       {
-        label: "Refresh",
-        icon: "pi pi-refresh",
-        command: () => reset(),
+        label: 'Refresh',
+        icon: 'pi pi-refresh',
+        command: () => reset()
       },
       {
-        label: "Apply Filters",
-        icon: "pi pi-filter",
-        command: () => applyFilters(),
+        label: 'Apply Filters',
+        icon: 'pi pi-filter',
+        command: () => applyFilters()
       },
       {
-        label: "Add User",
-        icon: "pi pi-user-plus",
-        command: () => router.push({ name: "admin.users.create" }),
-        visible: authStore.user.role === "SUPER_ADMIN",
-      },
-    ]);
+        label: 'Add User',
+        icon: 'pi pi-user-plus',
+        command: () => router.push({ name: 'admin.users.create' }),
+        visible: authStore.user.role === 'SUPER_ADMIN'
+      }
+    ])
 
     const columnVisibility = reactive({
       id: true,
@@ -495,265 +456,259 @@ export default {
       created_at: true,
       teams: true,
       questionnaires: true,
-      actions: true,
-    });
-    const columnsMenuRef = ref();
+      actions: true
+    })
+    const columnsMenuRef = ref()
     const columns = ref([
       {
-        label: "Id",
+        label: 'Id',
         command: () => {
-          columnVisibility.id = !columnVisibility.id;
-        },
+          columnVisibility.id = !columnVisibility.id
+        }
       },
       {
-        label: "Name",
+        label: 'Name',
         command: () => {
-          columnVisibility.name = !columnVisibility.name;
-        },
+          columnVisibility.name = !columnVisibility.name
+        }
       },
       {
-        label: "Email",
+        label: 'Email',
         command: () => {
-          columnVisibility.email = !columnVisibility.email;
-        },
+          columnVisibility.email = !columnVisibility.email
+        }
       },
       {
-        label: "Role",
+        label: 'Role',
         command: () => {
-          columnVisibility.role = !columnVisibility.role;
-        },
+          columnVisibility.role = !columnVisibility.role
+        }
       },
       {
-        label: "Created at",
+        label: 'Created at',
         command: () => {
-          columnVisibility.created_at = !columnVisibility.created_at;
-        },
+          columnVisibility.created_at = !columnVisibility.created_at
+        }
       },
       {
-        label: "Teams",
+        label: 'Teams',
         command: () => {
-          columnVisibility.teams = !columnVisibility.teams;
-        },
+          columnVisibility.teams = !columnVisibility.teams
+        }
       },
       {
-        label: "Questionnaires",
+        label: 'Questionnaires',
         command: () => {
-          columnVisibility.questionnaires = !columnVisibility.questionnaires;
-        },
+          columnVisibility.questionnaires = !columnVisibility.questionnaires
+        }
       },
       {
-        label: "Actions",
+        label: 'Actions',
         command: () => {
-          columnVisibility.actions = !columnVisibility.actions;
+          columnVisibility.actions = !columnVisibility.actions
         },
-        visible: authStore.user.role === "SUPER_ADMIN",
-      },
-    ]);
+        visible: authStore.user.role === 'SUPER_ADMIN'
+      }
+    ])
 
-    const showBulkActions = ref(false);
-    const bulkActionMenu = ref();
-    const displayBulkDeleteComponent = ref(false);
-    const bulkDeleteValue = ref("");
+    const showBulkActions = ref(false)
+    const bulkActionMenu = ref()
+    const displayBulkDeleteComponent = ref(false)
+    const bulkDeleteValue = ref('')
 
-    const selectedUsers = ref();
-    const filters = ref({ role: { name: "All", value: "" } });
-    const showPaginator = ref(true);
+    const selectedUsers = ref()
+    const filters = ref({ role: { name: 'All', value: '' } })
+    const showPaginator = ref(true)
 
     const roles = [
-      { name: "All", value: "" },
-      { name: "Super Admin", value: "SUPER_ADMIN" },
-      { name: "Admin", value: "ADMIN" },
-      { name: "Regular", value: "REGULAR" },
-    ];
+      { name: 'All', value: '' },
+      { name: 'Super Admin', value: 'SUPER_ADMIN' },
+      { name: 'Admin', value: 'ADMIN' },
+      { name: 'Regular', value: 'REGULAR' }
+    ]
 
     const bulkActions = [
       {
-        label: "Delete selected",
-        icon: "pi pi-trash",
+        label: 'Delete selected',
+        icon: 'pi pi-trash',
         command: () => {
-          let value = "";
+          let value = ''
           if (selectedUsers.value.length === 1) {
-            if (
-              selectedUsers.value[0]["attributes"]["role"] === "SUPER_ADMIN"
-            ) {
+            if (selectedUsers.value[0]['attributes']['role'] === 'SUPER_ADMIN') {
               toast.add({
-                severity: "warn",
-                summary: "Super Admin cannot be deleted !",
-                life: 5000,
-              });
-              return;
+                severity: 'warn',
+                summary: 'Super Admin cannot be deleted !',
+                life: 5000
+              })
+              return
             }
-            value = selectedUsers.value[0]["attributes"]["email"];
+            value = selectedUsers.value[0]['attributes']['email']
           } else {
-            value = selectedUsers.value.length + " " + "records";
+            value = selectedUsers.value.length + ' ' + 'records'
           }
 
-          bulkDeleteValue.value = value;
-          displayBulkDeleteComponent.value = true;
-        },
-      },
-    ];
+          bulkDeleteValue.value = value
+          displayBulkDeleteComponent.value = true
+        }
+      }
+    ]
 
     watch(query, (newQuery) => {
-      usersStore.getAll({ query: { ...newQuery, filters: filters.value } });
-    });
+      usersStore.getAll({ query: { ...newQuery, filters: filters.value } })
+    })
 
     // We need to reset show paginator if it is disabled
     watch(usersStore, (newUsersStore) => {
       if (!newUsersStore.loading) {
-        showPaginator.value = true;
+        showPaginator.value = true
       }
 
-      if (newUsersStore.status === "deleted") {
-        displayBulkDeleteComponent.value = false;
-        selectedUsers.value = [];
-        usersStore.getAll({ query: { ...query, filters: filters.value } });
+      if (newUsersStore.status === 'deleted') {
+        displayBulkDeleteComponent.value = false
+        selectedUsers.value = []
+        usersStore.getAll({ query: { ...query, filters: filters.value } })
       }
-    });
+    })
 
     watch(selectedUsers, (newSelectedUsers) => {
       if (newSelectedUsers && newSelectedUsers.length > 0) {
-        showBulkActions.value = true;
-        return;
+        showBulkActions.value = true
+        return
       }
-      showBulkActions.value = false;
-    });
+      showBulkActions.value = false
+    })
 
     watch(
       () => usersTeamsStore.status,
       (status) => {
-        console.log("status", status);
+        console.log('status', status)
 
-        if (status === "attached") {
-          displayAttachTeamsDialog.value = false;
+        if (status === 'attached') {
+          displayAttachTeamsDialog.value = false
         }
-      },
-    );
+      }
+    )
 
     function onPage(event) {
-      query.pagination.number = event.page + 1;
-      query.pagination.size = event.rows;
+      query.pagination.number = event.page + 1
+      query.pagination.size = event.rows
     }
 
     function applyFilters() {
-      query.pagination.number = 1;
-      showPaginator.value = false; // Reset the pagination
+      query.pagination.number = 1
+      showPaginator.value = false // Reset the pagination
 
-      usersStore.getAll({ query: { filters: filters.value, ...query } });
+      usersStore.getAll({ query: { filters: filters.value, ...query } })
     }
 
     function reset() {
       // Reser selected users
-      selectedUsers.value = [];
+      selectedUsers.value = []
 
       //Reset pagnator
-      showPaginator.value = false;
-      query.pagination = { number: 1, size: 10 };
+      showPaginator.value = false
+      query.pagination = { number: 1, size: 10 }
 
       //Reset filters
-      filters.value = { role: { name: "All", value: "" } };
+      filters.value = { role: { name: 'All', value: '' } }
 
       //Reset sort
-      query.sort = {};
+      query.sort = {}
 
       usersStore.getAll({
-        query: { pagination: { number: 1, size: 10 } },
-      });
+        query: { pagination: { number: 1, size: 10 } }
+      })
     }
 
     function toggleBulkActions(event) {
-      bulkActionMenu.value.toggle(event);
+      bulkActionMenu.value.toggle(event)
     }
 
     function toggleColumnsMenu(event) {
-      columnsMenuRef.value.toggle(event);
+      columnsMenuRef.value.toggle(event)
     }
 
     function toggleActionsMenu(event) {
-      actionsMenuRef.value.toggle(event);
+      actionsMenuRef.value.toggle(event)
     }
 
     function deleteUser(id) {
       confirm.require({
-        message:
-          "Do you want to delete this record? [This action cannot be undone !]",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        iconClass: "bg-red-500",
-        acceptClass: "p-button-danger",
-        acceptLabel: "Yes Delete",
+        message: 'Do you want to delete this record? [This action cannot be undone !]',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        iconClass: 'bg-red-500',
+        acceptClass: 'p-button-danger',
+        acceptLabel: 'Yes Delete',
         accept: () => {
-          usersStore.deleteUser(id);
+          usersStore.deleteUser(id)
         },
-        reject: () => {},
-      });
+        reject: () => {}
+      })
     }
 
     function onBulkDeleteConfirmed() {
-      getSelectedUsersIds();
-      usersStore.bulkDeleteUsers({ ids: getSelectedUsersIds() });
+      getSelectedUsersIds()
+      usersStore.bulkDeleteUsers({ ids: getSelectedUsersIds() })
     }
 
     function getSelectedUsersIds() {
-      let ids = [];
+      let ids = []
 
       selectedUsers.value.forEach((element) => {
-        if (element.attributes.role !== "SUPER_ADMIN") {
-          ids.push(element.id);
+        if (element.attributes.role !== 'SUPER_ADMIN') {
+          ids.push(element.id)
         }
-      });
+      })
 
-      return ids;
+      return ids
     }
 
     function attachQuestionnaire(userId) {
-      displayAssignQuestionnaireView.value = true;
-      userIdToAttachQuestionnaire.value = userId;
+      displayAssignQuestionnaireView.value = true
+      userIdToAttachQuestionnaire.value = userId
     }
 
     async function attachTeams(userId) {
-      selectedUserIdToAttachTeams = userId;
+      selectedUserIdToAttachTeams = userId
 
-      selectedTeams.value = [];
+      selectedTeams.value = []
 
-      displayAttachTeamsDialog.value = true;
+      displayAttachTeamsDialog.value = true
 
-      await teamsStore.getAll();
+      await teamsStore.getAll()
 
-      const tmpAvailableTeams = [];
+      const tmpAvailableTeams = []
 
       teamsStore.teams.data?.forEach((team) => {
         tmpAvailableTeams.push({
           name: team.attributes.name,
-          id: team.id,
-        });
-      });
+          id: team.id
+        })
+      })
 
-      availableTeams.value = tmpAvailableTeams;
+      availableTeams.value = tmpAvailableTeams
     }
 
     function onConfirmTeamAttach() {
       confirm.require({
-        message: "Do you want to attach selected teams(s) to the user",
-        header: "Attach Confirmation",
-        icon: "pi pi-exclamation-triangle",
+        message: 'Do you want to attach selected teams(s) to the user',
+        header: 'Attach Confirmation',
+        icon: 'pi pi-exclamation-triangle',
         rejectProps: {
-          label: "Cancel",
-          severity: "secondary",
-          outlined: true,
+          label: 'Cancel',
+          severity: 'secondary',
+          outlined: true
         },
         acceptProps: {
-          label: "Yes Attach",
-          severity: "warn",
+          label: 'Yes Attach',
+          severity: 'warn'
         },
         accept: () => {
-          usersTeamsStore.attachTeams(
-            selectedUserIdToAttachTeams,
-            selectedTeams.value,
-          );
+          usersTeamsStore.attachTeams(selectedUserIdToAttachTeams, selectedTeams.value)
         },
-        reject: () => {},
-      });
+        reject: () => {}
+      })
     }
 
     return {
@@ -796,8 +751,8 @@ export default {
       router,
       attachQuestionnaire,
       attachTeams,
-      onConfirmTeamAttach,
-    };
-  },
-};
+      onConfirmTeamAttach
+    }
+  }
+}
 </script>

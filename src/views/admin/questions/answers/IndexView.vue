@@ -11,20 +11,14 @@
     </div>
 
     <div class="mt-8">
-      <Skeleton
-        v-if="questionsAnswersStore.loading"
-        class="mb-2 !w-full !h-72"
-      ></Skeleton>
+      <Skeleton v-if="questionsAnswersStore.loading" class="mb-2 !w-full !h-72"></Skeleton>
 
       <div v-else id="answersList" ref="answersListElm" class="shadow">
         <div
           class="flex justify-between px-4 items-center w-full py-8 bg-gray-100 border-y-2 border-neutral-200"
         >
           <div class="text-lg font-bold">
-            <p>
-              List of Answers ({{ data.answers.length }} /
-              {{ route.query.total_answers }})
-            </p>
+            <p>List of Answers ({{ data.answers.length }} / {{ route.query.total_answers }})</p>
           </div>
         </div>
 
@@ -45,20 +39,14 @@
               <div class="space-y-1">
                 <p>
                   ID
-                  <Tag severity="secondary">{{
-                    answer.attributes.pretty_id
-                  }}</Tag>
+                  <Tag severity="secondary">{{ answer.attributes.pretty_id }}</Tag>
                 </p>
                 <p>
                   Images count
-                  <Tag severity="secondary">{{
-                    answer.attributes.images_count
-                  }}</Tag>
+                  <Tag severity="secondary">{{ answer.attributes.images_count }}</Tag>
                 </p>
                 <div class="cursor-pointer">
-                  <label
-                    class="mr-2"
-                    :for="`answer_${answer.attributes.pretty_id}`"
+                  <label class="mr-2" :for="`answer_${answer.attributes.pretty_id}`"
                     >Correct Answer</label
                   >
                   <Checkbox
@@ -75,25 +63,15 @@
 
       <div class="mt-8 flex justify-center flex-wrap items-start space-x-2">
         <PrimeButton
-          :label="
-            questionsAnswersStore.status === 'syncing' ? 'Syncing' : 'Sync All'
-          "
+          :label="questionsAnswersStore.status === 'syncing' ? 'Syncing' : 'Sync All'"
           icon="pi pi-history"
           class="!mb-2 p-button-warning"
           :loading="questionsAnswersStore.status === 'syncing'"
           @click="syncAnswers"
         />
         <span v-if="data.answers.length > 0" class="p-buttonset mb-2 space-x-2">
-          <PrimeButton
-            label="Select All"
-            icon="pi pi-clone"
-            @click="selectAllAnswers"
-          />
-          <PrimeButton
-            label="Deselect All"
-            icon="pi pi-times"
-            @click="deselectAllAnswers"
-          />
+          <PrimeButton label="Select All" icon="pi pi-clone" @click="selectAllAnswers" />
+          <PrimeButton label="Deselect All" icon="pi pi-times" @click="deselectAllAnswers" />
         </span>
         <PrimeButton
           v-if="selectedAnswers.length > 0"
@@ -122,20 +100,13 @@
             Answer id is required
             {{ questionsAnswersStore.errors.questionId }}
           </p>
-          <p
-            v-if="questionsAnswersStore.errors.questionId"
-            class="text-sm m-2 text-red-500"
-          >
+          <p v-if="questionsAnswersStore.errors.questionId" class="text-sm m-2 text-red-500">
             {{ questionsAnswersStore.errors.questionId }}
           </p>
         </div>
 
         <PrimeButton
-          :label="
-            questionsAnswersStore.status === 'searching'
-              ? 'Searching'
-              : 'Search'
-          "
+          :label="questionsAnswersStore.status === 'searching' ? 'Searching' : 'Search'"
           icon="pi pi-search"
           icon-pos="right"
           :loading="questionsAnswersStore.status === 'searching'"
@@ -196,7 +167,7 @@
     <div
       v-observe-visibility="{
         callback: onAnswerListVisible,
-        once: true,
+        once: true
       }"
       class="invisible"
     ></div>
@@ -204,22 +175,22 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue'
 
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import { useQuestionsAnswersStore } from "@/stores/questions/answers";
+import { useQuestionsAnswersStore } from '@/stores/questions/answers'
 
-import Card from "primevue/card";
-import Checkbox from "primevue/checkbox";
-import ConfirmDialog from "primevue/confirmdialog";
-import InputText from "primevue/inputtext";
-import PrimeButton from "primevue/button";
-import Skeleton from "primevue/skeleton";
-import Tag from "primevue/tag";
-import { useConfirm } from "primevue/useconfirm";
+import Card from 'primevue/card'
+import Checkbox from 'primevue/checkbox'
+import ConfirmDialog from 'primevue/confirmdialog'
+import InputText from 'primevue/inputtext'
+import PrimeButton from 'primevue/button'
+import Skeleton from 'primevue/skeleton'
+import Tag from 'primevue/tag'
+import { useConfirm } from 'primevue/useconfirm'
 
-import AnswerList from "@/views/admin/questions/answers/components/AnswerList.vue";
+import AnswerList from '@/views/admin/questions/answers/components/AnswerList.vue'
 
 export default {
   components: {
@@ -230,241 +201,235 @@ export default {
     Skeleton,
     InputText,
     Tag,
-    AnswerList,
+    AnswerList
   },
   setup() {
-    const route = useRoute();
+    const route = useRoute()
 
-    const confirm = useConfirm();
+    const confirm = useConfirm()
 
-    const questionsAnswersStore = useQuestionsAnswersStore();
+    const questionsAnswersStore = useQuestionsAnswersStore()
 
-    const showAnswerList = ref(false);
+    const showAnswerList = ref(false)
 
-    const shouldRefreshAnswerList = ref(false);
+    const shouldRefreshAnswerList = ref(false)
 
     const data = reactive({
-      answers: [],
-    });
-    const selectedAnswers = ref([]);
-    const questionId = ref("");
-    const queestionIdSearchButtonClicked = ref(false);
-    const addToListError = ref("");
+      answers: []
+    })
+    const selectedAnswers = ref([])
+    const questionId = ref('')
+    const queestionIdSearchButtonClicked = ref(false)
+    const addToListError = ref('')
 
     onMounted(() => {
-      getData();
-    });
+      getData()
+    })
 
     watch(
       () => questionsAnswersStore.answers,
       (newAnswers) => {
-        data.answers = JSON.parse(JSON.stringify(newAnswers));
-      },
-    );
+        data.answers = JSON.parse(JSON.stringify(newAnswers))
+      }
+    )
 
     function getData() {
       questionsAnswersStore.getAll(route.params.id).then(() => {
-        shouldRefreshAnswerList.value = true;
-      });
+        shouldRefreshAnswerList.value = true
+      })
     }
 
     function removeSelectedAnswers() {
-      let selectedAnswersLength = selectedAnswers.value.length;
-      let answers = JSON.parse(JSON.stringify(data.answers));
+      let selectedAnswersLength = selectedAnswers.value.length
+      let answers = JSON.parse(JSON.stringify(data.answers))
 
-      for (
-        let selectedAnswer = 0;
-        selectedAnswer < selectedAnswersLength;
-        selectedAnswer++
-      ) {
+      for (let selectedAnswer = 0; selectedAnswer < selectedAnswersLength; selectedAnswer++) {
         for (let answer = 0; answer < answers.length; answer++) {
           if (selectedAnswers.value[selectedAnswer].id === answers[answer].id) {
-            answers.splice(answer, 1);
-            break;
+            answers.splice(answer, 1)
+            break
           }
         }
       }
 
-      data.answers = answers;
-      selectedAnswers.value = [];
+      data.answers = answers
+      selectedAnswers.value = []
     }
 
     function searchAnswer() {
-      queestionIdSearchButtonClicked.value = true;
-      if (questionId.value === "") {
-        return;
+      queestionIdSearchButtonClicked.value = true
+      if (questionId.value === '') {
+        return
       }
 
-      questionsAnswersStore.checkAnswersExists(questionId.value);
+      questionsAnswersStore.checkAnswersExists(questionId.value)
     }
 
     function canAddToList() {
-      const answer = questionsAnswersStore.answer;
+      const answer = questionsAnswersStore.answer
 
       if (data.answers.length === parseInt(route.query.total_answers)) {
-        addToListError.value = "No of allowed total answers exceeded";
-        return false;
+        addToListError.value = 'No of allowed total answers exceeded'
+        return false
       }
 
       if (checkAnswerExists(answer)) {
-        addToListError.value = "Answer already exists";
+        addToListError.value = 'Answer already exists'
 
-        return false;
+        return false
       }
-      return true;
+      return true
     }
 
     function checkAnswerExists(answer) {
       for (const a of data.answers) {
         if (a.id === answer.id) {
-          return true;
+          return true
         }
       }
 
-      return false;
+      return false
     }
 
     function addToList(answer = null) {
       if (!answer) {
-        answer = questionsAnswersStore.answer;
+        answer = questionsAnswersStore.answer
       }
-      answer.attributes.correct_answer = false;
-      data.answers.unshift(answer);
+      answer.attributes.correct_answer = false
+      data.answers.unshift(answer)
     }
 
     function getListAnswersCount() {
-      let count = 0;
+      let count = 0
 
       data.answers.forEach((question) => {
         if (question.show) {
-          count++;
+          count++
         }
-      });
+      })
 
-      return count;
+      return count
     }
 
     function selectAnswer(event, question) {
-      const length = selectedAnswers.value.length;
+      const length = selectedAnswers.value.length
       for (let $i = 0; $i < length; $i++) {
         if (selectedAnswers.value[$i].id === question.id) {
-          selectedAnswers.value.splice($i, 1);
-          return;
+          selectedAnswers.value.splice($i, 1)
+          return
         }
       }
-      selectedAnswers.value.push(question);
+      selectedAnswers.value.push(question)
     }
 
     function deselectAllAnswers() {
-      selectedAnswers.value = [];
+      selectedAnswers.value = []
     }
 
     function selectAllAnswers() {
-      selectedAnswers.value = data.answers;
+      selectedAnswers.value = data.answers
     }
 
     function reset() {
-      shouldRefreshAnswerList.value = false;
-      selectedAnswers.value = [];
-      questionId.value = "";
-      queestionIdSearchButtonClicked.value = false;
-      getData();
+      shouldRefreshAnswerList.value = false
+      selectedAnswers.value = []
+      questionId.value = ''
+      queestionIdSearchButtonClicked.value = false
+      getData()
     }
 
     function isAnswerSelected(question) {
-      const length = selectedAnswers.value.length;
+      const length = selectedAnswers.value.length
       for (let $i = 0; $i < length; $i++) {
         if (selectedAnswers.value[$i].id === question.id) {
-          return true;
+          return true
         }
       }
 
-      return false;
+      return false
     }
 
     function prepareAnswersToSync() {
-      let answers = [];
+      let answers = []
 
       data.answers.forEach((answer) => {
-        let tmpAnswer = {};
-        tmpAnswer.id = answer.id;
-        tmpAnswer.correct = answer.attributes.correct_answer;
+        let tmpAnswer = {}
+        tmpAnswer.id = answer.id
+        tmpAnswer.correct = answer.attributes.correct_answer
 
-        answers.push(tmpAnswer);
-      });
+        answers.push(tmpAnswer)
+      })
 
-      return answers;
+      return answers
     }
 
     function syncAnswers() {
       questionsAnswersStore.syncAnswers(route.params.id, {
-        answers: prepareAnswersToSync(),
-      });
+        answers: prepareAnswersToSync()
+      })
     }
 
     function onAnswerListVisible(isVisible) {
       if (isVisible) {
-        showAnswerList.value = true;
+        showAnswerList.value = true
       }
     }
 
     function onSelectionChange(answers) {
       if (!Array.isArray(answers)) {
-        answers = [answers];
+        answers = [answers]
       }
 
       if (answers.length > route.query.total_answers - data.answers.length) {
-        showWarningDialog("No of allowed questions limit exceeded!");
-        return;
+        showWarningDialog('No of allowed questions limit exceeded!')
+        return
       }
 
       for (let ans of answers) {
         if (checkAnswerExists(ans)) {
-          showWarningDialog("Answer already exists with id " + ans.id);
-          return;
+          showWarningDialog('Answer already exists with id ' + ans.id)
+          return
         }
       }
 
       answers.forEach((answer) => {
-        addToList(answer);
-      });
+        addToList(answer)
+      })
 
-      showSuccessDialog(
-        "Selected answers added to list; Don't forget to sync!",
-      );
+      showSuccessDialog("Selected answers added to list; Don't forget to sync!")
     }
 
     function showWarningDialog(msg) {
       confirm.require({
         message: msg,
-        header: "Warning",
-        icon: "pi pi-info-circle",
-        rejectLabel: "Cancel",
+        header: 'Warning',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancel',
         rejectProps: {
-          label: "Cancel",
-          severity: "warn",
-          outlined: true,
+          label: 'Cancel',
+          severity: 'warn',
+          outlined: true
         },
         acceptProps: {
-          class: "!hidden",
-        },
-      });
+          class: '!hidden'
+        }
+      })
     }
 
     function showSuccessDialog(msg) {
       confirm.require({
         message: msg,
-        header: "Success",
-        icon: "pi pi-check",
+        header: 'Success',
+        icon: 'pi pi-check',
         rejectProps: {
-          class: "!hidden",
+          class: '!hidden'
         },
         acceptProps: {
-          label: "Back",
-          severity: "success",
-          outlined: true,
-        },
-      });
+          label: 'Back',
+          severity: 'success',
+          outlined: true
+        }
+      })
     }
 
     return {
@@ -489,10 +454,10 @@ export default {
       deselectAllAnswers,
       syncAnswers,
       onAnswerListVisible,
-      onSelectionChange,
-    };
-  },
-};
+      onSelectionChange
+    }
+  }
+}
 </script>
 
 <style scoped>

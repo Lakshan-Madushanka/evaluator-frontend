@@ -5,10 +5,7 @@
     <template #table>
       <div>
         <DataTable
-          :value="
-            questionnairesStore.questionnaires &&
-            questionnairesStore.questionnaires.data
-          "
+          :value="questionnairesStore.questionnaires && questionnairesStore.questionnaires.data"
           responsive-layout="scroll"
           :loading="questionnairesStore.loading"
           striped-rows
@@ -16,10 +13,7 @@
           filter-display="row"
         >
           <template #empty>
-            <p
-              v-if="!questionnairesStore.loading"
-              class="p-4 text-center text-2xl bg-blue-200"
-            >
+            <p v-if="!questionnairesStore.loading" class="p-4 text-center text-2xl bg-blue-200">
               No records found.
             </p>
           </template>
@@ -28,44 +22,24 @@
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
                 <p class="mr-2">Questionnaires</p>
-                <Avatar
-                  class="hover:cursor-pointer"
-                  icon="pi pi-eye"
-                  @click="toggleColumnsMenu"
-                />
-                <MenuComponent
-                  ref="columnsMenuRef"
-                  :model="columns"
-                  :popup="true"
-                >
+                <Avatar class="hover:cursor-pointer" icon="pi pi-eye" @click="toggleColumnsMenu" />
+                <MenuComponent ref="columnsMenuRef" :model="columns" :popup="true">
                   <template #item="slotProps">
-                    <div
-                      class="flex items-center p-2 hover:cursor-pointer w-full"
-                    >
+                    <div class="flex items-center p-2 hover:cursor-pointer w-full">
                       <div
                         v-if="slotProps['item']['label'] === 'Bulk Controllers'"
                         class="flex justify-between w-full text-sm text-blue-400"
                       >
-                        <span
-                          class="hover:text-blue-800"
-                          @click="displayAllColumns"
+                        <span class="hover:text-blue-800" @click="displayAllColumns"
                           >Display All</span
                         >
-                        <span
-                          class="hover:text-blue-800"
-                          @click="hideAllColumns"
-                          >Hide All</span
-                        >
+                        <span class="hover:text-blue-800" @click="hideAllColumns">Hide All</span>
                       </div>
                       <template v-else>
                         <i
                           :class="
                             columnVisibility[
-                              snake(
-                                lowercaseFirstLetter(
-                                  slotProps['item']['label'],
-                                ),
-                              ).toLowerCase()
+                              snake(lowercaseFirstLetter(slotProps['item']['label'])).toLowerCase()
                             ]
                               ? 'pi pi-eye'
                               : 'pi pi-eye-slash'
@@ -84,11 +58,7 @@
                   class="pi pi-align-justify hover:cursor-pointer lg:!hidden"
                   @click="toggleActionsMenu"
                 ></i>
-                <MenuComponent
-                  ref="actionsMenuRef"
-                  :model="actions"
-                  :popup="true"
-                />
+                <MenuComponent ref="actionsMenuRef" :model="actions" :popup="true" />
 
                 <div class="hidden lg:flex">
                   <PrimeButton
@@ -110,9 +80,7 @@
                     label="New Questionnaire"
                     class="!py-1 !mr-4"
                     icon-pos="right"
-                    @click="
-                      () => router.push({ name: 'admin.questionnaires.create' })
-                    "
+                    @click="() => router.push({ name: 'admin.questionnaires.create' })"
                   />
                 </div>
               </div>
@@ -126,22 +94,14 @@
 
           <Column field="id" header="Id" :hidden="!columnVisibility.id">
             <template #body="slotProps">
-              <div
-                :id="slotProps.data.id"
-                v-copy-to-clipboard="slotProps.data.id"
-                class="mr-6"
-              >
+              <div :id="slotProps.data.id" v-copy-to-clipboard="slotProps.data.id" class="mr-6">
                 {{ slotProps.data.id }}
               </div>
             </template>
           </Column>
 
           <!-- Category -->
-          <Column
-            header="Category"
-            :show-filter-menu="false"
-            :hidden="!columnVisibility.category"
-          >
+          <Column header="Category" :show-filter-menu="false" :hidden="!columnVisibility.category">
             <template #filter>
               <Dropdown
                 v-model="filters['categories.name']"
@@ -151,12 +111,9 @@
               />
             </template>
             <template #body="slotProps">
-              <template
-                v-if="slotProps.data.relationships.categories.data.length > 0"
-              >
+              <template v-if="slotProps.data.relationships.categories.data.length > 0">
                 <Tag
-                  v-for="category in slotProps.data.relationships.categories
-                    .data"
+                  v-for="category in slotProps.data.relationships.categories.data"
                   :key="category.id"
                   severity="info"
                   class="mr-1"
@@ -165,7 +122,7 @@
                     findRelations(
                       questionnairesStore.questionnaires.included,
                       category.id,
-                      category.type,
+                      category.type
                     ).attributes.name
                   }}
                 </Tag>
@@ -193,9 +150,7 @@
                 </IconField>
               </span>
             </template>
-            <template #body="slotProps">
-              {{ slotProps.data.attributes.name }}</template
-            >
+            <template #body="slotProps"> {{ slotProps.data.attributes.name }}</template>
           </Column>
 
           <!-- Difficulty -->
@@ -214,21 +169,15 @@
             </template>
 
             <template #body="slotProps">
-              <Tag
-                v-if="slotProps.data.attributes.difficulty === 'HARD'"
-                severity="danger"
-                >{{ slotProps.data.attributes.difficulty }}</Tag
-              >
-              <Tag
-                v-else-if="slotProps.data.attributes.difficulty === 'MEDIUM'"
-                severity="warn"
-                >{{ slotProps.data.attributes.difficulty }}</Tag
-              >
-              <Tag
-                v-else-if="slotProps.data.attributes.difficulty === 'EASY'"
-                severity="info"
-                >{{ slotProps.data.attributes.difficulty }}</Tag
-              >
+              <Tag v-if="slotProps.data.attributes.difficulty === 'HARD'" severity="danger">{{
+                slotProps.data.attributes.difficulty
+              }}</Tag>
+              <Tag v-else-if="slotProps.data.attributes.difficulty === 'MEDIUM'" severity="warn">{{
+                slotProps.data.attributes.difficulty
+              }}</Tag>
+              <Tag v-else-if="slotProps.data.attributes.difficulty === 'EASY'" severity="info">{{
+                slotProps.data.attributes.difficulty
+              }}</Tag>
             </template>
           </Column>
 
@@ -272,11 +221,7 @@
             </template>
 
             <template #body="slotProps">
-              <Tag
-                v-if="slotProps.data.attributes.single_answers_type"
-                severity="info"
-                >Single</Tag
-              >
+              <Tag v-if="slotProps.data.attributes.single_answers_type" severity="info">Single</Tag>
               <Tag v-else severity="info">Multiple</Tag>
             </template>
           </Column>
@@ -300,9 +245,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag severity="info"
-                >{{ slotProps.data.attributes.allocated_time }} (m)</Tag
-              >
+              <Tag severity="info">{{ slotProps.data.attributes.allocated_time }} (m)</Tag>
             </template>
           </Column>
 
@@ -325,9 +268,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag severity="info"
-                >{{ slotProps.data.attributes.no_of_questions }}
-              </Tag>
+              <Tag severity="info">{{ slotProps.data.attributes.no_of_questions }} </Tag>
             </template>
           </Column>
 
@@ -350,9 +291,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag severity="info"
-                >{{ slotProps.data.attributes.no_of_easy_questions }}
-              </Tag>
+              <Tag severity="info">{{ slotProps.data.attributes.no_of_easy_questions }} </Tag>
             </template>
           </Column>
 
@@ -375,9 +314,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag severity="info"
-                >{{ slotProps.data.attributes.no_of_medium_questions }}
-              </Tag>
+              <Tag severity="info">{{ slotProps.data.attributes.no_of_medium_questions }} </Tag>
             </template>
           </Column>
 
@@ -400,9 +337,7 @@
               </div>
             </template>
             <template #body="slotProps">
-              <Tag severity="info"
-                >{{ slotProps.data.attributes.no_of_hard_questions }}
-              </Tag>
+              <Tag severity="info">{{ slotProps.data.attributes.no_of_hard_questions }} </Tag>
             </template>
           </Column>
 
@@ -413,9 +348,7 @@
             :hidden="!columnVisibility.no_of_assigned_questions"
           >
             <template #body="slotProps">
-              <Tag severity="info">{{
-                slotProps.data.attributes.no_of_assigned_questions
-              }}</Tag>
+              <Tag severity="info">{{ slotProps.data.attributes.no_of_assigned_questions }}</Tag>
             </template>
           </Column>
 
@@ -424,26 +357,18 @@
             <template #header>
               <div class="flex justify-between items-center w-full">
                 <p>Created at</p>
-                <SortComponent
-                  @direction-change="query.sort.created_at = $event"
-                />
+                <SortComponent @direction-change="query.sort.created_at = $event" />
               </div>
             </template>
             <template #body="slotProps">
               {{
-                moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
-                )
+                moment(slotProps.data.attributes.created_at).format('ddd, MMM D, yyyy, h:mm a')
               }}</template
             >
           </Column>
 
           <!-- Actions -->
-          <Column
-            field="Actions"
-            header="Actions"
-            :hidden="!columnVisibility.actions"
-          >
+          <Column field="Actions" header="Actions" :hidden="!columnVisibility.actions">
             <template #body="slotProps">
               <span class="p-buttonset space-x-1">
                 <PrimeButton
@@ -462,15 +387,11 @@
                         name: 'admin.questionnaires.questions.index',
                         params: { id: slotProps.data.id },
                         query: {
-                          no_of_easy_questions:
-                            slotProps.data.attributes.no_of_easy_questions,
-                          no_of_medium_questions:
-                            slotProps.data.attributes.no_of_medium_questions,
-                          no_of_hard_questions:
-                            slotProps.data.attributes.no_of_hard_questions,
-                          no_of_total_questions:
-                            slotProps.data.attributes.no_of_questions,
-                        },
+                          no_of_easy_questions: slotProps.data.attributes.no_of_easy_questions,
+                          no_of_medium_questions: slotProps.data.attributes.no_of_medium_questions,
+                          no_of_hard_questions: slotProps.data.attributes.no_of_hard_questions,
+                          no_of_total_questions: slotProps.data.attributes.no_of_questions
+                        }
                       })
                   "
                 />
@@ -482,7 +403,7 @@
                     () =>
                       router.push({
                         name: 'admin.questionnaires.edit',
-                        params: { id: slotProps.data.id },
+                        params: { id: slotProps.data.id }
                       })
                   "
                 />
@@ -504,8 +425,7 @@
                 questionnairesStore.questionnaires.meta.per_page
               "
               :total-records="
-                questionnairesStore.questionnaires &&
-                questionnairesStore.questionnaires.meta.total
+                questionnairesStore.questionnaires && questionnairesStore.questionnaires.meta.total
               "
               @page="onPage"
             >
@@ -528,36 +448,36 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, reactive, watch } from 'vue'
 
-import { useQuestionnairesStore } from "@/stores/questionnaires/index";
-import { useDashboardStore } from "@/stores/dashboard";
-import { useCategoriesStore } from "@/stores/categories/index";
+import { useQuestionnairesStore } from '@/stores/questionnaires/index'
+import { useDashboardStore } from '@/stores/dashboard'
+import { useCategoriesStore } from '@/stores/categories/index'
 
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router'
 
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
-import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
+import AdminTableLayout from '@/views/layouts/AdminTableLayout.vue'
 
-import Avatar from "primevue/avatar";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
-import PrimeButton from "primevue/button";
-import MenuComponent from "primevue/menu";
-import InputText from "primevue/inputtext";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
-import ConfirmDialog from "primevue/confirmdialog";
-import Slider from "primevue/slider";
-import Tag from "primevue/tag";
-import Dropdown from "primevue/dropdown";
-import { useConfirm } from "primevue/useconfirm";
+import Avatar from 'primevue/avatar'
+import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
+import PrimeButton from 'primevue/button'
+import MenuComponent from 'primevue/menu'
+import InputText from 'primevue/inputtext'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
+import ConfirmDialog from 'primevue/confirmdialog'
+import Slider from 'primevue/slider'
+import Tag from 'primevue/tag'
+import Dropdown from 'primevue/dropdown'
+import { useConfirm } from 'primevue/useconfirm'
 
-import SortComponent from "@/components/SortComponent.vue";
-import Paginator from "@/components/PaginatorComponent.vue";
+import SortComponent from '@/components/SortComponent.vue'
+import Paginator from '@/components/PaginatorComponent.vue'
 
-import { lowercaseFirstLetter, snake, findRelations } from "@/helpers";
+import { lowercaseFirstLetter, snake, findRelations } from '@/helpers'
 
 export default {
   components: {
@@ -575,48 +495,48 @@ export default {
     Slider,
     Tag,
     IconField,
-    InputIcon,
+    InputIcon
   },
   setup() {
-    const confirm = useConfirm();
+    const confirm = useConfirm()
 
     // Stores
-    const questionnairesStore = useQuestionnairesStore();
-    const dashboardStore = useDashboardStore();
-    const categoriesStore = useCategoriesStore();
+    const questionnairesStore = useQuestionnairesStore()
+    const dashboardStore = useDashboardStore()
+    const categoriesStore = useCategoriesStore()
 
-    const router = useRouter();
+    const router = useRouter()
 
     // Questionnaire data
-    const questionnaireMaxAllocatedTime = ref(0);
-    const maxEasyQuestionsCount = ref(0);
-    const maxMediumQuestionsCount = ref(0);
-    const maxHardQuestionsCount = ref(0);
-    const totalQuestionsCount = ref(0);
+    const questionnaireMaxAllocatedTime = ref(0)
+    const maxEasyQuestionsCount = ref(0)
+    const maxMediumQuestionsCount = ref(0)
+    const maxHardQuestionsCount = ref(0)
+    const totalQuestionsCount = ref(0)
 
     // Filter dropdown options
-    const categoriesFilterOptions = reactive([{ name: "All", value: null }]);
+    const categoriesFilterOptions = reactive([{ name: 'All', value: null }])
     const completenessFilterOptions = reactive([
-      { name: "All", value: null },
-      { name: "Completed", value: true },
-      { name: "Incompleted", value: false },
-    ]);
+      { name: 'All', value: null },
+      { name: 'Completed', value: true },
+      { name: 'Incompleted', value: false }
+    ])
     const difficultyFilterOptions = reactive([
-      { name: "All", value: null },
-      { name: "Easy", value: "EASY" },
-      { name: "Medium", value: "MEDIUM" },
-      { name: "Hard", value: "HARD" },
-    ]);
+      { name: 'All', value: null },
+      { name: 'Easy', value: 'EASY' },
+      { name: 'Medium', value: 'MEDIUM' },
+      { name: 'Hard', value: 'HARD' }
+    ])
     const answersTypeFilterOptions = reactive([
-      { name: "All", value: null },
-      { name: "Single", value: true },
-      { name: "Multiple", value: false },
-    ]);
+      { name: 'All', value: null },
+      { name: 'Single', value: true },
+      { name: 'Multiple', value: false }
+    ])
 
-    const showPaginator = ref(true);
+    const showPaginator = ref(true)
 
     const initialFilters = {
-      ["categories.name"]: categoriesFilterOptions[0],
+      ['categories.name']: categoriesFilterOptions[0],
       completed: completenessFilterOptions[0],
       difficulty: difficultyFilterOptions[0],
       single_answers_type: answersTypeFilterOptions[0],
@@ -624,21 +544,21 @@ export default {
       no_of_questions: [0, 0],
       no_of_easy_questions: [0, 0],
       no_of_medium_questions: [0, 0],
-      no_of_hard_questions: [0, 0],
-    };
+      no_of_hard_questions: [0, 0]
+    }
 
-    const initialQuery = { sort: {}, pagination: { number: 1, size: 10 } };
+    const initialQuery = { sort: {}, pagination: { number: 1, size: 10 } }
 
     // Query
-    const filters = reactive({ ...initialFilters });
+    const filters = reactive({ ...initialFilters })
     const query = reactive({
       sort: {},
-      pagination: { number: 1, size: 10 },
-    });
-    const includes = ["categories"];
+      pagination: { number: 1, size: 10 }
+    })
+    const includes = ['categories']
 
     // Column visibility
-    const columnsMenuRef = ref();
+    const columnsMenuRef = ref()
     const columnVisibility = reactive({
       id: true,
       name: true,
@@ -653,140 +573,135 @@ export default {
       no_of_hard_questions: true,
       no_of_assigned_questions: true,
       created_at: true,
-      actions: true,
-    });
+      actions: true
+    })
     const columns = ref([
       {
-        label: "Bulk Controllers",
-        command: () => {},
+        label: 'Bulk Controllers',
+        command: () => {}
       },
       {
-        label: "Id",
+        label: 'Id',
         command: () => {
-          columnVisibility.id = !columnVisibility.id;
-        },
+          columnVisibility.id = !columnVisibility.id
+        }
       },
       {
-        label: "Name",
+        label: 'Name',
         command: () => {
-          columnVisibility.name = !columnVisibility.name;
-        },
+          columnVisibility.name = !columnVisibility.name
+        }
       },
       {
-        label: "Category",
+        label: 'Category',
         command: () => {
-          columnVisibility.category = !columnVisibility.category;
-        },
+          columnVisibility.category = !columnVisibility.category
+        }
       },
       {
-        label: "Difficulty",
+        label: 'Difficulty',
         command: () => {
-          columnVisibility.difficulty = !columnVisibility.difficulty;
-        },
+          columnVisibility.difficulty = !columnVisibility.difficulty
+        }
       },
       {
-        label: "Completeness",
+        label: 'Completeness',
         command: () => {
-          columnVisibility.completeness = !columnVisibility.completeness;
-        },
+          columnVisibility.completeness = !columnVisibility.completeness
+        }
       },
       {
-        label: "Answers Type",
+        label: 'Answers Type',
         command: () => {
-          columnVisibility.answers_type = !columnVisibility.answers_type;
-        },
+          columnVisibility.answers_type = !columnVisibility.answers_type
+        }
       },
       {
-        label: "Allocated Time",
+        label: 'Allocated Time',
         command: () => {
-          columnVisibility.allocated_time = !columnVisibility.allocated_time;
-        },
+          columnVisibility.allocated_time = !columnVisibility.allocated_time
+        }
       },
       {
-        label: "No of total questions",
+        label: 'No of total questions',
         command: () => {
-          columnVisibility.no_of_total_questions =
-            !columnVisibility.no_of_total_questions;
-        },
+          columnVisibility.no_of_total_questions = !columnVisibility.no_of_total_questions
+        }
       },
       {
-        label: "No of easy questions",
+        label: 'No of easy questions',
         command: () => {
-          columnVisibility.no_of_easy_questions =
-            !columnVisibility.no_of_easy_questions;
-        },
+          columnVisibility.no_of_easy_questions = !columnVisibility.no_of_easy_questions
+        }
       },
       {
-        label: "No of medium questions",
+        label: 'No of medium questions',
         command: () => {
-          columnVisibility.no_of_medium_questions =
-            !columnVisibility.no_of_medium_questions;
-        },
+          columnVisibility.no_of_medium_questions = !columnVisibility.no_of_medium_questions
+        }
       },
       {
-        label: "No of hard questions",
+        label: 'No of hard questions',
         command: () => {
-          columnVisibility.no_of_hard_questions =
-            !columnVisibility.no_of_hard_questions;
-        },
+          columnVisibility.no_of_hard_questions = !columnVisibility.no_of_hard_questions
+        }
       },
       {
-        label: "No of assigned questions",
+        label: 'No of assigned questions',
         command: () => {
-          columnVisibility.no_of_assigned_questions =
-            !columnVisibility.no_of_assigned_questions;
-        },
+          columnVisibility.no_of_assigned_questions = !columnVisibility.no_of_assigned_questions
+        }
       },
       {
-        label: "Created at",
+        label: 'Created at',
         command: () => {
-          columnVisibility.created_at = !columnVisibility.created_at;
-        },
+          columnVisibility.created_at = !columnVisibility.created_at
+        }
       },
       {
-        label: "Actions",
+        label: 'Actions',
         command: () => {
-          columnVisibility.actions = !columnVisibility.actions;
-        },
-      },
-    ]);
+          columnVisibility.actions = !columnVisibility.actions
+        }
+      }
+    ])
 
     // Actions (display for mobile devices)
-    const actionsMenuRef = ref();
+    const actionsMenuRef = ref()
     const actions = ref([
       {
-        label: "Refresh",
-        icon: "pi pi-refresh",
-        command: () => reset(),
+        label: 'Refresh',
+        icon: 'pi pi-refresh',
+        command: () => reset()
       },
       {
-        label: "Apply Filters",
-        icon: "pi pi-filter",
-        command: () => applyFilters(),
+        label: 'Apply Filters',
+        icon: 'pi pi-filter',
+        command: () => applyFilters()
       },
       {
-        label: "New Questionnaire",
-        icon: "pi pi-plus",
-        command: () => router.push({ name: "admin.questionnaires.create" }),
-      },
-    ]);
+        label: 'New Questionnaire',
+        icon: 'pi pi-plus',
+        command: () => router.push({ name: 'admin.questionnaires.create' })
+      }
+    ])
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------
 
     onMounted(() => {
-      initQuery();
-    });
+      initQuery()
+    })
 
     watch(questionnairesStore, (newUsersStore) => {
       if (!questionnairesStore.loading) {
-        showPaginator.value = true;
+        showPaginator.value = true
       }
-      if (newUsersStore.status === "deleted") {
+      if (newUsersStore.status === 'deleted') {
         questionnairesStore.getAll({
-          query: { ...query, filters: filters, includes },
-        });
+          query: { ...query, filters: filters, includes }
+        })
       }
-    });
+    })
 
     watch(
       () => categoriesStore.categories,
@@ -795,128 +710,126 @@ export default {
           newCategories.data.forEach((category) => {
             categoriesFilterOptions.push({
               name: category.attributes.name,
-              value: category.attributes.name,
-            });
-          });
+              value: category.attributes.name
+            })
+          })
         }
-      },
-    );
+      }
+    )
 
     watch(
       () => dashboardStore.data.questionnaires,
       (newQuestionnairesData) => {
         if (Object.keys(newQuestionnairesData).length > 0) {
-          const maxAllocatedTime =
-            newQuestionnairesData.max_allocated_time_per_questionnaire;
+          const maxAllocatedTime = newQuestionnairesData.max_allocated_time_per_questionnaire
           const easyQuestionsCount =
-            newQuestionnairesData.max_no_of_easy_questions_per_questionnaire;
+            newQuestionnairesData.max_no_of_easy_questions_per_questionnaire
           const mediumQuestionsCount =
-            newQuestionnairesData.max_no_of_medium_questions_per_questionnaire;
+            newQuestionnairesData.max_no_of_medium_questions_per_questionnaire
           const hardQuestionsCount =
-            newQuestionnairesData.max_no_of_hard_questions_per_questionnaire;
+            newQuestionnairesData.max_no_of_hard_questions_per_questionnaire
           const allQuestionsCount =
-            newQuestionnairesData.max_no_of_total_questions_per_questionnaire;
+            newQuestionnairesData.max_no_of_total_questions_per_questionnaire
 
-          filters.allocated_time[1] = maxAllocatedTime;
-          questionnaireMaxAllocatedTime.value = maxAllocatedTime;
+          filters.allocated_time[1] = maxAllocatedTime
+          questionnaireMaxAllocatedTime.value = maxAllocatedTime
 
-          filters.no_of_questions[1] = allQuestionsCount;
-          totalQuestionsCount.value = allQuestionsCount;
+          filters.no_of_questions[1] = allQuestionsCount
+          totalQuestionsCount.value = allQuestionsCount
 
-          filters.no_of_easy_questions[1] = easyQuestionsCount;
-          maxEasyQuestionsCount.value = easyQuestionsCount;
+          filters.no_of_easy_questions[1] = easyQuestionsCount
+          maxEasyQuestionsCount.value = easyQuestionsCount
 
-          filters.no_of_medium_questions[1] = mediumQuestionsCount;
-          maxMediumQuestionsCount.value = mediumQuestionsCount;
+          filters.no_of_medium_questions[1] = mediumQuestionsCount
+          maxMediumQuestionsCount.value = mediumQuestionsCount
 
-          filters.no_of_hard_questions[1] = hardQuestionsCount;
-          maxHardQuestionsCount.value = hardQuestionsCount;
+          filters.no_of_hard_questions[1] = hardQuestionsCount
+          maxHardQuestionsCount.value = hardQuestionsCount
         }
-      },
-    );
+      }
+    )
 
     watch(query, (newQuery) => {
       questionnairesStore.getAll({
-        query: { ...newQuery, filters, includes },
-      });
-    });
+        query: { ...newQuery, filters, includes }
+      })
+    })
 
     function displayAllColumns() {
       for (let visibility in columnVisibility) {
-        columnVisibility[visibility] = true;
+        columnVisibility[visibility] = true
       }
     }
 
     function hideAllColumns() {
       for (let visibility in columnVisibility) {
-        columnVisibility[visibility] = false;
+        columnVisibility[visibility] = false
       }
     }
 
     function initQuery() {
       questionnairesStore.getAll({
-        query: { ...query, includes },
-      });
-      categoriesStore.getAll();
-      dashboardStore.getQuestionnairesData();
+        query: { ...query, includes }
+      })
+      categoriesStore.getAll()
+      dashboardStore.getQuestionnairesData()
     }
 
     function applyFilters() {
-      showPaginator.value = false; // Reset the pagination
-      query.pagination.number = 1;
+      showPaginator.value = false // Reset the pagination
+      query.pagination.number = 1
 
       questionnairesStore.getAll({
-        query: { filters: filters, ...query, includes },
-      });
+        query: { filters: filters, ...query, includes }
+      })
     }
 
     function onPage(event) {
-      query.pagination.number = event.page + 1;
-      query.pagination.size = event.rows;
+      query.pagination.number = event.page + 1
+      query.pagination.size = event.rows
     }
 
     function reset() {
       //Reset filters
-      Object.assign(filters, { ...initialFilters });
+      Object.assign(filters, { ...initialFilters })
 
       //Reset query
-      Object.assign(query, { ...initialQuery });
+      Object.assign(query, { ...initialQuery })
 
       //Reset paginator
-      showPaginator.value = false;
+      showPaginator.value = false
 
-      initQuery();
+      initQuery()
     }
 
     function toggleActionsMenu(event) {
-      actionsMenuRef.value.toggle(event);
+      actionsMenuRef.value.toggle(event)
     }
 
     function toggleColumnsMenu(event) {
-      columnsMenuRef.value.toggle(event);
+      columnsMenuRef.value.toggle(event)
     }
 
     function deleteQuestionnaire(id) {
       confirm.require({
-        message:
-          "Do you want to delete this record? [This action cannot be undone !]",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        iconClass: "bg-red-500",
-        acceptClass: "p-button-danger",
-        acceptLabel: "Yes Delete",
+        message: 'Do you want to delete this record? [This action cannot be undone !]',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        iconClass: 'bg-red-500',
+        acceptClass: 'p-button-danger',
+        acceptLabel: 'Yes Delete',
         accept: () => {
-          questionnairesStore.deleteQuestionnaire(id);
+          questionnairesStore.deleteQuestionnaire(id)
         },
-        reject: () => {},
-      });
+        reject: () => {}
+      })
     }
     function showQuestionnaire(id) {
       const routeData = router.resolve({
-        name: "admin.questionnaires.questions.show",
-        params: { id },
-      });
-      window.open(routeData.href, "_blank");
+        name: 'admin.questionnaires.questions.show',
+        params: { id }
+      })
+      window.open(routeData.href, '_blank')
     }
 
     return {
@@ -953,8 +866,8 @@ export default {
       toggleActionsMenu,
       onPage,
       findRelations,
-      showQuestionnaire,
-    };
-  },
-};
+      showQuestionnaire
+    }
+  }
+}
 </script>

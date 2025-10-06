@@ -10,16 +10,14 @@
       <div class="flex items-center">
         <p class="text-xl font-bold mr-4">
           Attach a questionnaire to
-          {{ props.type === "user" ? "user" : "team" }}
+          {{ props.type === 'user' ? 'user' : 'team' }}
           <span class="italic text-green-500">{{ props.attachableId }}</span>
           (id)
         </p>
       </div>
     </template>
 
-    <div
-      class="mb-8 mt-4 flex flex-col items-center sm:flex-row sm:items-start pt-4"
-    >
+    <div class="mb-8 mt-4 flex flex-col items-center sm:flex-row sm:items-start pt-4">
       <div class="w-[60%] mb-2 sm:mb-0">
         <span class="p-input-icon-left p-input-icon-right w-full">
           <span>
@@ -32,8 +30,8 @@
                   'w-full disabled:!text-[var(--p-primary-color)]',
 
                   {
-                    '!font-bold': questionnairesStore.availableId,
-                  },
+                    '!font-bold': questionnairesStore.availableId
+                  }
                 ]"
                 placeholder="Questionnaire id"
                 type="search"
@@ -46,152 +44,138 @@
             </IconField>
           </span>
         </span>
-        <p
-          v-if="questionnaireId === '' && searchButtonClicked"
-          class="text-red-500 text-sm mt-2"
-        >
+        <p v-if="questionnaireId === '' && searchButtonClicked" class="text-red-500 text-sm mt-2">
           Questionnaire id is required
         </p>
-        <p
-          v-if="questionnairesStore.errors.questionnaireId"
-          class="text-red-500 text-sm mt-2"
-        >
+        <p v-if="questionnairesStore.errors.questionnaireId" class="text-red-500 text-sm mt-2">
           {{ questionnairesStore.errors.questionnaireId }}
         </p>
       </div>
       <PrimeButton
         v-if="!questionnairesStore.availableId"
-        :label="
-          questionnairesStore.status === 'searching' ? 'Searching' : 'Search'
-        "
+        :label="questionnairesStore.status === 'searching' ? 'Searching' : 'Search'"
         :loading="questionnairesStore.status === 'searching'"
         @click="search"
       />
       <div v-else>
         <PrimeButton
           class="!mr-2"
-          :label="
-            questionnairesStore.status === 'attaching' ? 'Attaching' : 'Attach'
-          "
+          :label="questionnairesStore.status === 'attaching' ? 'Attaching' : 'Attach'"
           :loading="questionnairesStore.status === 'attaching'"
           @click="attach"
         />
 
-        <PrimeButton
-          class="p-button-warning"
-          label="Cancel"
-          @click="clearState"
-        />
+        <PrimeButton class="p-button-warning" label="Cancel" @click="clearState" />
       </div>
     </div>
   </PrimeDialog>
 </template>
 
 <script>
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted } from 'vue'
 
-import { useUsersQuestionnairesStore } from "@/stores/users/questionnaires";
-import { useTeamsQuestionnairesStore } from "@/stores/teams/questionnaires";
+import { useUsersQuestionnairesStore } from '@/stores/users/questionnaires'
+import { useTeamsQuestionnairesStore } from '@/stores/teams/questionnaires'
 
-import PrimeButton from "primevue/button";
-import PrimeDialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
+import PrimeButton from 'primevue/button'
+import PrimeDialog from 'primevue/dialog'
+import InputText from 'primevue/inputtext'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
 
 export default {
   components: { PrimeDialog, InputText, PrimeButton, IconField, InputIcon },
   props: {
     display: { type: Boolean, default: false },
     attachableId: { type: String, default: null },
-    type: { type: String, required: true },
+    type: { type: String, required: true }
   },
-  emits: ["hide", "questionnaireAttached"],
+  emits: ['hide', 'questionnaireAttached'],
 
   setup(props, { emit }) {
-    let questionnairesStore = null;
+    let questionnairesStore = null
 
-    if (props.type === "user") {
-      questionnairesStore = useUsersQuestionnairesStore();
+    if (props.type === 'user') {
+      questionnairesStore = useUsersQuestionnairesStore()
     }
 
-    if (props.type === "team") {
-      questionnairesStore = useTeamsQuestionnairesStore();
+    if (props.type === 'team') {
+      questionnairesStore = useTeamsQuestionnairesStore()
     }
 
-    const displayComponent = ref(false);
-    const questionnaireId = ref("");
-    const searchButtonClicked = ref(false);
+    const displayComponent = ref(false)
+    const questionnaireId = ref('')
+    const searchButtonClicked = ref(false)
 
-    onMounted(() => clearState());
+    onMounted(() => clearState())
 
     watch(
       () => questionnairesStore.status,
       (newStatus) => {
-        if (newStatus === "attached") {
-          clearState();
+        if (newStatus === 'attached') {
+          clearState()
         }
-      },
-    );
+      }
+    )
 
     watch(
       () => props.display,
       (newValue) => {
-        displayComponent.value = newValue;
-      },
-    );
+        displayComponent.value = newValue
+      }
+    )
 
     function clearState() {
-      questionnairesStore.clearState();
-      questionnaireId.value = "";
-      searchButtonClicked.value = "";
+      questionnairesStore.clearState()
+      questionnaireId.value = ''
+      searchButtonClicked.value = ''
     }
 
     function hide() {
-      clearState();
+      clearState()
 
-      displayComponent.value = false;
-      emit("hide", displayComponent.value);
+      displayComponent.value = false
+      emit('hide', displayComponent.value)
     }
 
     function onPasteQquestionnaireIdTextInput(event) {
-      event.preventDefault();
-      let id = event.clipboardData.getData("text");
-      id = id.replace(/\s/g, "");
-      id = id.replace(/\//g, "");
-      id = id.replace(/\\/g, "");
+      event.preventDefault()
+      let id = event.clipboardData.getData('text')
+      id = id.replace(/\s/g, '')
+      id = id.replace(/\//g, '')
+      id = id.replace(/\\/g, '')
 
-      questionnaireId.value = id;
+      questionnaireId.value = id
     }
 
     function onQuestionnaireIdTextInputKeyDown(event) {
-      const key = event.key;
-      if (key === "/" || key === " " || key === "\\") {
-        event.preventDefault();
+      const key = event.key
+      if (key === '/' || key === ' ' || key === '\\') {
+        event.preventDefault()
       }
       if (questionnairesStore.errors.questionnaireId) {
-        questionnairesStore.errors.questionnaireId = "";
+        questionnairesStore.errors.questionnaireId = ''
       }
     }
 
     function attachOrSearch() {
       if (questionnairesStore.availableId) {
-        attach();
+        attach()
       } else {
-        search();
+        search()
       }
     }
 
     function search() {
-      searchButtonClicked.value = true;
-      if (questionnaireId.value !== "") {
-        questionnairesStore.checkAvailability(questionnaireId.value);
+      searchButtonClicked.value = true
+      if (questionnaireId.value !== '') {
+        questionnairesStore.checkAvailability(questionnaireId.value)
       }
     }
 
     async function attach() {
-      await questionnairesStore.attach(props.attachableId);
-      emit("questionnaireAttached");
+      await questionnairesStore.attach(props.attachableId)
+      emit('questionnaireAttached')
     }
 
     return {
@@ -206,8 +190,8 @@ export default {
       clearState,
       questionnaireId,
       searchButtonClicked,
-      questionnairesStore,
-    };
-  },
-};
+      questionnairesStore
+    }
+  }
+}
 </script>

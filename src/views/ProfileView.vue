@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex flex-col justify-center items-center p-4 md:px-[10rem] sm:p-12"
-  >
+  <div class="flex flex-col justify-center items-center p-4 md:px-[10rem] sm:p-12">
     <div class="mb-8">
       <i class="pi pi-user-edit" style="font-size: 6rem"></i>
     </div>
@@ -29,23 +27,15 @@
         <!-- Client side errors -->
         <template v-if="v$.name.$invalid">
           <div class="mt-1">
-            <p
-              v-for="(error, index) in v$.name.$errors"
-              :key="index"
-              class="text-red-500"
-            >
-              {{ error.$message.replace("Value", "Name") }}
+            <p v-for="(error, index) in v$.name.$errors" :key="index" class="text-red-500">
+              {{ error.$message.replace('Value', 'Name') }}
             </p>
           </div>
         </template>
 
         <!-- Server side errors -->
         <template v-if="authStore.errors.name">
-          <p
-            v-for="(error, index) in authStore.errors.name"
-            :key="index"
-            class="text-red-500"
-          >
+          <p v-for="(error, index) in authStore.errors.name" :key="index" class="text-red-500">
             {{ error }}
           </p>
         </template>
@@ -73,23 +63,15 @@
         <!-- Client side errors -->
         <template v-if="v$.email.$invalid">
           <div class="mt-1">
-            <p
-              v-for="(error, index) in v$.email.$errors"
-              :key="index"
-              class="text-red-500"
-            >
-              {{ error.$message.replace("Value", "Email") }}
+            <p v-for="(error, index) in v$.email.$errors" :key="index" class="text-red-500">
+              {{ error.$message.replace('Value', 'Email') }}
             </p>
           </div>
         </template>
 
         <!-- Server side errors -->
         <template v-if="authStore.errors.email">
-          <p
-            v-for="(error, index) in authStore.errors.email"
-            :key="index"
-            class="text-red-500"
-          >
+          <p v-for="(error, index) in authStore.errors.email" :key="index" class="text-red-500">
             {{ error }}
           </p>
         </template>
@@ -126,12 +108,8 @@
         </span>
         <template v-if="v$.password.$invalid">
           <div class="mt-1">
-            <p
-              v-for="(error, index) in v$.password.$errors"
-              :key="index"
-              class="text-red-500"
-            >
-              {{ error.$message.replace("Value", "Password") }}
+            <p v-for="(error, index) in v$.password.$errors" :key="index" class="text-red-500">
+              {{ error.$message.replace('Value', 'Password') }}
               {{ customRules.massages[error.$validator] }}
             </p>
           </div>
@@ -160,7 +138,7 @@
               :key="index"
               class="text-red-500"
             >
-              {{ error.$message.replace("value", "Password Confirmation") }}
+              {{ error.$message.replace('value', 'Password Confirmation') }}
               {{ customRules.massages[error.$validator] }}
             </p>
           </div>
@@ -168,11 +146,7 @@
 
         <!-- Server side errors -->
         <template v-if="authStore.errors.password">
-          <p
-            v-for="(error, index) in authStore.errors.password"
-            :key="index"
-            class="text-red-500"
-          >
+          <p v-for="(error, index) in authStore.errors.password" :key="index" class="text-red-500">
             {{ error }}
           </p>
         </template>
@@ -180,10 +154,7 @@
 
       <PrimeButton
         :label="authStore.status === 'updating' ? 'Updating' : 'Update'"
-        :class="[
-          'w-full',
-          { '!cursor-not-allowed': v$.$invalid && updateButtonClicked },
-        ]"
+        :class="['w-full', { '!cursor-not-allowed': v$.$invalid && updateButtonClicked }]"
         :loading="authStore.status === 'updating'"
         :disabled="v$.$invalid && updateButtonClicked"
         @click="update"
@@ -193,71 +164,71 @@
 </template>
 
 <script>
-import { ref, toRef } from "vue";
-import { useVuelidate } from "@vuelidate/core";
-import { email, required, requiredIf, sameAs } from "@vuelidate/validators";
-import InputText from "primevue/inputtext";
-import Password from "primevue/password";
-import PrimeButton from "primevue/button";
-import Divider from "primevue/divider";
-import { useAuthStore } from "../stores/auth";
-import { reactive } from "vue";
-import * as customRules from "../validationRules";
+import { ref, toRef } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { email, required, requiredIf, sameAs } from '@vuelidate/validators'
+import InputText from 'primevue/inputtext'
+import Password from 'primevue/password'
+import PrimeButton from 'primevue/button'
+import Divider from 'primevue/divider'
+import { useAuthStore } from '../stores/auth'
+import { reactive } from 'vue'
+import * as customRules from '../validationRules'
 export default {
   components: { InputText, Password, PrimeButton, Divider },
   setup() {
-    const authStore = useAuthStore();
+    const authStore = useAuthStore()
 
-    const updateButtonClicked = ref(false);
+    const updateButtonClicked = ref(false)
 
     const profile = reactive({
       name: authStore.user.name,
       email: authStore.user.email,
-      password: "",
-      passwordConfirmation: "",
-    });
+      password: '',
+      passwordConfirmation: ''
+    })
 
-    const passwordRef = toRef(profile, "password");
+    const passwordRef = toRef(profile, 'password')
 
     const rules = {
       name: { required },
       email: { required, email },
       password: {
-        password: customRules.password,
+        password: customRules.password
       },
       passwordConfirmation: {
         requiredIfPassword: requiredIf(passwordRef),
-        sameAsPassword: sameAs(passwordRef),
-      },
-    };
+        sameAsPassword: sameAs(passwordRef)
+      }
+    }
 
-    const v$ = useVuelidate(rules, profile, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, profile, { $autoDirty: true, $lazy: true })
 
     function getProfileData() {
-      if (passwordRef.value === "") {
-        return { name: profile.name, email: profile.email };
+      if (passwordRef.value === '') {
+        return { name: profile.name, email: profile.email }
       }
       return {
         name: profile.name,
         email: profile.email,
         password: profile.password,
-        password_confirmation: profile.passwordConfirmation,
-      };
+        password_confirmation: profile.passwordConfirmation
+      }
     }
 
     function update() {
-      updateButtonClicked.value = true;
+      updateButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      authStore.update(getProfileData());
+      authStore.update(getProfileData())
     }
 
-    return { authStore, profile, v$, customRules, update, updateButtonClicked };
-  },
-};
+    return { authStore, profile, v$, customRules, update, updateButtonClicked }
+  }
+}
 </script>

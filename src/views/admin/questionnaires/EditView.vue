@@ -13,19 +13,13 @@
   </FormLayout>
   <FormLayout v-else>
     <template #header>
-      <div
-        class="flex flex-wrap justify-center md:justify-start space-x-4 items-center"
-      >
+      <div class="flex flex-wrap justify-center md:justify-start space-x-4 items-center">
         <p class="mb-2">
           Edit Questionnaire
           <span class="italic text-green-400 mr-1">{{ route.params.id }}</span>
           <span class="lowercase text-sm">(id)</span>
         </p>
-        <PrimeButton
-          class="p-button-sm h-10"
-          icon="pi pi-refresh"
-          @click="refresh"
-        />
+        <PrimeButton class="p-button-sm h-10" icon="pi pi-refresh" @click="refresh" />
       </div>
     </template>
     <template #content>
@@ -49,7 +43,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Name") }}
+                {{ error.$message.replace('Value', 'Name') }}
               </p>
             </div>
           </template>
@@ -87,7 +81,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Difficulty") }}
+                {{ error.$message.replace('Value', 'Difficulty') }}
                 {{ validationErrorMessages[error.$validator] }}
               </p>
             </div>
@@ -127,7 +121,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Caetegory") }}
+                {{ error.$message.replace('Value', 'Caetegory') }}
                 {{ validationErrorMessages[error.$validator] }}
               </p>
             </div>
@@ -150,10 +144,7 @@
             <Dropdown
               v-model="state.single_answers_type"
               :options="answersTypeOptions"
-              :class="[
-                'w-full',
-                { 'p-invalid': v$.single_answers_type.$invalid },
-              ]"
+              :class="['w-full', { 'p-invalid': v$.single_answers_type.$invalid }]"
               option-label="name"
               placeholder="Select answers type"
               class="w-full"
@@ -169,7 +160,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Answers Type") }}
+                {{ error.$message.replace('Value', 'Answers Type') }}
                 {{ validationErrorMessages[error.$validator] }}
               </p>
             </div>
@@ -177,8 +168,7 @@
           <!-- Server side errors -->
           <template v-if="questionnairesStore.errors.single_answers_type">
             <p
-              v-for="(error, index) in questionnairesStore.errors
-                .single_answers_type"
+              v-for="(error, index) in questionnairesStore.errors.single_answers_type"
               :key="index"
               class="text-red-500 text-sm"
             >
@@ -195,10 +185,7 @@
               <InputNumber
                 v-model="state.no_of_easy_questions"
                 input-id="minmax-buttons"
-                :class="[
-                  'w-full',
-                  { 'p-invalid': v$.no_of_easy_questions.$invalid },
-                ]"
+                :class="['w-full', { 'p-invalid': v$.no_of_easy_questions.$invalid }]"
                 :use-grouping="false"
                 :min="0"
                 show-buttons
@@ -214,15 +201,14 @@
                   :key="index"
                   class="text-red-500 text-sm"
                 >
-                  {{ error.$message.replace("Value", "No of Easy Questions") }}
+                  {{ error.$message.replace('Value', 'No of Easy Questions') }}
                 </p>
               </div>
             </template>
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.no_of_easy_questions">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .no_of_easy_questions"
+                v-for="(error, index) in questionnairesStore.errors.no_of_easy_questions"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -237,10 +223,7 @@
               <InputNumber
                 v-model="state.no_of_medium_questions"
                 input-id="minmax-buttons"
-                :class="[
-                  'w-full',
-                  { 'p-invalid': v$.no_of_medium_questions.$invalid },
-                ]"
+                :class="['w-full', { 'p-invalid': v$.no_of_medium_questions.$invalid }]"
                 :use-grouping="false"
                 :min="0"
                 show-buttons
@@ -256,17 +239,14 @@
                   :key="index"
                   class="text-red-500 text-sm"
                 >
-                  {{
-                    error.$message.replace("Value", "No of Medium Questions")
-                  }}
+                  {{ error.$message.replace('Value', 'No of Medium Questions') }}
                 </p>
               </div>
             </template>
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.no_of_medium_questions">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .no_of_medium_questions"
+                v-for="(error, index) in questionnairesStore.errors.no_of_medium_questions"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -281,10 +261,7 @@
               <InputNumber
                 v-model="state.no_of_hard_questions"
                 input-id="minmax-buttons"
-                :class="[
-                  'w-full',
-                  { 'p-invalid': v$.no_of_hard_questions.$invalid },
-                ]"
+                :class="['w-full', { 'p-invalid': v$.no_of_hard_questions.$invalid }]"
                 :use-grouping="false"
                 :min="0"
                 show-buttons
@@ -300,15 +277,14 @@
                   :key="index"
                   class="text-red-500 text-sm"
                 >
-                  {{ error.$message.replace("Value", "No of Hard Questions") }}
+                  {{ error.$message.replace('Value', 'No of Hard Questions') }}
                 </p>
               </div>
             </template>
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.no_of_hard_questions">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .no_of_hard_questions"
+                v-for="(error, index) in questionnairesStore.errors.no_of_hard_questions"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -323,10 +299,7 @@
               <InputNumber
                 v-model="state.no_of_questions"
                 input-id="minmax-buttons"
-                :class="[
-                  'w-full',
-                  { 'p-invalid': v$.no_of_questions.$invalid },
-                ]"
+                :class="['w-full', { 'p-invalid': v$.no_of_questions.$invalid }]"
                 :use-grouping="false"
                 :min="0"
                 show-buttons
@@ -343,19 +316,18 @@
                   class="text-red-500 text-sm"
                 >
                   {{
-                    error.$validator === "equalTo"
-                      ? "Total no of questions must be equal to sum of easy, medium and hard questions"
-                      : ""
+                    error.$validator === 'equalTo'
+                      ? 'Total no of questions must be equal to sum of easy, medium and hard questions'
+                      : ''
                   }}
-                  {{ error.$message.replace("Value", "No of total questions") }}
+                  {{ error.$message.replace('Value', 'No of total questions') }}
                 </p>
               </div>
             </template>
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.no_of_questions">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .no_of_questions"
+                v-for="(error, index) in questionnairesStore.errors.no_of_questions"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -389,7 +361,7 @@
                   :key="index"
                   class="text-red-500 text-sm"
                 >
-                  {{ error.$message.replace("Value", "Allocated time") }}
+                  {{ error.$message.replace('Value', 'Allocated time') }}
                   {{ validationErrorMessages[error.$validator] }}
                 </p>
               </div>
@@ -397,8 +369,7 @@
             <!-- Server side errors -->
             <template v-if="questionnairesStore.errors.allocated_time">
               <p
-                v-for="(error, index) in questionnairesStore.errors
-                  .allocated_time"
+                v-for="(error, index) in questionnairesStore.errors.allocated_time"
                 :key="index"
                 class="text-red-500 text-sm"
               >
@@ -409,14 +380,10 @@
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
-          :label="
-            questionnairesStore.status === 'updating' ? 'Updating' : 'Update'
-          "
+          :label="questionnairesStore.status === 'updating' ? 'Updating' : 'Update'"
           icon="pi pi-spinner"
           icon-pos="right"
           :disabled="v$.$invalid && updateQuestionnaireButtonClicked"
@@ -436,27 +403,27 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue'
 
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import { useQuestionnairesStore } from "@/stores/questionnaires";
-import { useCategoriesStore } from "@/stores/categories";
+import { useQuestionnairesStore } from '@/stores/questionnaires'
+import { useCategoriesStore } from '@/stores/categories'
 
-import Dropdown from "primevue/dropdown";
-import InputText from "primevue/inputtext";
-import InputNumber from "primevue/inputnumber";
-import MultiSelect from "primevue/multiselect";
-import PrimeButton from "primevue/button";
+import Dropdown from 'primevue/dropdown'
+import InputText from 'primevue/inputtext'
+import InputNumber from 'primevue/inputnumber'
+import MultiSelect from 'primevue/multiselect'
+import PrimeButton from 'primevue/button'
 
-import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, maxLength } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, maxLength } from '@vuelidate/validators'
 
-import FormLayout from "@/views/layouts/FormLayout.vue";
-import FormSkeleton from "@/components/skeletons/FormSkeleton.vue";
+import FormLayout from '@/views/layouts/FormLayout.vue'
+import FormSkeleton from '@/components/skeletons/FormSkeleton.vue'
 
-import { messages as validationErrorMessages } from "@/validationRules";
-import { findRelations } from "@/helpers";
+import { messages as validationErrorMessages } from '@/validationRules'
+import { findRelations } from '@/helpers'
 
 export default {
   components: {
@@ -466,51 +433,49 @@ export default {
     PrimeButton,
     InputNumber,
     MultiSelect,
-    FormSkeleton,
+    FormSkeleton
   },
   setup() {
-    const questionnairesStore = useQuestionnairesStore();
-    const categoriesStore = useCategoriesStore();
+    const questionnairesStore = useQuestionnairesStore()
+    const categoriesStore = useCategoriesStore()
 
-    const route = useRoute();
+    const route = useRoute()
 
     const initialState = {
-      name: "",
-      difficulty: "",
+      name: '',
+      difficulty: '',
       categories: [],
-      single_answers_type: "",
+      single_answers_type: '',
       no_of_easy_questions: null,
       no_of_medium_questions: null,
       no_of_hard_questions: null,
       no_of_questions: null,
-      allocated_time: null,
-    };
+      allocated_time: null
+    }
 
-    const state = reactive(JSON.parse(JSON.stringify(initialState)));
+    const state = reactive(JSON.parse(JSON.stringify(initialState)))
 
-    const updateQuestionnaireButtonClicked = ref(false);
+    const updateQuestionnaireButtonClicked = ref(false)
 
     const difficultyOptions = [
-      { name: "Easy", value: 1 },
-      { name: "Medium", value: 2 },
-      { name: "Hard", value: 3 },
-    ];
+      { name: 'Easy', value: 1 },
+      { name: 'Medium', value: 2 },
+      { name: 'Hard', value: 3 }
+    ]
 
     const answersTypeOptions = [
-      { name: "Single", value: "true" },
-      { name: "Multiple", value: "false" },
-    ];
+      { name: 'Single', value: 'true' },
+      { name: 'Multiple', value: 'false' }
+    ]
 
-    const categoriesOptions = ref([]);
+    const categoriesOptions = ref([])
 
     const equalToRule = (value) => {
       let total =
-        state.no_of_easy_questions +
-        state.no_of_medium_questions +
-        state.no_of_hard_questions;
+        state.no_of_easy_questions + state.no_of_medium_questions + state.no_of_hard_questions
 
-      return value === total || value === null;
-    };
+      return value === total || value === null
+    }
 
     const rules = {
       name: { required, minLength: minLength(3), maxLength: maxLength(50) },
@@ -522,16 +487,16 @@ export default {
       no_of_hard_questions: { required },
       no_of_questions: {
         required,
-        equalTo: equalToRule,
+        equalTo: equalToRule
       },
-      allocated_time: { required },
-    };
+      allocated_time: { required }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     onMounted(() => {
-      loadData();
-    });
+      loadData()
+    })
 
     watch(
       () => categoriesStore.categories,
@@ -540,128 +505,110 @@ export default {
           newCategories.data.forEach((category) => {
             categoriesOptions.value.push({
               name: category.attributes.name,
-              value: category.id,
-            });
-          });
+              value: category.id
+            })
+          })
         }
-      },
-    );
+      }
+    )
 
     watch(
       () => questionnairesStore.questionnaire,
       (newQuestionnaire) => {
         if (newQuestionnaire) {
-          state.name = newQuestionnaire.data.attributes.name;
-          state.no_of_easy_questions =
-            newQuestionnaire.data.attributes.no_of_easy_questions;
-          state.no_of_medium_questions =
-            newQuestionnaire.data.attributes.no_of_medium_questions;
-          state.no_of_hard_questions =
-            newQuestionnaire.data.attributes.no_of_hard_questions;
-          state.no_of_questions =
-            newQuestionnaire.data.attributes.no_of_questions;
-          state.allocated_time =
-            newQuestionnaire.data.attributes.allocated_time;
+          state.name = newQuestionnaire.data.attributes.name
+          state.no_of_easy_questions = newQuestionnaire.data.attributes.no_of_easy_questions
+          state.no_of_medium_questions = newQuestionnaire.data.attributes.no_of_medium_questions
+          state.no_of_hard_questions = newQuestionnaire.data.attributes.no_of_hard_questions
+          state.no_of_questions = newQuestionnaire.data.attributes.no_of_questions
+          state.allocated_time = newQuestionnaire.data.attributes.allocated_time
 
-          let relations = newQuestionnaire.included;
+          let relations = newQuestionnaire.included
 
-          setDiffculty(newQuestionnaire);
-          setCategories(newQuestionnaire, relations);
-          setAnswersType(newQuestionnaire);
+          setDiffculty(newQuestionnaire)
+          setCategories(newQuestionnaire, relations)
+          setAnswersType(newQuestionnaire)
         }
-      },
-    );
+      }
+    )
 
     function setCategories(newQuestionnaire, relations) {
-      newQuestionnaire.data.relationships.categories.data.forEach(
-        (category) => {
-          let categoryRelation = findRelations(
-            relations,
-            category.id,
-            category.type,
-          );
+      newQuestionnaire.data.relationships.categories.data.forEach((category) => {
+        let categoryRelation = findRelations(relations, category.id, category.type)
 
-          state.categories.push({
-            value: categoryRelation.id,
-            name: categoryRelation.attributes.name,
-          });
-        },
-      );
+        state.categories.push({
+          value: categoryRelation.id,
+          name: categoryRelation.attributes.name
+        })
+      })
     }
 
     function setDiffculty(newQuestionnaire) {
       for (let difficulty of difficultyOptions) {
-        if (
-          newQuestionnaire.data.attributes.difficulty ===
-          difficulty.name.toUpperCase()
-        ) {
-          state.difficulty = difficulty;
-          return;
+        if (newQuestionnaire.data.attributes.difficulty === difficulty.name.toUpperCase()) {
+          state.difficulty = difficulty
+          return
         }
       }
     }
 
     function setAnswersType(newQuestionnaire) {
       for (let answerType of answersTypeOptions) {
-        if (
-          answerType.name === "Single" &&
-          newQuestionnaire.data.attributes.single_answers_type
-        ) {
-          state.single_answers_type = answerType;
-          return;
+        if (answerType.name === 'Single' && newQuestionnaire.data.attributes.single_answers_type) {
+          state.single_answers_type = answerType
+          return
         }
 
-        state.single_answers_type = answerType;
+        state.single_answers_type = answerType
       }
     }
 
     function prepareFormData() {
-      let difficultyValue = state.difficulty.value;
-      let selectedCategories = [];
-      let single_answers_type =
-        state.single_answer_type === "true" ? true : false;
+      let difficultyValue = state.difficulty.value
+      let selectedCategories = []
+      let single_answers_type = state.single_answer_type === 'true' ? true : false
 
       state.categories.forEach((category) => {
-        selectedCategories.push(category.value);
-      });
+        selectedCategories.push(category.value)
+      })
 
       return {
         ...state,
         categories: selectedCategories,
         single_answers_type,
-        difficulty: difficultyValue,
-      };
+        difficulty: difficultyValue
+      }
     }
 
     function updateQuestionnaire() {
-      updateQuestionnaireButtonClicked.value = true;
+      updateQuestionnaireButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      questionnairesStore.editQuestionnaire(route.params.id, prepareFormData());
+      questionnairesStore.editQuestionnaire(route.params.id, prepareFormData())
     }
 
     function clearState() {
-      Object.assign(state, JSON.parse(JSON.stringify(initialState)));
+      Object.assign(state, JSON.parse(JSON.stringify(initialState)))
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      questionnairesStore.errors = {};
+      questionnairesStore.errors = {}
     }
 
     function refresh() {
-      loadData();
+      loadData()
     }
 
     function loadData() {
-      categoriesStore.getAll();
+      categoriesStore.getAll()
       questionnairesStore.getOne(route.params.id, {
-        query: { includes: ["categories"] },
-      });
+        query: { includes: ['categories'] }
+      })
     }
 
     return {
@@ -676,8 +623,8 @@ export default {
       clearState,
       updateQuestionnaireButtonClicked,
       questionnairesStore,
-      refresh,
-    };
-  },
-};
+      refresh
+    }
+  }
+}
 </script>

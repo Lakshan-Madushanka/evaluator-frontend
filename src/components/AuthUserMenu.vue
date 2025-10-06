@@ -6,74 +6,67 @@
     aria-controls="overlay_menu"
     @click="toggle"
   >
-    <span class="ml-2 text-sm hidden sm:inline">{{
-      formatText(authStore.user.name)
-    }}</span>
+    <span class="ml-2 text-sm hidden sm:inline">{{ formatText(authStore.user.name) }}</span>
   </i>
-  <MenuComponent
-    id="overlay_menu"
-    ref="authMenu"
-    :model="authItems"
-    :popup="true"
-  />
+  <MenuComponent id="overlay_menu" ref="authMenu" :model="authItems" :popup="true" />
 </template>
 
 <script>
-import MenuComponent from "primevue/menu";
-import { ref } from "vue";
-import { useAuthStore } from "@/stores/auth";
-import { formatText } from "@/helpers";
-import { useRouter } from "vue-router";
+import MenuComponent from 'primevue/menu'
+import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { formatText } from '@/helpers'
+import { useRouter } from 'vue-router'
 
 export default {
   components: {
-    MenuComponent,
+    MenuComponent
   },
 
   setup() {
-    const authStore = useAuthStore();
+    const authStore = useAuthStore()
 
-    const router = useRouter();
+    const router = useRouter()
 
-    const authMenu = ref();
+    const authMenu = ref()
 
     const authItems = [
       {
-        label: "Profile",
-        icon: "pi pi-fw pi-user-edit",
+        label: 'Profile',
+        icon: 'pi pi-fw pi-user-edit',
         command: () => {
-          router.push({ name: "profile" });
-        },
+          router.push({ name: 'profile' })
+        }
       },
       {
-        label: "Dashboard",
-        icon: "pi pi-fw pi-th-large",
+        label: 'Dashboard',
+        icon: 'pi pi-fw pi-th-large',
         command: () => {
-          router.push({ name: "admin.dashboard" });
+          router.push({ name: 'admin.dashboard' })
         },
-        to: { name: "admin.dashboard" },
+        to: { name: 'admin.dashboard' }
       },
       { separator: true },
       {
-        label: "Sign Out",
-        icon: "pi pi-fw pi-sign-out",
+        label: 'Sign Out',
+        icon: 'pi pi-fw pi-sign-out',
         command: () => {
-          authStore.logOut();
-        },
-      },
-    ];
+          authStore.logOut()
+        }
+      }
+    ]
 
     const toggle = (event) => {
-      authMenu.value.toggle(event);
-    };
+      authMenu.value.toggle(event)
+    }
 
     return {
       authStore,
       authItems,
       authMenu,
       toggle,
-      formatText,
-    };
-  },
-};
+      formatText
+    }
+  }
+}
 </script>

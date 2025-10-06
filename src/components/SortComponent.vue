@@ -6,54 +6,54 @@
       {
         'pi-sort-alt': !direction,
         'pi-sort-alpha-up': direction === 'asc',
-        'pi-sort-alpha-down-alt': direction === 'desc',
-      },
+        'pi-sort-alpha-down-alt': direction === 'desc'
+      }
     ]"
     @click="onDirectionChange"
   ></i>
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
 export default {
   props: {
     dir: {
       type: String,
       required: false,
-      default: "",
-    },
+      default: ''
+    }
   },
-  emits: ["directionChange"],
+  emits: ['directionChange'],
   setup(props, { emit }) {
-    const direction = ref(null);
+    const direction = ref(null)
 
     watch(
       () => props.dir,
       function (dir) {
-        if (dir === "") {
-          dir = null;
+        if (dir === '') {
+          dir = null
         }
-        direction.value = dir;
-      },
-    );
+        direction.value = dir
+      }
+    )
 
     function onDirectionChange() {
-      const dir = direction.value;
+      const dir = direction.value
 
       switch (dir) {
         case null:
-          direction.value = "asc";
-          break;
-        case "asc":
-          direction.value = "desc";
-          break;
+          direction.value = 'asc'
+          break
+        case 'asc':
+          direction.value = 'desc'
+          break
         default:
-          direction.value = null;
+          direction.value = null
       }
-      emit("directionChange", direction.value);
+      emit('directionChange', direction.value)
     }
-    return { onDirectionChange, direction };
-  },
-};
+    return { onDirectionChange, direction }
+  }
+}
 </script>

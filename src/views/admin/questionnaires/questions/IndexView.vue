@@ -51,10 +51,7 @@
       </ul>
     </div>
     <div class="mt-8">
-      <Skeleton
-        v-if="questionnairesQuestionsStore.loading"
-        class="mb-2 !w-full !h-72"
-      ></Skeleton>
+      <Skeleton v-if="questionnairesQuestionsStore.loading" class="mb-2 !w-full !h-72"></Skeleton>
 
       <div v-else class="shadow">
         <div
@@ -98,9 +95,7 @@
               <div class="space-y-1">
                 <p>
                   ID
-                  <Tag severity="secondary" size="small">{{
-                    question.attributes.pretty_id
-                  }}</Tag>
+                  <Tag severity="secondary" size="small">{{ question.attributes.pretty_id }}</Tag>
                 </p>
                 <p>
                   Single answers type
@@ -110,9 +105,7 @@
                 </p>
                 <p>
                   Difficulty
-                  <Tag severity="secondary" size="small">
-                    {{ question.attributes.hardness }}</Tag
-                  >
+                  <Tag severity="secondary" size="small"> {{ question.attributes.hardness }}</Tag>
                 </p>
                 <p>
                   Answers count
@@ -144,30 +137,15 @@
       </div>
       <div class="mt-8 flex justify-center flex-wrap items-start">
         <PrimeButton
-          :label="
-            questionnairesQuestionsStore.status === 'syncing'
-              ? 'Syncing'
-              : 'Sync All'
-          "
+          :label="questionnairesQuestionsStore.status === 'syncing' ? 'Syncing' : 'Sync All'"
           icon="pi pi-history"
           class="!mb-2 !mr-4 p-button-warning"
           :loading="questionnairesQuestionsStore.status === 'syncing'"
           @click="syncQuestions"
         />
-        <span
-          v-if="data.questions.length > 0"
-          class="p-buttonset space-x-4 mr-4 mb-2"
-        >
-          <PrimeButton
-            label="Select All"
-            icon="pi pi-clone"
-            @click="selectAllQuestions"
-          />
-          <PrimeButton
-            label="Deselect All"
-            icon="pi pi-times"
-            @click="deselectAllQuestions"
-          />
+        <span v-if="data.questions.length > 0" class="p-buttonset space-x-4 mr-4 mb-2">
+          <PrimeButton label="Select All" icon="pi pi-clone" @click="selectAllQuestions" />
+          <PrimeButton label="Deselect All" icon="pi pi-times" @click="deselectAllQuestions" />
         </span>
         <PrimeButton
           v-if="selectedQuestions.length > 0"
@@ -231,9 +209,7 @@
             <div class="space-y-1">
               <p>
                 ID
-                <Tag severity="secondary" size="small">{{
-                  question.attributes.pretty_id
-                }}</Tag>
+                <Tag severity="secondary" size="small">{{ question.attributes.pretty_id }}</Tag>
               </p>
               <p>
                 Single answers type
@@ -243,9 +219,7 @@
               </p>
               <p>
                 Difficulty
-                <Tag severity="secondary" size="small">
-                  {{ question.attributes.hardness }}</Tag
-                >
+                <Tag severity="secondary" size="small"> {{ question.attributes.hardness }}</Tag>
               </p>
               <p>
                 Answers count
@@ -278,30 +252,15 @@
       <template #footer>
         <div class="mt-8 flex justify-center flex-wrap items-center">
           <PrimeButton
-            :label="
-              questionnairesQuestionsStore.status === 'syncing'
-                ? 'Syncing'
-                : 'Sync All'
-            "
+            :label="questionnairesQuestionsStore.status === 'syncing' ? 'Syncing' : 'Sync All'"
             icon="pi pi-history"
             class="!mb-2 !mr-4 p-button-warning"
             :loading="questionnairesQuestionsStore.status === 'syncing'"
             @click="syncQuestions"
           />
-          <span
-            v-if="data.questions.length > 0"
-            class="p-buttonset space-x-4 mr-4 mb-2"
-          >
-            <PrimeButton
-              label="Select All"
-              icon="pi pi-clone"
-              @click="selectAllQuestions"
-            />
-            <PrimeButton
-              label="Deselect All"
-              icon="pi pi-times"
-              @click="deselectAllQuestions"
-            />
+          <span v-if="data.questions.length > 0" class="p-buttonset space-x-4 mr-4 mb-2">
+            <PrimeButton label="Select All" icon="pi pi-clone" @click="selectAllQuestions" />
+            <PrimeButton label="Deselect All" icon="pi pi-times" @click="deselectAllQuestions" />
           </span>
           <PrimeButton
             v-if="selectedQuestions.length > 0"
@@ -332,20 +291,13 @@
             Question id is required
             {{ questionnairesQuestionsStore.errors.questionId }}
           </p>
-          <p
-            v-if="questionnairesQuestionsStore.errors.questionId"
-            class="text-sm m-2 text-red-500"
-          >
+          <p v-if="questionnairesQuestionsStore.errors.questionId" class="text-sm m-2 text-red-500">
             {{ questionnairesQuestionsStore.errors.questionId }}
           </p>
         </div>
 
         <PrimeButton
-          :label="
-            questionnairesQuestionsStore.status === 'searching'
-              ? 'Searching'
-              : 'Search'
-          "
+          :label="questionnairesQuestionsStore.status === 'searching' ? 'Searching' : 'Search'"
           icon="pi pi-search"
           icon-pos="right"
           :loading="questionnairesQuestionsStore.status === 'searching'"
@@ -377,11 +329,7 @@
         <template #content>
           <div class="flex justify-between">
             <div class="flex w-[75%]">
-              <p
-                v-html="
-                  questionnairesQuestionsStore.question.attributes.content
-                "
-              ></p>
+              <p v-html="questionnairesQuestionsStore.question.attributes.content"></p>
             </div>
             <div>
               <p>
@@ -390,10 +338,7 @@
               </p>
               <p>
                 Single answers type:
-                {{
-                  questionnairesQuestionsStore.question.attributes
-                    .answers_type_single
-                }}
+                {{ questionnairesQuestionsStore.question.attributes.answers_type_single }}
               </p>
               <p>
                 Difficulty:
@@ -401,15 +346,11 @@
               </p>
               <p>
                 Answers count:
-                {{
-                  questionnairesQuestionsStore.question.attributes.no_of_answers
-                }}
+                {{ questionnairesQuestionsStore.question.attributes.no_of_answers }}
               </p>
               <p>
                 Images count:
-                {{
-                  questionnairesQuestionsStore.question.attributes.images_count
-                }}
+                {{ questionnairesQuestionsStore.question.attributes.images_count }}
               </p>
               <p>
                 Marks:
@@ -434,7 +375,7 @@
     <div
       v-observe-visibility="{
         callback: onEligibleQuestionListVisible,
-        once: true,
+        once: true
       }"
       class="invisible"
     ></div>
@@ -442,24 +383,24 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue'
 
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import { useQuestionnairesQuestionsStore } from "@/stores/questionnaires/questions";
+import { useQuestionnairesQuestionsStore } from '@/stores/questionnaires/questions'
 
-import Card from "primevue/card";
-import ConfirmDialog from "primevue/confirmdialog";
-import Dropdown from "primevue/dropdown";
-import PrimeDialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
-import InputNumber from "primevue/inputnumber";
-import PrimeButton from "primevue/button";
-import Skeleton from "primevue/skeleton";
-import Tag from "primevue/tag";
-import { useConfirm } from "primevue/useconfirm";
+import Card from 'primevue/card'
+import ConfirmDialog from 'primevue/confirmdialog'
+import Dropdown from 'primevue/dropdown'
+import PrimeDialog from 'primevue/dialog'
+import InputText from 'primevue/inputtext'
+import InputNumber from 'primevue/inputnumber'
+import PrimeButton from 'primevue/button'
+import Skeleton from 'primevue/skeleton'
+import Tag from 'primevue/tag'
+import { useConfirm } from 'primevue/useconfirm'
 
-import EligibleQuestionsList from "@/views/admin/questionnaires/questions/components/EligibleQuestionsList.vue";
+import EligibleQuestionsList from '@/views/admin/questionnaires/questions/components/EligibleQuestionsList.vue'
 
 export default {
   components: {
@@ -472,126 +413,126 @@ export default {
     Tag,
     InputText,
     InputNumber,
-    EligibleQuestionsList,
+    EligibleQuestionsList
   },
   setup() {
-    const confirm = useConfirm();
+    const confirm = useConfirm()
 
-    const route = useRoute();
+    const route = useRoute()
 
-    const questionnairesQuestionsStore = useQuestionnairesQuestionsStore();
+    const questionnairesQuestionsStore = useQuestionnairesQuestionsStore()
 
-    const maximizeQuestionList = ref(false);
+    const maximizeQuestionList = ref(false)
 
-    const showEligibleQuestionList = ref(false);
+    const showEligibleQuestionList = ref(false)
 
-    const shouldRefreshEligibleQuestionList = ref(false);
+    const shouldRefreshEligibleQuestionList = ref(false)
 
     const difficultyFilterOptions = [
-      { name: "All", value: 1 },
+      { name: 'All', value: 1 },
 
-      { name: "Easy", value: 2 },
-      { name: "Medium", value: 3 },
-      { name: "Hard", value: 4 },
-    ];
-    const selectedDiffculty = ref(null);
+      { name: 'Easy', value: 2 },
+      { name: 'Medium', value: 3 },
+      { name: 'Hard', value: 4 }
+    ]
+    const selectedDiffculty = ref(null)
 
     const data = reactive({
       questions: [],
-      assignedQuestions: { easy: 0, medium: 0, hard: 0, total: 0 },
-    });
-    const selectedQuestions = ref([]);
-    const questionId = ref("");
-    const queestionIdSearchButtonClicked = ref(false);
-    const addToListError = ref("");
+      assignedQuestions: { easy: 0, medium: 0, hard: 0, total: 0 }
+    })
+    const selectedQuestions = ref([])
+    const questionId = ref('')
+    const queestionIdSearchButtonClicked = ref(false)
+    const addToListError = ref('')
 
     onMounted(() => {
-      getData();
-    });
+      getData()
+    })
 
     watch(selectedDiffculty, (diffculty) => {
-      const diffcultyValue = diffculty.value;
+      const diffcultyValue = diffculty.value
 
       if (diffcultyValue === 1) {
         data.questions.forEach((question) => {
-          question.show = true;
-        });
+          question.show = true
+        })
       } else if (diffcultyValue === 2) {
         data.questions.forEach((question) => {
-          if (question.attributes.hardness === "EASY") {
-            question.show = true;
+          if (question.attributes.hardness === 'EASY') {
+            question.show = true
           } else {
-            question.show = false;
+            question.show = false
           }
-        });
+        })
       } else if (diffcultyValue === 3) {
         data.questions.forEach((question) => {
-          if (question.attributes.hardness === "MEDIUM") {
-            question.show = true;
+          if (question.attributes.hardness === 'MEDIUM') {
+            question.show = true
           } else {
-            question.show = false;
+            question.show = false
           }
-        });
+        })
       } else if (diffcultyValue === 4) {
         data.questions.forEach((question) => {
-          if (question.attributes.hardness === "HARD") {
-            question.show = true;
+          if (question.attributes.hardness === 'HARD') {
+            question.show = true
           } else {
-            question.show = false;
+            question.show = false
           }
-        });
+        })
       }
-    });
+    })
 
     watch(
       () => questionnairesQuestionsStore.questions,
       (newQuestions) => {
-        data.questions = JSON.parse(JSON.stringify(newQuestions));
+        data.questions = JSON.parse(JSON.stringify(newQuestions))
         data.questions.forEach((question) => {
-          question.show = true;
-          setAssignedQuestionsCount(question, "increment");
-        });
-      },
-    );
+          question.show = true
+          setAssignedQuestionsCount(question, 'increment')
+        })
+      }
+    )
 
     function getData() {
       questionnairesQuestionsStore
         .getAll(route.params.id)
-        .then(() => (shouldRefreshEligibleQuestionList.value = true));
+        .then(() => (shouldRefreshEligibleQuestionList.value = true))
     }
 
     function setAssignedQuestionsCount(question, operation) {
-      if (question.attributes.hardness === "EASY") {
-        if (operation === "increment") {
-          data.assignedQuestions.easy++;
+      if (question.attributes.hardness === 'EASY') {
+        if (operation === 'increment') {
+          data.assignedQuestions.easy++
         } else {
-          data.assignedQuestions.easy--;
+          data.assignedQuestions.easy--
         }
-      } else if (question.attributes.hardness === "MEDIUM") {
-        if (operation === "increment") {
-          data.assignedQuestions.medium++;
+      } else if (question.attributes.hardness === 'MEDIUM') {
+        if (operation === 'increment') {
+          data.assignedQuestions.medium++
         } else {
-          data.assignedQuestions.medium--;
+          data.assignedQuestions.medium--
         }
-      } else if (question.attributes.hardness === "HARD") {
-        if (operation === "increment") {
-          data.assignedQuestions.hard++;
+      } else if (question.attributes.hardness === 'HARD') {
+        if (operation === 'increment') {
+          data.assignedQuestions.hard++
         } else {
-          data.assignedQuestions.hard--;
+          data.assignedQuestions.hard--
         }
       }
 
-      if (operation === "increment") {
-        data.assignedQuestions.total++;
-        return;
+      if (operation === 'increment') {
+        data.assignedQuestions.total++
+        return
       }
 
-      data.assignedQuestions.total--;
+      data.assignedQuestions.total--
     }
 
     function removeSelectedQuestions() {
-      let selectedQuestionsLength = selectedQuestions.value.length;
-      let questions = JSON.parse(JSON.stringify(data.questions));
+      let selectedQuestionsLength = selectedQuestions.value.length
+      let questions = JSON.parse(JSON.stringify(data.questions))
 
       for (
         let selectedQuestion = 0;
@@ -599,292 +540,264 @@ export default {
         selectedQuestion++
       ) {
         for (let question = 0; question < questions.length; question++) {
-          if (
-            selectedQuestions.value[selectedQuestion].id ===
-            questions[question].id
-          ) {
-            setAssignedQuestionsCount(questions[question], "decrement");
-            questions.splice(question, 1);
-            data.assignedQuestions.total--;
-            break;
+          if (selectedQuestions.value[selectedQuestion].id === questions[question].id) {
+            setAssignedQuestionsCount(questions[question], 'decrement')
+            questions.splice(question, 1)
+            data.assignedQuestions.total--
+            break
           }
         }
       }
 
-      data.questions = questions;
-      selectedQuestions.value = [];
+      data.questions = questions
+      selectedQuestions.value = []
     }
 
     function searchQuestion() {
-      queestionIdSearchButtonClicked.value = true;
-      if (questionId.value === "") {
-        return;
+      queestionIdSearchButtonClicked.value = true
+      if (questionId.value === '') {
+        return
       }
 
-      questionnairesQuestionsStore.checkQuestionEligibility(
-        route.params.id,
-        questionId.value,
-      );
+      questionnairesQuestionsStore.checkQuestionEligibility(route.params.id, questionId.value)
     }
 
     function canAddToList(question = null) {
       if (!question) {
-        question = questionnairesQuestionsStore.question;
+        question = questionnairesQuestionsStore.question
       }
-      const difficulty = question.attributes.hardness;
+      const difficulty = question.attributes.hardness
 
-      if (
-        data.assignedQuestions.total ===
-        parseInt(route.query.no_of_total_questions)
-      ) {
-        addToListError.value = "No of allowed total questions exceeded";
-        return false;
+      if (data.assignedQuestions.total === parseInt(route.query.no_of_total_questions)) {
+        addToListError.value = 'No of allowed total questions exceeded'
+        return false
       }
       if (
-        difficulty === "EASY" &&
-        data.assignedQuestions.easy ===
-          parseInt(route.query.no_of_easy_questions)
+        difficulty === 'EASY' &&
+        data.assignedQuestions.easy === parseInt(route.query.no_of_easy_questions)
       ) {
-        addToListError.value = "No of allowed easy questions exceeded";
-        return false;
+        addToListError.value = 'No of allowed easy questions exceeded'
+        return false
       }
       if (
-        difficulty === "MEDIUM" &&
-        data.assignedQuestions.medium ===
-          parseInt(route.query.no_of_medium_questions)
+        difficulty === 'MEDIUM' &&
+        data.assignedQuestions.medium === parseInt(route.query.no_of_medium_questions)
       ) {
-        addToListError.value = "No of allowed medium questions exceeded";
-        return false;
+        addToListError.value = 'No of allowed medium questions exceeded'
+        return false
       }
       if (
-        difficulty === "HARD" &&
-        data.assignedQuestions.hard ===
-          parseInt(route.query.no_of_hard_questions)
+        difficulty === 'HARD' &&
+        data.assignedQuestions.hard === parseInt(route.query.no_of_hard_questions)
       ) {
-        addToListError.value = "No of allowed hard questions exceeded";
-        return false;
+        addToListError.value = 'No of allowed hard questions exceeded'
+        return false
       }
 
       if (checkQuestionExists(question)) {
-        addToListError.value = "Question already exists";
+        addToListError.value = 'Question already exists'
 
-        return false;
+        return false
       }
 
-      return true;
+      return true
     }
 
     function checkQuestionExists(question) {
       for (const q of data.questions) {
         if (q.id === question.id) {
-          return true;
+          return true
         }
       }
 
-      return false;
+      return false
     }
 
     function addToList(question = null) {
       if (!question) {
-        question = questionnairesQuestionsStore.question;
+        question = questionnairesQuestionsStore.question
       }
-      question.show = true;
-      question.attributes.marks = 1;
-      setAssignedQuestionsCount(question, "increment");
-      data.questions.unshift(question);
+      question.show = true
+      question.attributes.marks = 1
+      setAssignedQuestionsCount(question, 'increment')
+      data.questions.unshift(question)
     }
 
     function getListQuestionsCount() {
-      let count = 0;
+      let count = 0
 
       data.questions.forEach((question) => {
         if (question.show) {
-          count++;
+          count++
         }
-      });
+      })
 
-      return count;
+      return count
     }
 
     function selectQuestion(event, question) {
-      const length = selectedQuestions.value.length;
+      const length = selectedQuestions.value.length
       for (let $i = 0; $i < length; $i++) {
         if (selectedQuestions.value[$i].id === question.id) {
-          selectedQuestions.value.splice($i, 1);
-          return;
+          selectedQuestions.value.splice($i, 1)
+          return
         }
       }
-      selectedQuestions.value.push(question);
+      selectedQuestions.value.push(question)
     }
 
     function deselectAllQuestions() {
-      selectedQuestions.value = [];
+      selectedQuestions.value = []
     }
 
     function selectAllQuestions() {
-      selectedQuestions.value = data.questions;
+      selectedQuestions.value = data.questions
     }
 
     function reset() {
-      selectedQuestions.value = [];
-      selectedDiffculty.value = difficultyFilterOptions[0];
-      questionId.value = "";
-      data.assignedQuestions.easy = 0;
-      data.assignedQuestions.medium = 0;
-      data.assignedQuestions.hard = 0;
-      data.assignedQuestions.total = 0;
-      shouldRefreshEligibleQuestionList.value = false;
-      getData();
+      selectedQuestions.value = []
+      selectedDiffculty.value = difficultyFilterOptions[0]
+      questionId.value = ''
+      data.assignedQuestions.easy = 0
+      data.assignedQuestions.medium = 0
+      data.assignedQuestions.hard = 0
+      data.assignedQuestions.total = 0
+      shouldRefreshEligibleQuestionList.value = false
+      getData()
     }
 
     function isQuestionSelected(question) {
-      const length = selectedQuestions.value.length;
+      const length = selectedQuestions.value.length
       for (let $i = 0; $i < length; $i++) {
         if (selectedQuestions.value[$i].id === question.id) {
-          return true;
+          return true
         }
       }
 
-      return false;
+      return false
     }
 
     function prepareQuestionsToSync() {
-      let questions = [];
+      let questions = []
 
       data.questions.forEach((question) => {
-        let tmpQuestion = {};
-        tmpQuestion.id = question.id;
-        tmpQuestion.marks = question.attributes.marks;
+        let tmpQuestion = {}
+        tmpQuestion.id = question.id
+        tmpQuestion.marks = question.attributes.marks
 
-        questions.push(tmpQuestion);
-      });
+        questions.push(tmpQuestion)
+      })
 
-      return questions;
+      return questions
     }
 
     function syncQuestions() {
-      shouldRefreshEligibleQuestionList.value = false;
+      shouldRefreshEligibleQuestionList.value = false
 
       questionnairesQuestionsStore
         .syncQuestions(route.params.id, {
-          questions: prepareQuestionsToSync(),
+          questions: prepareQuestionsToSync()
         })
         .then(() => {
-          shouldRefreshEligibleQuestionList.value = true;
-        });
+          shouldRefreshEligibleQuestionList.value = true
+        })
     }
 
     function onEligibleQuestionListVisible(isVisible) {
       if (isVisible) {
-        showEligibleQuestionList.value = true;
+        showEligibleQuestionList.value = true
       }
     }
 
     function onAdd(question) {
       if (!canAddToList(question)) {
-        showWarningDialog(addToListError.value);
-        return;
+        showWarningDialog(addToListError.value)
+        return
       }
 
-      addToList(question);
-      showSuccessDialog("Question is added to the list");
+      addToList(question)
+      showSuccessDialog('Question is added to the list')
     }
 
     function onSelectionChange(questions) {
-      if (
-        questions.length >
-        route.query.no_of_total_questions - data.assignedQuestions.total
-      ) {
-        showWarningDialog("No of allowed questions limit exceeded!");
-        return;
+      if (questions.length > route.query.no_of_total_questions - data.assignedQuestions.total) {
+        showWarningDialog('No of allowed questions limit exceeded!')
+        return
       }
 
-      const q = { hard: 0, easy: 0, medium: 0 };
+      const q = { hard: 0, easy: 0, medium: 0 }
 
       for (let key in questions) {
-        if (data.questions.some((quest) => quest.id === questions[key]["id"])) {
-          showWarningDialog(
-            `Queestion with id ${questions[key]["id"]} already exists!`,
-          );
-          return;
+        if (data.questions.some((quest) => quest.id === questions[key]['id'])) {
+          showWarningDialog(`Queestion with id ${questions[key]['id']} already exists!`)
+          return
         }
-        if (questions[key]["attributes"]["hardness"] === "EASY") {
-          q.easy++;
-        } else if (questions[key]["attributes"]["hardness"] === "MEDIUM") {
-          q.medium++;
+        if (questions[key]['attributes']['hardness'] === 'EASY') {
+          q.easy++
+        } else if (questions[key]['attributes']['hardness'] === 'MEDIUM') {
+          q.medium++
         } else {
-          q.hard++;
+          q.hard++
         }
-        questions[key].show = true;
-        questions[key].attributes.marks = 1;
+        questions[key].show = true
+        questions[key].attributes.marks = 1
       }
 
-      if (
-        data.assignedQuestions.easy + q.easy >
-        route.query.no_of_easy_questions
-      ) {
-        showWarningDialog("No of allowed easy questions limit exceeded!");
-        return;
+      if (data.assignedQuestions.easy + q.easy > route.query.no_of_easy_questions) {
+        showWarningDialog('No of allowed easy questions limit exceeded!')
+        return
       }
 
-      if (
-        data.assignedQuestions.medium + q.medium >
-        route.query.no_of_medium_questions
-      ) {
-        showWarningDialog("No of allowed medium questions limit exceeded!");
-        return;
+      if (data.assignedQuestions.medium + q.medium > route.query.no_of_medium_questions) {
+        showWarningDialog('No of allowed medium questions limit exceeded!')
+        return
       }
 
-      if (
-        data.assignedQuestions.hard + q.hard >
-        route.query.no_of_hard_questions
-      ) {
-        showWarningDialog("No of allowed hard questions limit exceeded!");
-        return;
+      if (data.assignedQuestions.hard + q.hard > route.query.no_of_hard_questions) {
+        showWarningDialog('No of allowed hard questions limit exceeded!')
+        return
       }
 
-      data.questions = [...data.questions, ...questions];
+      data.questions = [...data.questions, ...questions]
 
       questions.forEach((question) => {
-        setAssignedQuestionsCount(question, "increment");
-      });
+        setAssignedQuestionsCount(question, 'increment')
+      })
 
-      showSuccessDialog(
-        "Selected questions added to list; Don't forget to sync!",
-      );
+      showSuccessDialog("Selected questions added to list; Don't forget to sync!")
     }
 
     function showWarningDialog(msg) {
       confirm.require({
         message: msg,
-        header: "Warning",
-        icon: "pi pi-info-circle",
-        rejectLabel: "Cancel",
+        header: 'Warning',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancel',
         rejectProps: {
-          label: "Cancel",
-          severity: "warn",
-          outlined: true,
+          label: 'Cancel',
+          severity: 'warn',
+          outlined: true
         },
         acceptProps: {
-          class: "!hidden",
-        },
-      });
+          class: '!hidden'
+        }
+      })
     }
 
     function showSuccessDialog(msg) {
       confirm.require({
         message: msg,
-        header: "Success",
-        icon: "pi pi-check",
+        header: 'Success',
+        icon: 'pi pi-check',
         rejectProps: {
-          class: "!hidden",
+          class: '!hidden'
         },
         acceptProps: {
-          label: "Back",
-          severity: "success",
-          outlined: true,
-        },
-      });
+          label: 'Back',
+          severity: 'success',
+          outlined: true
+        }
+      })
     }
 
     return {
@@ -913,10 +826,10 @@ export default {
       onEligibleQuestionListVisible,
       onSelectionChange,
       shouldRefreshEligibleQuestionList,
-      onAdd,
-    };
-  },
-};
+      onAdd
+    }
+  }
+}
 </script>
 
 <style scoped>

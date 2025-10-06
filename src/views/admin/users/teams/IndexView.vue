@@ -13,10 +13,7 @@
           filter-display="row"
         >
           <template #empty>
-            <p
-              v-if="!teamsStore.loading"
-              class="p-4 text-center text-2xl bg-blue-200"
-            >
+            <p v-if="!teamsStore.loading" class="p-4 text-center text-2xl bg-blue-200">
               No records found.
             </p>
           </template>
@@ -25,25 +22,13 @@
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
                 <p class="mr-2">Teams</p>
-                <Avatar
-                  class="hover:cursor-pointer"
-                  icon="pi pi-eye"
-                  @click="toggleColumnsMenu"
-                />
-                <MenuComponent
-                  ref="columnsMenuRef"
-                  :model="columns"
-                  :popup="true"
-                >
+                <Avatar class="hover:cursor-pointer" icon="pi pi-eye" @click="toggleColumnsMenu" />
+                <MenuComponent ref="columnsMenuRef" :model="columns" :popup="true">
                   <template #item="slotProps">
                     <div class="flex items-center p-2 hover:cursor-pointer">
                       <i
                         :class="
-                          columnVisibility[
-                            snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
-                            )
-                          ]
+                          columnVisibility[snake(lowercaseFirstLetter(slotProps['item']['label']))]
                             ? 'pi pi-eye'
                             : 'pi pi-eye-slash'
                         "
@@ -60,11 +45,7 @@
                   class="pi pi-align-justify hover:cursor-pointer lg:!hidden"
                   @click="toggleActionsMenu"
                 ></i>
-                <MenuComponent
-                  ref="actionsMenuRef"
-                  :model="actions"
-                  :popup="true"
-                />
+                <MenuComponent ref="actionsMenuRef" :model="actions" :popup="true" />
 
                 <div class="hidden lg:flex">
                   <PrimeButton
@@ -92,11 +73,7 @@
           <Column field="id" header="Id" :hidden="!columnVisibility.id">
             <template #body="slotProps"> {{ slotProps.data.id }}</template>
           </Column>
-          <Column
-            field="name"
-            :show-filter-menu="false"
-            :hidden="!columnVisibility.name"
-          >
+          <Column field="name" :show-filter-menu="false" :hidden="!columnVisibility.name">
             <template #header>
               <div class="flex justify-between items-center w-full">
                 <p>Name</p>
@@ -116,38 +93,26 @@
                 </IconField>
               </span>
             </template>
-            <template #body="slotProps">
-              {{ slotProps.data.attributes.name }}</template
-            >
+            <template #body="slotProps"> {{ slotProps.data.attributes.name }}</template>
           </Column>
 
-          <Column
-            field="created_at"
-            header="Created at"
-            :hidden="!columnVisibility.created_at"
-          >
+          <Column field="created_at" header="Created at" :hidden="!columnVisibility.created_at">
             <template #body="slotProps">
               {{
-                moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
-                )
+                moment(slotProps.data.attributes.created_at).format('ddd, MMM D, yyyy, h:mm a')
               }}</template
             >
           </Column>
 
           <!--Show Users-->
 
-          <Column
-            field="users"
-            header="Users"
-            :hidden="!columnVisibility.users"
-          >
+          <Column field="users" header="Users" :hidden="!columnVisibility.users">
             <template #body="slotProps">
               <router-link
                 class="inlne-block flex items-center justify-start hover:bg-transparent"
                 :to="{
                   name: 'admin.teams.users.index',
-                  params: { id: slotProps.data.id },
+                  params: { id: slotProps.data.id }
                 }"
               >
                 <Avatar icon="pi pi-eye" />
@@ -161,29 +126,29 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, reactive, watch } from 'vue'
 
-import { useUsersTeamsStore } from "@/stores/users/teams";
+import { useUsersTeamsStore } from '@/stores/users/teams'
 
-import { useRouter, useRoute } from "vue-router";
+import { useRouter, useRoute } from 'vue-router'
 
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
-import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
+import AdminTableLayout from '@/views/layouts/AdminTableLayout.vue'
 
-import Avatar from "primevue/avatar";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
-import PrimeButton from "primevue/button";
-import MenuComponent from "primevue/menu";
-import InputText from "primevue/inputtext";
-import ConfirmDialog from "primevue/confirmdialog";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
+import Avatar from 'primevue/avatar'
+import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
+import PrimeButton from 'primevue/button'
+import MenuComponent from 'primevue/menu'
+import InputText from 'primevue/inputtext'
+import ConfirmDialog from 'primevue/confirmdialog'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
 
-import SortComponent from "@/components/SortComponent.vue";
+import SortComponent from '@/components/SortComponent.vue'
 
-import { lowercaseFirstLetter, snake } from "@/helpers";
+import { lowercaseFirstLetter, snake } from '@/helpers'
 
 export default {
   components: {
@@ -197,113 +162,113 @@ export default {
     MenuComponent,
     ConfirmDialog,
     IconField,
-    InputIcon,
+    InputIcon
   },
   setup() {
-    const teamsStore = useUsersTeamsStore();
+    const teamsStore = useUsersTeamsStore()
 
-    const router = useRouter();
-    const route = useRoute();
+    const router = useRouter()
+    const route = useRoute()
 
     const query = reactive({
-      sort: {},
-    });
+      sort: {}
+    })
 
-    const columnsMenuRef = ref();
+    const columnsMenuRef = ref()
     const columnVisibility = reactive({
       id: true,
       name: true,
       users: true,
       created_at: true,
-      actions: true,
-    });
+      actions: true
+    })
     const columns = ref([
       {
-        label: "Id",
+        label: 'Id',
         command: () => {
-          columnVisibility.id = !columnVisibility.id;
-        },
+          columnVisibility.id = !columnVisibility.id
+        }
       },
       {
-        label: "Name",
+        label: 'Name',
         command: () => {
-          columnVisibility.name = !columnVisibility.name;
-        },
+          columnVisibility.name = !columnVisibility.name
+        }
       },
       {
-        label: "Created at",
+        label: 'Created at',
         command: () => {
-          columnVisibility.created_at = !columnVisibility.created_at;
-        },
+          columnVisibility.created_at = !columnVisibility.created_at
+        }
       },
       {
-        label: "Users",
+        label: 'Users',
         command: () => {
-          columnVisibility.users = !columnVisibility.users;
-        },
+          columnVisibility.users = !columnVisibility.users
+        }
       },
       {
-        label: "Actions",
+        label: 'Actions',
         command: () => {
-          columnVisibility.actions = !columnVisibility.actions;
-        },
-      },
-    ]);
+          columnVisibility.actions = !columnVisibility.actions
+        }
+      }
+    ])
 
-    const filters = ref({});
+    const filters = ref({})
 
-    const actionsMenuRef = ref();
+    const actionsMenuRef = ref()
     const actions = ref([
       {
-        label: "Refresh",
-        icon: "pi pi-refresh",
-        command: () => reset(),
+        label: 'Refresh',
+        icon: 'pi pi-refresh',
+        command: () => reset()
       },
       {
-        label: "Apply Filters",
-        icon: "pi pi-filter",
-        command: () => applyFilters(),
-      },
-    ]);
+        label: 'Apply Filters',
+        icon: 'pi pi-filter',
+        command: () => applyFilters()
+      }
+    ])
 
     onMounted(() => {
-      getAllRequest(false);
-    });
+      getAllRequest(false)
+    })
 
     watch(query, () => {
-      getAllRequest();
-    });
+      getAllRequest()
+    })
 
     function getAllRequest(withQuery = true) {
       if (withQuery) {
         teamsStore.getAll(route.params.id, {
-          query: { ...query, filters: filters.value },
-        });
+          query: { ...query, filters: filters.value }
+        })
       } else {
-        teamsStore.getAll(route.params.id);
+        teamsStore.getAll(route.params.id)
       }
     }
 
     function applyFilters() {
-      getAllRequest();
+      getAllRequest()
     }
 
     function reset() {
       //Reset filters
-      filters.value = {};
+      filters.value = {}
 
       //Reset sort
-      query.sort = {};
+      query.sort = {}
 
-      getAllRequest(false);
+      getAllRequest(false)
     }
 
     function toggleActionsMenu(event) {
-      actionsMenuRef.value.toggle(event);
+      actionsMenuRef.value.toggle(event)
     }
 
     function toggleColumnsMenu(event) {
-      columnsMenuRef.value.toggle(event);
+      columnsMenuRef.value.toggle(event)
     }
 
     return {
@@ -322,8 +287,8 @@ export default {
       router,
       actions,
       actionsMenuRef,
-      toggleActionsMenu,
-    };
-  },
-};
+      toggleActionsMenu
+    }
+  }
+}
 </script>

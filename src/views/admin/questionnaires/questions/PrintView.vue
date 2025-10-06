@@ -5,13 +5,7 @@
   >
     <Skeleton height="8rem" class="mb-6" />
     <div class="bg-white flex flex-col items-center justify-center">
-      <Skeleton
-        v-for="n in 10"
-        :key="n"
-        class="m-4"
-        height="16rem"
-        width="95%"
-      />
+      <Skeleton v-for="n in 10" :key="n" class="m-4" height="16rem" width="95%" />
     </div>
   </div>
   <div v-else class="w-[210mm] h-[297mm] mx-auto">
@@ -27,18 +21,14 @@
             class="print:!hidden pi pi-print !text-xl text-[var(--p-primary-color)] cursor-pointer"
           />
         </div>
-        <div
-          class="flex flex-col justify-center items-center text-base font-bold w-[25rem]"
-        >
+        <div class="flex flex-col justify-center items-center text-base font-bold w-[25rem]">
           <p class="flex justify-between w-full">
             <span class="mr-2">Time limit</span>
             <span>{{ formatMinutes(questionnaire?.allocated_time) }}</span>
           </p>
           <p class="flex justify-between w-full">
             <span class="mr-2">Answers type</span>
-            <span>{{
-              questionnaire?.single_answers_type ? "Single" : "Multiple"
-            }}</span>
+            <span>{{ questionnaire?.single_answers_type ? 'Single' : 'Multiple' }}</span>
           </p>
         </div>
       </div>
@@ -59,9 +49,7 @@
               <p v-html="question.attributes.content"></p>
             </div>
             <p v-if="route.query.showMarks === 'true'">
-              <span class="hidden lg:inline">marks</span> ({{
-                question.attributes.marks
-              }})
+              <span class="hidden lg:inline">marks</span> ({{ question.attributes.marks }})
             </p>
           </div>
           <!--Question images-->
@@ -86,10 +74,7 @@
             :key="answer.id"
             class="mt-4"
           >
-            <div
-              v-if="question.attributes.answers_type_single"
-              class="flex items-center"
-            >
+            <div v-if="question.attributes.answers_type_single" class="flex items-center">
               <p class="mr-4">{{ String.fromCharCode(97 + answerIndex) }}).</p>
               <RadioButton
                 v-model="correctAnswers[question.id]"
@@ -138,69 +123,69 @@
 </template>
 
 <script>
-import { ref, onMounted, watch, reactive, computed } from "vue";
+import { ref, onMounted, watch, reactive, computed } from 'vue'
 
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import { useQuestionnairesQuestionsStore } from "@/stores/questionnaires/questions";
-import { useQuestionnairesStore } from "@/stores/questionnaires";
+import { useQuestionnairesQuestionsStore } from '@/stores/questionnaires/questions'
+import { useQuestionnairesStore } from '@/stores/questionnaires'
 
-import Checkbox from "primevue/checkbox";
-import PrimeImage from "primevue/image";
-import RadioButton from "primevue/radiobutton";
-import Skeleton from "primevue/skeleton";
+import Checkbox from 'primevue/checkbox'
+import PrimeImage from 'primevue/image'
+import RadioButton from 'primevue/radiobutton'
+import Skeleton from 'primevue/skeleton'
 
-import { findRelations, formatMinutes } from "@/helpers";
+import { findRelations, formatMinutes } from '@/helpers'
 
 export default {
   components: {
     Checkbox,
     PrimeImage,
     RadioButton,
-    Skeleton,
+    Skeleton
   },
   setup() {
-    const route = useRoute();
+    const route = useRoute()
 
-    const questionnairesQuestionsStore = useQuestionnairesQuestionsStore();
-    const questionnairesStore = useQuestionnairesStore();
+    const questionnairesQuestionsStore = useQuestionnairesQuestionsStore()
+    const questionnairesStore = useQuestionnairesStore()
 
-    const includes = ["images", "answers.images"];
+    const includes = ['images', 'answers.images']
 
-    let questionAnswers = reactive({});
-    const correctAnswers = reactive({});
+    let questionAnswers = reactive({})
+    const correctAnswers = reactive({})
 
-    const currrentPageRecords = ref();
-    const paginator = { perPage: 10, page: 1, offset: 0 };
+    const currrentPageRecords = ref()
+    const paginator = { perPage: 10, page: 1, offset: 0 }
 
     onMounted(() => {
-      getQuestionsData();
-      getQuestionnaireData();
-    });
+      getQuestionsData()
+      getQuestionnaireData()
+    })
 
     watch(
       () => questionnairesQuestionsStore.questions,
       (newQuestions) => {
         if (newQuestions) {
-          setAnwers(newQuestions);
-          currrentPageRecords.value = getPaginatorRecords();
+          setAnwers(newQuestions)
+          currrentPageRecords.value = getPaginatorRecords()
         }
-      },
-    );
+      }
+    )
 
     function setAnwers(newQuestions) {
       for (let question of newQuestions) {
-        questionAnswers[question.id] = [];
+        questionAnswers[question.id] = []
 
         for (let answer of question.relationships.answers.data) {
           let relatedAnswer = findRelations(
             questionnairesQuestionsStore.meta.included,
             answer.id,
-            answer.type,
-          );
-          questionAnswers[question.id].push(relatedAnswer);
-          if (route.query.showAnswers === "true") {
-            setCorrectAnswer(question, relatedAnswer);
+            answer.type
+          )
+          questionAnswers[question.id].push(relatedAnswer)
+          if (route.query.showAnswers === 'true') {
+            setCorrectAnswer(question, relatedAnswer)
           }
         }
       }
@@ -209,62 +194,59 @@ export default {
     function setCorrectAnswer(question, answer) {
       if (question.attributes.answers_type_single) {
         if (answer.attributes.correct_answer) {
-          correctAnswers[question.id] = answer.id;
+          correctAnswers[question.id] = answer.id
         }
       } else {
         if (!correctAnswers[question.id]) {
-          correctAnswers[question.id] = [];
+          correctAnswers[question.id] = []
         }
         if (answer.attributes.correct_answer) {
-          correctAnswers[question.id].push(answer.id);
+          correctAnswers[question.id].push(answer.id)
         }
       }
     }
 
     function getQuestionsData() {
       questionnairesQuestionsStore.getAll(route.params.id, {
-        query: { includes },
-      });
+        query: { includes }
+      })
     }
 
     function getQuestionnaireData() {
-      questionnairesStore.getOne(route.params.id);
+      questionnairesStore.getOne(route.params.id)
     }
 
     function onPageChange(event) {
-      paginator.page = event.page + 1; // paginator start with page 0
-      paginator.perPage = event.rows;
+      paginator.page = event.page + 1 // paginator start with page 0
+      paginator.perPage = event.rows
 
-      currrentPageRecords.value = getPaginatorRecords();
+      currrentPageRecords.value = getPaginatorRecords()
     }
 
     function getQuestionNo(index) {
-      index = parseInt(index);
+      index = parseInt(index)
 
-      return (paginator.page - 1) * paginator.perPage + index + 1;
+      return (paginator.page - 1) * paginator.perPage + index + 1
     }
 
     function getPaginatorRecords() {
-      let start_index = (paginator.page - 1) * paginator.perPage;
-      let end_index = start_index + paginator.perPage;
+      let start_index = (paginator.page - 1) * paginator.perPage
+      let end_index = start_index + paginator.perPage
 
-      return questionnairesQuestionsStore.questions?.slice(
-        start_index,
-        end_index,
-      );
+      return questionnairesQuestionsStore.questions?.slice(start_index, end_index)
     }
 
     async function navigate(questionNo) {
-      let page = Math.ceil(parseFloat(questionNo / paginator.perPage));
+      let page = Math.ceil(parseFloat(questionNo / paginator.perPage))
 
-      paginator.page = page;
-      paginator.offset = page * paginator.perPage;
+      paginator.page = page
+      paginator.offset = page * paginator.perPage
 
-      onPageChange({ page: page - 1, rows: paginator.perPage });
+      onPageChange({ page: page - 1, rows: paginator.perPage })
     }
 
     function print() {
-      window.print();
+      window.print()
     }
 
     return {
@@ -272,9 +254,7 @@ export default {
       currrentPageRecords,
       questionnairesStore,
       questionnairesQuestionsStore,
-      questionnaire: computed(
-        () => questionnairesStore.questionnaire?.data?.attributes,
-      ),
+      questionnaire: computed(() => questionnairesStore.questionnaire?.data?.attributes),
       questionAnswers,
       correctAnswers,
       findRelations,
@@ -283,8 +263,8 @@ export default {
       navigate,
       paginator,
       formatMinutes,
-      print,
-    };
-  },
-};
+      print
+    }
+  }
+}
 </script>

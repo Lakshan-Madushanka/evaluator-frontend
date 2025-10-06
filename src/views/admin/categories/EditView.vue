@@ -34,7 +34,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Name") }}
+                {{ error.$message.replace('Value', 'Name') }}
               </p>
             </div>
           </template>
@@ -51,9 +51,7 @@
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
           :label="categoriesStore.status === 'updating' ? 'Updating' : 'Update'"
@@ -76,20 +74,20 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue'
 
-import { useCategoriesStore } from "@/stores/categories";
+import { useCategoriesStore } from '@/stores/categories'
 
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import PrimeButton from "primevue/button";
-import InputText from "primevue/inputtext";
+import PrimeButton from 'primevue/button'
+import InputText from 'primevue/inputtext'
 
-import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 
-import FormLayout from "@/views/layouts/FormLayout.vue";
-import FormSkeleton from "@/components/skeletons/FormSkeleton.vue";
+import FormLayout from '@/views/layouts/FormLayout.vue'
+import FormSkeleton from '@/components/skeletons/FormSkeleton.vue'
 
 export default {
   components: {
@@ -97,59 +95,57 @@ export default {
     InputText,
     PrimeButton,
 
-    FormSkeleton,
+    FormSkeleton
   },
   setup() {
-    const categoriesStore = useCategoriesStore();
-    const route = useRoute();
+    const categoriesStore = useCategoriesStore()
+    const route = useRoute()
 
-    onMounted(() => categoriesStore.getOne(route.params.id));
+    onMounted(() => categoriesStore.getOne(route.params.id))
 
     const state = reactive({
-      name:
-        categoriesStore.category &&
-        categoriesStore.category.data.attributes.name,
-    });
+      name: categoriesStore.category && categoriesStore.category.data.attributes.name
+    })
 
-    const updateCategoryButtonClicked = ref(false);
+    const updateCategoryButtonClicked = ref(false)
 
     const rules = {
-      name: { required },
-    };
+      name: { required }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     watch(
       () => categoriesStore.category,
       (newCategory) => {
         if (newCategory) {
-          state.name = newCategory.data.attributes.name;
+          state.name = newCategory.data.attributes.name
         }
-      },
-    );
+      }
+    )
 
     function refresh() {
-      categoriesStore.getOne(route.params.id);
+      categoriesStore.getOne(route.params.id)
     }
 
     function updateCategory() {
-      updateCategoryButtonClicked.value = true;
+      updateCategoryButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      categoriesStore.editCategory(route.params.id, state);
+      categoriesStore.editCategory(route.params.id, state)
     }
 
     function clearState() {
-      state.name = "";
+      state.name = ''
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      categoriesStore.errors = {};
+      categoriesStore.errors = {}
     }
 
     return {
@@ -159,8 +155,8 @@ export default {
       updateCategory,
       clearState,
       updateCategoryButtonClicked,
-      categoriesStore,
-    };
-  },
-};
+      categoriesStore
+    }
+  }
+}
 </script>

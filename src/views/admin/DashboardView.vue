@@ -26,25 +26,19 @@
               class="w-full pr-4 flex justify-between border-b-2 border-neutral-100 border-opacity-100 py-1 dark:border-opacity-50"
             >
               <p class="">Super Admins</p>
-              <Tag severity="secondary">{{
-                dashboardStore.data.usersCount.superAdmins
-              }}</Tag>
+              <Tag severity="secondary">{{ dashboardStore.data.usersCount.superAdmins }}</Tag>
             </li>
             <li
               class="w-full pr-4 flex justify-between border-b-2 border-neutral-100 border-opacity-100 py-1 dark:border-opacity-50"
             >
               <p class="">Admins</p>
-              <Tag severity="secondary">{{
-                dashboardStore.data.usersCount.admins
-              }}</Tag>
+              <Tag severity="secondary">{{ dashboardStore.data.usersCount.admins }}</Tag>
             </li>
             <li
               class="w-full pr-4 flex justify-between border-b-2 border-neutral-100 border-opacity-100 py-1 dark:border-opacity-50"
             >
               <p class="">Candidates</p>
-              <Tag severity="secondary">{{
-                dashboardStore.data.usersCount.regular
-              }}</Tag>
+              <Tag severity="secondary">{{ dashboardStore.data.usersCount.regular }}</Tag>
             </li>
           </ul>
         </template>
@@ -85,20 +79,9 @@
     </div>
 
     <!-- Charts -->
-    <div
-      v-if="categoryQuestionnairesChartData"
-      class="flex flex-wrap justify-between space-y-4"
-    >
-      <Chart
-        type="bar"
-        class="w-full lg:w-[48%]"
-        :data="categoryQuestionnairesChartData"
-      />
-      <Chart
-        type="bar"
-        class="w-full lg:w-[48%]"
-        :data="categoryQuestionsChartData"
-      />
+    <div v-if="categoryQuestionnairesChartData" class="flex flex-wrap justify-between space-y-4">
+      <Chart type="bar" class="w-full lg:w-[48%]" :data="categoryQuestionnairesChartData" />
+      <Chart type="bar" class="w-full lg:w-[48%]" :data="categoryQuestionsChartData" />
     </div>
 
     <!-- Table -->
@@ -115,10 +98,7 @@
           <p class="text-2xl font-bold">Latest Evaluations</p>
         </template>
         <template #empty>
-          <p
-            v-if="!dashboardStore.loading"
-            class="p-4 text-center text-2xl bg-blue-200"
-          >
+          <p v-if="!dashboardStore.loading" class="p-4 text-center text-2xl bg-blue-200">
             No records found.
           </p>
         </template>
@@ -135,28 +115,20 @@
 
         <!--Questionnaire name-->
         <Column field="questionnaire_name" header="Questionnaire Name">
-          <template #body="slotProps">
-            {{ slotProps.data.questionnaire.name }}</template
-          >
+          <template #body="slotProps"> {{ slotProps.data.questionnaire.name }}</template>
         </Column>
 
         <!--Questionnaire name-->
         <Column field="marks" header="Marks(%)">
           <template #body="slotProps">
-            <Tag severity="success" rounded class="ml-4">{{
-              slotProps.data.marks_percentage
-            }}</Tag>
+            <Tag severity="success" rounded class="ml-4">{{ slotProps.data.marks_percentage }}</Tag>
           </template>
         </Column>
 
         <!--Created at-->
         <Column field="data" header="Date">
           <template #body="slotProps">
-            {{
-              moment(slotProps.data.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a",
-              )
-            }}
+            {{ moment(slotProps.data.created_at).format('ddd, MMM D, yyyy, h:mm a') }}
           </template>
         </Column>
       </DataTable>
@@ -165,20 +137,20 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
-import { useDashboardStore } from "@/stores/dashboard";
-import { useDashboard } from "@/composables/dashboard";
+import { onMounted } from 'vue'
+import { useDashboardStore } from '@/stores/dashboard'
+import { useDashboard } from '@/composables/dashboard'
 
-import Card from "primevue/card";
-import Chart from "primevue/chart";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
-import ProgressSpinner from "primevue/progressspinner";
-import OverlayBadge from "primevue/overlaybadge";
-import Avatar from "primevue/avatar";
-import { Tag } from "primevue";
+import Card from 'primevue/card'
+import Chart from 'primevue/chart'
+import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
+import ProgressSpinner from 'primevue/progressspinner'
+import OverlayBadge from 'primevue/overlaybadge'
+import Avatar from 'primevue/avatar'
+import { Tag } from 'primevue'
 
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
 export default {
   components: {
@@ -189,24 +161,23 @@ export default {
     ProgressSpinner,
     OverlayBadge,
     Avatar,
-    Tag,
+    Tag
   },
   setup() {
-    const dashboardStore = useDashboardStore();
+    const dashboardStore = useDashboardStore()
 
-    const { categoryQuestionnairesChartData, categoryQuestionsChartData } =
-      useDashboard();
+    const { categoryQuestionnairesChartData, categoryQuestionsChartData } = useDashboard()
 
     onMounted(() => {
-      dashboardStore.getMainDashnboardData();
-    });
+      dashboardStore.getMainDashnboardData()
+    })
 
     return {
       dashboardStore,
       categoryQuestionnairesChartData,
       categoryQuestionsChartData,
-      moment,
-    };
-  },
-};
+      moment
+    }
+  }
+}
 </script>

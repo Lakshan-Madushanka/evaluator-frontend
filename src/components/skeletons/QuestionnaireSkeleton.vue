@@ -9,22 +9,16 @@
       </div>
     </div>
     <div class="mx-2 bg-white flex flex-col justify-center items-center">
-      <Skeleton
-        v-for="n in 10"
-        :key="n"
-        class="m-4"
-        height="16rem"
-        width="95%"
-      />
+      <Skeleton v-for="n in 10" :key="n" class="m-4" height="16rem" width="95%" />
     </div>
   </div>
 </template>
 
 <script>
-import Skeleton from "primevue/skeleton";
+import Skeleton from 'primevue/skeleton'
 
 export default {
   components: { Skeleton },
-  setup() {},
-};
+  setup() {}
+}
 </script>

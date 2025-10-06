@@ -4,19 +4,17 @@
       <Skeleton class="" height="3rem"></Skeleton>
     </div>
   </div>
-  <div
-    class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-  >
+  <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
     <Skeleton class="" width="25%" height="2rem"></Skeleton>
     <Skeleton class="" width="25%" height="2rem"></Skeleton>
   </div>
 </template>
 
 <script>
-import Skeleton from "primevue/skeleton";
+import Skeleton from 'primevue/skeleton'
 
 export default {
   components: { Skeleton },
-  setup() {},
-};
+  setup() {}
+}
 </script>

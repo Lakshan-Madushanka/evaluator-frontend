@@ -26,7 +26,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Difficulty") }}
+                {{ error.$message.replace('Value', 'Difficulty') }}
                 {{ validationErrorMessages[error.$validator] }}
               </p>
             </div>
@@ -66,7 +66,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Caetegory") }}
+                {{ error.$message.replace('Value', 'Caetegory') }}
                 {{ validationErrorMessages[error.$validator] }}
               </p>
             </div>
@@ -89,10 +89,7 @@
             <Dropdown
               v-model="state.is_answers_type_single"
               :options="answersTypeOptions"
-              :class="[
-                'w-full',
-                { 'p-invalid': v$.is_answers_type_single.$invalid },
-              ]"
+              :class="['w-full', { 'p-invalid': v$.is_answers_type_single.$invalid }]"
               option-label="name"
               option-value="value"
               placeholder="Select answers type"
@@ -109,7 +106,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Answers Type") }}
+                {{ error.$message.replace('Value', 'Answers Type') }}
                 {{ validationErrorMessages[error.$validator] }}
               </p>
             </div>
@@ -117,8 +114,7 @@
           <!-- Server side errors -->
           <template v-if="questionsStore.errors.is_answers_type_single">
             <p
-              v-for="(error, index) in questionsStore.errors
-                .is_answers_type_single"
+              v-for="(error, index) in questionsStore.errors.is_answers_type_single"
               :key="index"
               class="text-red-500 text-sm"
             >
@@ -150,7 +146,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "No of Answers") }}
+                {{ error.$message.replace('Value', 'No of Answers') }}
               </p>
             </div>
           </template>
@@ -184,7 +180,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Text") }}
+                {{ error.$message.replace('Value', 'Text') }}
               </p>
             </div>
           </template>
@@ -201,9 +197,7 @@
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
           :label="questionsStore.status === 'creating' ? 'Creating' : 'Create'"
@@ -226,26 +220,23 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue'
 
-import { useQuestionsStore } from "@/stores/questions";
-import { useCategoriesStore } from "@/stores/categories";
+import { useQuestionsStore } from '@/stores/questions'
+import { useCategoriesStore } from '@/stores/categories'
 
-import Dropdown from "primevue/dropdown";
-import InputNumber from "primevue/inputnumber";
-import MultiSelect from "primevue/multiselect";
-import PrimeButton from "primevue/button";
+import Dropdown from 'primevue/dropdown'
+import InputNumber from 'primevue/inputnumber'
+import MultiSelect from 'primevue/multiselect'
+import PrimeButton from 'primevue/button'
 
-import { useVuelidate } from "@vuelidate/core";
-import { required, minLength } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 
-import FormLayout from "@/views/layouts/FormLayout.vue";
-import TextEditor from "@/components/form/textEditors/DefaultTextEditor.vue";
+import FormLayout from '@/views/layouts/FormLayout.vue'
+import TextEditor from '@/components/form/textEditors/DefaultTextEditor.vue'
 
-import {
-  exists as existsRule,
-  messages as validationErrorMessages,
-} from "@/validationRules";
+import { exists as existsRule, messages as validationErrorMessages } from '@/validationRules'
 
 export default {
   components: {
@@ -254,38 +245,38 @@ export default {
     InputNumber,
     PrimeButton,
     MultiSelect,
-    TextEditor,
+    TextEditor
   },
   setup() {
-    const questionsStore = useQuestionsStore();
-    const categoriesStore = useCategoriesStore();
+    const questionsStore = useQuestionsStore()
+    const categoriesStore = useCategoriesStore()
 
     const initialState = {
-      text: "",
-      difficulty: "",
+      text: '',
+      difficulty: '',
       categories: [],
-      is_answers_type_single: "",
-      no_of_answers: null,
-    };
+      is_answers_type_single: '',
+      no_of_answers: null
+    }
 
     const state = reactive({
-      ...initialState,
-    });
+      ...initialState
+    })
 
-    const createQuestionButtonClicked = ref(false);
+    const createQuestionButtonClicked = ref(false)
 
     const difficultyOptions = [
-      { name: "Easy", value: 1 },
-      { name: "Medium", value: 2 },
-      { name: "Hard", value: 3 },
-    ];
+      { name: 'Easy', value: 1 },
+      { name: 'Medium', value: 2 },
+      { name: 'Hard', value: 3 }
+    ]
 
     const answersTypeOptions = [
-      { name: "Single", value: "true" },
-      { name: "Multiple", value: "false" },
-    ];
+      { name: 'Single', value: 'true' },
+      { name: 'Multiple', value: 'false' }
+    ]
 
-    const categoriesOptions = ref([]);
+    const categoriesOptions = ref([])
 
     const rules = {
       text: { required, minLength: minLength(3) },
@@ -294,15 +285,15 @@ export default {
       no_of_answers: { required },
       is_answers_type_single: {
         required,
-        exists: existsRule(["true", "false"]),
-      },
-    };
+        exists: existsRule(['true', 'false'])
+      }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     onMounted(() => {
-      categoriesStore.getAll();
-    });
+      categoriesStore.getAll()
+    })
 
     watch(
       () => categoriesStore.categories,
@@ -311,47 +302,46 @@ export default {
           newCategories.data.forEach((category) => {
             categoriesOptions.value.push({
               name: category.attributes.name,
-              value: category.id,
-            });
-          });
+              value: category.id
+            })
+          })
         }
-      },
-    );
+      }
+    )
 
     function prepareFormData() {
-      let selectedCategories = [];
-      let is_answers_type_single =
-        state.is_answers_type_single === "true" ? true : false;
+      let selectedCategories = []
+      let is_answers_type_single = state.is_answers_type_single === 'true' ? true : false
 
       state.categories.forEach((category) => {
-        selectedCategories.push(category.value);
-      });
+        selectedCategories.push(category.value)
+      })
 
       return {
         ...state,
         categories: selectedCategories,
-        is_answers_type_single,
-      };
+        is_answers_type_single
+      }
     }
 
     function createQuestion() {
-      createQuestionButtonClicked.value = true;
+      createQuestionButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      questionsStore.createQuestion(prepareFormData());
+      questionsStore.createQuestion(prepareFormData())
     }
 
     function clearState() {
-      Object.assign(state, { ...initialState });
+      Object.assign(state, { ...initialState })
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      questionsStore.errors = {};
+      questionsStore.errors = {}
     }
 
     return {
@@ -364,8 +354,8 @@ export default {
       createQuestion,
       clearState,
       createQuestionButtonClicked,
-      questionsStore,
-    };
-  },
-};
+      questionsStore
+    }
+  }
+}
 </script>

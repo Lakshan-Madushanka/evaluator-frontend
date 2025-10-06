@@ -22,17 +22,13 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Name") }}
+                {{ error.$message.replace('Value', 'Name') }}
               </p>
             </div>
           </template>
           <!-- Server side errors -->
           <template v-if="usersStore.errors.name">
-            <p
-              v-for="(error, index) in usersStore.errors.name"
-              :key="index"
-              class="text-red-500"
-            >
+            <p v-for="(error, index) in usersStore.errors.name" :key="index" class="text-red-500">
               {{ error }}
             </p>
           </template>
@@ -57,17 +53,13 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Email") }}
+                {{ error.$message.replace('Value', 'Email') }}
               </p>
             </div>
           </template>
           <!-- Server side errors -->
           <template v-if="usersStore.errors.email">
-            <p
-              v-for="(error, index) in usersStore.errors.email"
-              :key="index"
-              class="text-red-500"
-            >
+            <p v-for="(error, index) in usersStore.errors.email" :key="index" class="text-red-500">
               {{ error }}
             </p>
           </template>
@@ -81,10 +73,7 @@
             option-label="name"
             option-value="value"
             placeholder="Select a role"
-            :class="[
-              'w-full md:w-[calc(50%-1rem)]',
-              { 'p-invalid': v$.role.$invalid },
-            ]"
+            :class="['w-full md:w-[calc(50%-1rem)]', { 'p-invalid': v$.role.$invalid }]"
           />
           <!-- Client side errors -->
           <template v-if="v$.role.$invalid">
@@ -94,18 +83,14 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Role") }}
+                {{ error.$message.replace('Value', 'Role') }}
                 {{ customRules.messages[error.$validator] }}
               </p>
             </div>
           </template>
           <!-- Server side errors -->
           <template v-if="usersStore.errors.role">
-            <p
-              v-for="(error, index) in usersStore.errors.role"
-              :key="index"
-              class="text-red-500"
-            >
+            <p v-for="(error, index) in usersStore.errors.role" :key="index" class="text-red-500">
               {{ error }}
             </p>
           </template>
@@ -144,12 +129,8 @@
           <!-- Client side errors -->
           <template v-if="v$.password.$invalid">
             <div class="mt-1">
-              <p
-                v-for="(error, index) in v$.password.$errors"
-                :key="index"
-                class="text-red-500"
-              >
-                {{ error.$message.replace("Value", "Password") }}
+              <p v-for="(error, index) in v$.password.$errors" :key="index" class="text-red-500">
+                {{ error.$message.replace('Value', 'Password') }}
                 {{ customRules.messages[error.$validator] }}
               </p>
             </div>
@@ -189,7 +170,7 @@
                 :key="index"
                 class="text-red-500"
               >
-                {{ error.$message.replace("Value", "Password Confirmation") }}
+                {{ error.$message.replace('Value', 'Password Confirmation') }}
                 {{ customRules.messages[error.$validator] }}
               </p>
             </div>
@@ -197,9 +178,7 @@
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
           :label="usersStore.status === 'creating' ? 'Creating' : 'Create'"
@@ -222,22 +201,22 @@
 </template>
 
 <script>
-import { ref, reactive, toRef } from "vue";
+import { ref, reactive, toRef } from 'vue'
 
-import { useUsersStore } from "@/stores/users";
+import { useUsersStore } from '@/stores/users'
 
-import PrimeButton from "primevue/button";
-import InputText from "primevue/inputtext";
-import Dropdown from "primevue/dropdown";
-import Divider from "primevue/divider";
-import Password from "primevue/password";
+import PrimeButton from 'primevue/button'
+import InputText from 'primevue/inputtext'
+import Dropdown from 'primevue/dropdown'
+import Divider from 'primevue/divider'
+import Password from 'primevue/password'
 
-import { useVuelidate } from "@vuelidate/core";
-import { email, required, requiredIf, sameAs } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { email, required, requiredIf, sameAs } from '@vuelidate/validators'
 
-import FormLayout from "@/views/layouts/FormLayout.vue";
+import FormLayout from '@/views/layouts/FormLayout.vue'
 
-import * as customRules from "@/validationRules";
+import * as customRules from '@/validationRules'
 
 export default {
   components: {
@@ -246,27 +225,27 @@ export default {
     PrimeButton,
     Dropdown,
     Divider,
-    Password,
+    Password
   },
   setup() {
-    const usersStore = useUsersStore();
+    const usersStore = useUsersStore()
 
     const state = reactive({
-      name: "",
-      email: "",
-      role: "",
-      password: "",
-      password_confirmation: "",
-    });
+      name: '',
+      email: '',
+      role: '',
+      password: '',
+      password_confirmation: ''
+    })
 
-    const createUserButtonClicked = ref(false);
+    const createUserButtonClicked = ref(false)
 
     const roles = [
-      { name: "Admin", value: 2 },
-      { name: "Regular", value: 3 },
-    ];
+      { name: 'Admin', value: 2 },
+      { name: 'Regular', value: 3 }
+    ]
 
-    const passwordRef = toRef(state, "password");
+    const passwordRef = toRef(state, 'password')
 
     const rules = {
       name: { required },
@@ -274,37 +253,37 @@ export default {
       role: { required, exists: customRules.exists([2, 3]) },
       password: {
         requiredIfAdmin: requiredIf(() => state.role === 2),
-        password: customRules.password,
+        password: customRules.password
       },
       password_confirmation: {
         requiredIfPassword: requiredIf(passwordRef),
-        sameAsPassword: sameAs(passwordRef),
-      },
-    };
+        sameAsPassword: sameAs(passwordRef)
+      }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     function createUser() {
-      createUserButtonClicked.value = true;
+      createUserButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      usersStore.createUser(state);
+      usersStore.createUser(state)
     }
 
     function clearState() {
-      state.name = "";
-      state.email = "";
-      state.role = "";
-      state.password = "";
+      state.name = ''
+      state.email = ''
+      state.role = ''
+      state.password = ''
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      usersStore.errors = {};
+      usersStore.errors = {}
     }
 
     return {
@@ -315,8 +294,8 @@ export default {
       clearState,
       customRules,
       createUserButtonClicked,
-      usersStore,
-    };
-  },
-};
+      usersStore
+    }
+  }
+}
 </script>

@@ -4,65 +4,37 @@
       <div class="content">
         <h2>Sign In</h2>
         <template v-if="authStore.errors.email">
-          <p
-            v-for="(error, index) in authStore.errors.email"
-            :key="index"
-            class="text-red-500"
-          >
+          <p v-for="(error, index) in authStore.errors.email" :key="index" class="text-red-500">
             {{ error }}
           </p>
         </template>
         <div class="form">
           <div class="input-box">
-            <input
-              v-model="state.email"
-              type="email"
-              required
-              @keyup.enter="login"
-            />
+            <input v-model="state.email" type="email" required @keyup.enter="login" />
             <i>Email</i>
             <template v-if="v$.email.$invalid">
               <div class="mt-1">
-                <p
-                  v-for="(error, index) in v$.email.$errors"
-                  :key="index"
-                  class="text-red-500"
-                >
-                  {{ error.$message.replace("Value", "Email") }}
+                <p v-for="(error, index) in v$.email.$errors" :key="index" class="text-red-500">
+                  {{ error.$message.replace('Value', 'Email') }}
                 </p>
               </div>
             </template>
           </div>
           <div class="input-box">
-            <input
-              v-model="state.password"
-              type="password"
-              required
-              @keyup.enter="login"
-            />
+            <input v-model="state.password" type="password" required @keyup.enter="login" />
             <i>Password</i>
             <template v-if="v$.password.$invalid">
               <div class="mt-1">
-                <p
-                  v-for="(error, index) in v$.password.$errors"
-                  :key="index"
-                  class="text-red-500"
-                >
-                  {{ error.$message.replace("Value", "Password") }}
+                <p v-for="(error, index) in v$.password.$errors" :key="index" class="text-red-500">
+                  {{ error.$message.replace('Value', 'Password') }}
                 </p>
               </div>
             </template>
           </div>
 
           <div>
-            <label for="remember_me" class="mr-2 text-white">
-              Remember me</label
-            >
-            <Checkbox
-              v-model="state.remember"
-              input-id="remember_me"
-              :binary="true"
-            />
+            <label for="remember_me" class="mr-2 text-white"> Remember me</label>
+            <Checkbox v-model="state.remember" input-id="remember_me" :binary="true" />
           </div>
 
           <div class="input-box mt-6 relative" @click="login">
@@ -85,35 +57,35 @@
 </template>
 
 <script>
-import { useAuthStore } from "../stores/auth";
-import { useVuelidate } from "@vuelidate/core";
-import { email, required } from "@vuelidate/validators";
-import { reactive } from "vue";
-import Checkbox from "primevue/checkbox";
+import { useAuthStore } from '../stores/auth'
+import { useVuelidate } from '@vuelidate/core'
+import { email, required } from '@vuelidate/validators'
+import { reactive } from 'vue'
+import Checkbox from 'primevue/checkbox'
 
 export default {
   components: { Checkbox },
   setup() {
-    const authStore = useAuthStore();
+    const authStore = useAuthStore()
 
     const state = reactive({
-      email: "super-admin@company.com",
-      password: "superAdmin123",
-      remember: false,
-    });
+      email: 'super-admin@company.com',
+      password: 'superAdmin123',
+      remember: false
+    })
 
     const rules = {
       email: { required, email },
-      password: { required },
-    };
+      password: { required }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     function login() {
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (!v$.value.$invalid && !authStore.loading) {
-        authStore.login(state);
+        authStore.login(state)
       }
     }
 
@@ -121,10 +93,10 @@ export default {
       authStore,
       state,
       v$,
-      login,
-    };
-  },
-};
+      login
+    }
+  }
+}
 </script>
 <style scoped>
 section {
@@ -223,7 +195,7 @@ section .sign-in .content .form .links a:nth-child(2) {
   font-weight: 600;
 }
 
-section .sign-in .content .form input[type="submit"] {
+section .sign-in .content .form input[type='submit'] {
   padding: 10px;
   background: #0f0;
   color: #111;
@@ -233,7 +205,7 @@ section .sign-in .content .form input[type="submit"] {
   cursor: pointer;
 }
 
-section .sign-in .content .form input[type="submit"]:hover {
+section .sign-in .content .form input[type='submit']:hover {
   background: rgb(7, 200, 7);
 }
 </style>

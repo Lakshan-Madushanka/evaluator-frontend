@@ -85,9 +85,7 @@
                 <p>{{ slotProps.item.attributes.file_name }}</p>
                 <p>
                   {{
-                    moment(slotProps.item.attributes.created_at).format(
-                      "ddd, MMM D, yyyy, h:mm a",
-                    )
+                    moment(slotProps.item.attributes.created_at).format('ddd, MMM D, yyyy, h:mm a')
                   }}
                 </p>
               </div>
@@ -96,11 +94,7 @@
         </OrderList>
         <div class="mt-4 flex justify-center space-x-4">
           <PrimeButton
-            :label="
-              imagesStore.status === 'changing'
-                ? 'Changing order'
-                : 'Change order'
-            "
+            :label="imagesStore.status === 'changing' ? 'Changing order' : 'Change order'"
             :loading="imagesStore.status === 'changing'"
             @click="changeOrder"
           />
@@ -124,25 +118,25 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from 'vue'
 
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import { useImagesStore } from "@/stores/images/manager";
+import { useImagesStore } from '@/stores/images/manager'
 
-import ConfirmDialog from "primevue/confirmdialog";
-import PrimeGalleria from "primevue/galleria";
-import PrimeButton from "primevue/button";
-import Skeleton from "primevue/skeleton";
-import FileUpload from "primevue/fileupload";
-import OrderList from "primevue/orderlist";
-import { useConfirm } from "primevue/useconfirm";
+import ConfirmDialog from 'primevue/confirmdialog'
+import PrimeGalleria from 'primevue/galleria'
+import PrimeButton from 'primevue/button'
+import Skeleton from 'primevue/skeleton'
+import FileUpload from 'primevue/fileupload'
+import OrderList from 'primevue/orderlist'
+import { useConfirm } from 'primevue/useconfirm'
 
-import { get_route_to_upload_images as imageUploadRoute } from "@/api/routes/images/manager";
+import { get_route_to_upload_images as imageUploadRoute } from '@/api/routes/images/manager'
 
-import { getCookie } from "@/helpers";
+import { getCookie } from '@/helpers'
 
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
 export default {
   components: {
@@ -151,86 +145,86 @@ export default {
     OrderList,
     PrimeGalleria,
     PrimeButton,
-    Skeleton,
+    Skeleton
   },
   setup() {
-    const route = useRoute();
+    const route = useRoute()
 
-    const confirm = useConfirm();
+    const confirm = useConfirm()
 
-    const imagesStore = useImagesStore();
+    const imagesStore = useImagesStore()
 
-    const selectedImages = ref([]);
+    const selectedImages = ref([])
 
     onMounted(() => {
-      getImages();
-    });
+      getImages()
+    })
 
     watch(
       () => imagesStore.status,
       (newStatus) => {
-        if (newStatus === "removed") {
-          getImages();
-          selectedImages.value = [];
+        if (newStatus === 'removed') {
+          getImages()
+          selectedImages.value = []
         }
-      },
-    );
+      }
+    )
 
     function getImages() {
-      imagesStore.getImages(route.params.id, route.params.type);
+      imagesStore.getImages(route.params.id, route.params.type)
     }
 
     function getImageUploadRoute() {
-      return imageUploadRoute(route.params.id, route.params.type);
+      return imageUploadRoute(route.params.id, route.params.type)
     }
 
     function beforeSend(request) {
-      request.xhr.setRequestHeader("Accept", "application/json");
-      request.xhr.setRequestHeader("X-XSRF-TOKEN", getCookie("XSRF-TOKEN"));
+      request.xhr.setRequestHeader('Accept', 'application/json')
+      request.xhr.setRequestHeader('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'))
     }
 
     function prepareDataToChangeOrder() {
-      let order = {};
+      let order = {}
       imagesStore.images.forEach((image, index) => {
-        order[image["id"]] = index + 1;
-      });
+        order[image['id']] = index + 1
+      })
 
-      return order;
+      return order
     }
 
     function getIdsToDelete() {
-      let ids = [];
+      let ids = []
       selectedImages.value.forEach((image) => {
-        ids.push(image["id"]);
-      });
+        ids.push(image['id'])
+      })
 
-      return ids;
+      return ids
     }
 
     function changeOrder() {
       imagesStore.chageOrderOfImages(route.params.type, {
-        order: prepareDataToChangeOrder(),
-      });
+        order: prepareDataToChangeOrder()
+      })
     }
 
     function onUploadCompleted() {
-      getImages();
+      getImages()
     }
 
     function removeAll() {
       confirm.require({
-        message: "This will remove all selected images ?",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        acceptClass: "p-button-danger",
+        message: 'This will remove all selected images ?',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
 
         accept: () => {
           imagesStore.removeImages(route.params.type, {
-            ids: getIdsToDelete(),
-          });
+            ids: getIdsToDelete()
+          })
         },
-        reject: () => {},
-      });
+        reject: () => {}
+      })
     }
 
     return {
@@ -242,8 +236,8 @@ export default {
       changeOrder,
       removeAll,
       onUploadCompleted,
-      moment,
-    };
-  },
-};
+      moment
+    }
+  }
+}
 </script>

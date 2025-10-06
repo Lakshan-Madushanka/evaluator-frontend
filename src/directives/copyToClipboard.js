@@ -1,65 +1,65 @@
 function createElm(el, targetElmId) {
-  let container = document.createElement("div");
-  let icon = document.createElement("i");
+  let container = document.createElement('div')
+  let icon = document.createElement('i')
 
-  el.style.position = "relative";
+  el.style.position = 'relative'
 
-  icon.className = "pi pi-copy hover:cursor-pointer";
+  icon.className = 'pi pi-copy hover:cursor-pointer'
 
-  icon.style.padding = "0";
-  icon.style.backgroundColor = "white";
-  icon.style.fontSize = "16px";
+  icon.style.padding = '0'
+  icon.style.backgroundColor = 'white'
+  icon.style.fontSize = '16px'
 
-  container.style.position = "absolute";
-  container.style.right = "-1.8rem";
-  container.style.top = "-3px";
+  container.style.position = 'absolute'
+  container.style.right = '-1.8rem'
+  container.style.top = '-3px'
 
-  container.appendChild(icon);
+  container.appendChild(icon)
 
-  icon.addEventListener("click", () => copyToClipBoard(container, targetElmId));
+  icon.addEventListener('click', () => copyToClipBoard(container, targetElmId))
 
-  el.appendChild(container);
+  el.appendChild(container)
 }
 
 function createToast(element) {
-  let span = document.createElement("span");
+  let span = document.createElement('span')
 
-  span.style.position = "absolute";
-  span.style.fontWeight = "bold";
-  span.style.left = "2rem";
-  span.style.bottom = "1px";
-  span.style.padding = "2px";
-  span.style.backgroundColor = "white";
+  span.style.position = 'absolute'
+  span.style.fontWeight = 'bold'
+  span.style.left = '2rem'
+  span.style.bottom = '1px'
+  span.style.padding = '2px'
+  span.style.backgroundColor = 'white'
 
-  span.textContent = "copied";
+  span.textContent = 'copied'
 
-  element.appendChild(span);
+  element.appendChild(span)
 
-  setTimeout(() => span.remove(), 1000);
+  setTimeout(() => span.remove(), 1000)
 }
 
 function copyToClipBoard(element, targetElmId) {
-  const target = getTarget(targetElmId);
+  const target = getTarget(targetElmId)
 
-  let content = target.value;
+  let content = target.value
 
   if (target.value === undefined) {
-    content = target.textContent;
+    content = target.textContent
   }
 
-  navigator.clipboard.writeText(content);
+  navigator.clipboard.writeText(content)
 
-  createToast(element);
+  createToast(element)
 }
 
 function getTarget(targetElmId) {
-  const target = document.querySelector("#" + targetElmId);
+  const target = document.querySelector('#' + targetElmId)
 
-  return target;
+  return target
 }
 
 export default {
   beforeMount: (el, binding) => {
-    createElm(el, binding.value);
-  },
-};
+    createElm(el, binding.value)
+  }
+}

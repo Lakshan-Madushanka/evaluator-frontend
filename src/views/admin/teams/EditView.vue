@@ -34,26 +34,20 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Name") }}
+                {{ error.$message.replace('Value', 'Name') }}
               </p>
             </div>
           </template>
           <!-- Server side errors -->
           <template v-if="teamsStore.errors.name">
-            <p
-              v-for="(error, index) in teamsStore.errors.name"
-              :key="index"
-              class="text-red-500"
-            >
+            <p v-for="(error, index) in teamsStore.errors.name" :key="index" class="text-red-500">
               {{ error }}
             </p>
           </template>
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
           :label="teamsStore.status === 'updating' ? 'Updating' : 'Update'"
@@ -76,20 +70,20 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue'
 
-import { useTeamsStore } from "@/stores/teams";
+import { useTeamsStore } from '@/stores/teams'
 
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import PrimeButton from "primevue/button";
-import InputText from "primevue/inputtext";
+import PrimeButton from 'primevue/button'
+import InputText from 'primevue/inputtext'
 
-import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 
-import FormLayout from "@/views/layouts/FormLayout.vue";
-import FormSkeleton from "@/components/skeletons/FormSkeleton.vue";
+import FormLayout from '@/views/layouts/FormLayout.vue'
+import FormSkeleton from '@/components/skeletons/FormSkeleton.vue'
 
 export default {
   components: {
@@ -97,57 +91,57 @@ export default {
     InputText,
     PrimeButton,
 
-    FormSkeleton,
+    FormSkeleton
   },
   setup() {
-    const teamsStore = useTeamsStore();
-    const route = useRoute();
+    const teamsStore = useTeamsStore()
+    const route = useRoute()
 
-    onMounted(() => teamsStore.getOne(route.params.id));
+    onMounted(() => teamsStore.getOne(route.params.id))
 
     const state = reactive({
-      name: teamsStore.team && teamsStore.team.data.attributes.name,
-    });
+      name: teamsStore.team && teamsStore.team.data.attributes.name
+    })
 
-    const updateTeamButtonClicked = ref(false);
+    const updateTeamButtonClicked = ref(false)
 
     const rules = {
-      name: { required },
-    };
+      name: { required }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     watch(
       () => teamsStore.team,
       (newTeam) => {
         if (newTeam) {
-          state.name = newTeam.data.attributes.name;
+          state.name = newTeam.data.attributes.name
         }
-      },
-    );
+      }
+    )
 
     function refresh() {
-      teamsStore.getOne(route.params.id);
+      teamsStore.getOne(route.params.id)
     }
 
     function updateTeam() {
-      updateTeamButtonClicked.value = true;
+      updateTeamButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      teamsStore.editTeam(route.params.id, state);
+      teamsStore.editTeam(route.params.id, state)
     }
 
     function clearState() {
-      state.name = "";
+      state.name = ''
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      teamsStore.errors = {};
+      teamsStore.errors = {}
     }
 
     return {
@@ -157,8 +151,8 @@ export default {
       updateTeam,
       clearState,
       updateTeamButtonClicked,
-      teamsStore,
-    };
-  },
-};
+      teamsStore
+    }
+  }
+}
 </script>

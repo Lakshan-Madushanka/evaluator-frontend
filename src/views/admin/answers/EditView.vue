@@ -13,19 +13,13 @@
   </FormLayout>
   <FormLayout v-else>
     <template #header>
-      <div
-        class="flex flex-wrap justify-center md:justify-start space-x-4 items-center"
-      >
+      <div class="flex flex-wrap justify-center md:justify-start space-x-4 items-center">
         <p class="mb-2">
           Edit Answer
           <span class="italic text-green-400 mr-1">{{ route.params.id }}</span>
           <span class="lowercase text-sm">(id)</span>
         </p>
-        <PrimeButton
-          class="p-button-sm h-10"
-          icon="pi pi-refresh"
-          @click="refresh"
-        />
+        <PrimeButton class="p-button-sm h-10" icon="pi pi-refresh" @click="refresh" />
       </div>
     </template>
     <template #content>
@@ -48,7 +42,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Text") }}
+                {{ error.$message.replace('Value', 'Text') }}
               </p>
             </div>
           </template>
@@ -65,9 +59,7 @@
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
           :label="answersStore.status === 'updating' ? 'Updating' : 'Update'"
@@ -90,88 +82,88 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue'
 
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import { useAnswersStore } from "@/stores/answers";
+import { useAnswersStore } from '@/stores/answers'
 
-import PrimeButton from "primevue/button";
+import PrimeButton from 'primevue/button'
 
-import { useVuelidate } from "@vuelidate/core";
-import { required, minLength } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 
-import FormLayout from "@/views/layouts/FormLayout.vue";
-import FormSkeleton from "@/components/skeletons/FormSkeleton.vue";
-import TextEditor from "@/components/form/textEditors/DefaultTextEditor.vue";
+import FormLayout from '@/views/layouts/FormLayout.vue'
+import FormSkeleton from '@/components/skeletons/FormSkeleton.vue'
+import TextEditor from '@/components/form/textEditors/DefaultTextEditor.vue'
 
-import { messages as validationErrorMessages } from "@/validationRules";
+import { messages as validationErrorMessages } from '@/validationRules'
 
 export default {
   components: {
     FormLayout,
     PrimeButton,
     FormSkeleton,
-    TextEditor,
+    TextEditor
   },
   setup() {
-    const answersStore = useAnswersStore();
+    const answersStore = useAnswersStore()
 
-    const route = useRoute();
+    const route = useRoute()
 
     const initialState = {
-      text: "",
-    };
+      text: ''
+    }
 
-    const state = reactive(JSON.parse(JSON.stringify(initialState)));
+    const state = reactive(JSON.parse(JSON.stringify(initialState)))
 
-    const updateAnswerButtonClicked = ref(false);
+    const updateAnswerButtonClicked = ref(false)
 
     const rules = {
-      text: { required, minLength: minLength(3) },
-    };
+      text: { required, minLength: minLength(3) }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     onMounted(() => {
-      loadData();
-    });
+      loadData()
+    })
 
     watch(
       () => answersStore.answer,
       (newAnswer) => {
         if (newAnswer) {
-          state.text = newAnswer.data.attributes.text;
+          state.text = newAnswer.data.attributes.text
         }
-      },
-    );
+      }
+    )
 
     function updateAnswer() {
-      updateAnswerButtonClicked.value = true;
+      updateAnswerButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      answersStore.editAnswer(route.params.id, state);
+      answersStore.editAnswer(route.params.id, state)
     }
 
     function clearState() {
-      Object.assign(state, JSON.parse(JSON.stringify(initialState)));
+      Object.assign(state, JSON.parse(JSON.stringify(initialState)))
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      answersStore.errors = {};
+      answersStore.errors = {}
     }
 
     function refresh() {
-      loadData();
+      loadData()
     }
 
     function loadData() {
-      answersStore.getOne(route.params.id);
+      answersStore.getOne(route.params.id)
     }
 
     return {
@@ -183,8 +175,8 @@ export default {
       clearState,
       updateAnswerButtonClicked,
       answersStore,
-      refresh,
-    };
-  },
-};
+      refresh
+    }
+  }
+}
 </script>

@@ -13,7 +13,7 @@
     <div
       :class="[
         'pl-[290px] w-full transition-all duration-[.3s]',
-        { '!pl-[65px]': sideBarCollapse },
+        { '!pl-[65px]': sideBarCollapse }
       ]"
     >
       <SessionTimeoutMessage />
@@ -26,219 +26,219 @@
 </template>
 
 <script>
-import { ref, toRefs, reactive, watch, onBeforeMount, markRaw } from "vue";
+import { ref, toRefs, reactive, watch, onBeforeMount, markRaw } from 'vue'
 
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import { formatText } from "@/helpers";
+import { formatText } from '@/helpers'
 
-import { SidebarMenu } from "vue-sidebar-menu";
-import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
-import NavBar from "@/navBars/AdminNavBar.vue";
-import { useAppStore } from "@/stores/app";
-import { useAuthStore } from "@/stores/auth";
-import Divider from "primevue/divider";
-import SessionTimeoutMessage from "@/components/SessionTimeoutMessage.vue";
+import { SidebarMenu } from 'vue-sidebar-menu'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+import NavBar from '@/navBars/AdminNavBar.vue'
+import { useAppStore } from '@/stores/app'
+import { useAuthStore } from '@/stores/auth'
+import Divider from 'primevue/divider'
+import SessionTimeoutMessage from '@/components/SessionTimeoutMessage.vue'
 
 export default {
   components: { SidebarMenu, NavBar, SessionTimeoutMessage },
   setup() {
-    const route = useRoute();
+    const route = useRoute()
 
-    const appStore = useAppStore();
-    const authStore = useAuthStore();
+    const appStore = useAppStore()
+    const authStore = useAuthStore()
 
-    const sideBarCollapse = ref(false);
+    const sideBarCollapse = ref(false)
 
     const activeClasses = reactive({
-      dashboard: "",
-      teams: "",
-      users: "",
-      categories: "",
-      questionnaires: "",
-      questions: "",
-      answers: "",
-      evaluations: "",
-    });
-    const activeClassesRef = toRefs(activeClasses);
+      dashboard: '',
+      teams: '',
+      users: '',
+      categories: '',
+      questionnaires: '',
+      questions: '',
+      answers: '',
+      evaluations: ''
+    })
+    const activeClassesRef = toRefs(activeClasses)
 
     const menu = ref([
       {
         header: formatText(`😊 Hello ${authStore.user.name}`, 20),
         hiddenOnCollapse: true,
-        class: "text-center !text-xl !normal-case !pt-6",
-        icon: "pi pi-fw pi-th-large",
+        class: 'text-center !text-xl !normal-case !pt-6',
+        icon: 'pi pi-fw pi-th-large'
       },
       {
-        component: markRaw(Divider),
+        component: markRaw(Divider)
       },
       {
-        href: { name: "home" },
-        title: "Home",
-        icon: "pi pi-fw pi-home",
-        exact: true,
+        href: { name: 'home' },
+        title: 'Home',
+        icon: 'pi pi-fw pi-home',
+        exact: true
       },
       {
-        href: { name: "admin.dashboard" },
-        title: "Dashboard",
+        href: { name: 'admin.dashboard' },
+        title: 'Dashboard',
         class: activeClassesRef.dashboard,
-        icon: "pi pi-fw pi-th-large",
-        exact: true,
+        icon: 'pi pi-fw pi-th-large',
+        exact: true
       },
       {
-        component: markRaw(Divider),
+        component: markRaw(Divider)
       },
       {
-        href: { name: "admin.teams.index" },
-        title: "Teams",
+        href: { name: 'admin.teams.index' },
+        title: 'Teams',
         class: activeClassesRef.teams,
-        icon: "pi pi-fw pi-users",
-        exact: true,
+        icon: 'pi pi-fw pi-users',
+        exact: true
       },
       {
-        href: { name: "admin.users.index" },
-        title: "Users",
+        href: { name: 'admin.users.index' },
+        title: 'Users',
         class: activeClassesRef.users,
-        icon: "pi pi-fw pi-user",
-        exact: true,
+        icon: 'pi pi-fw pi-user',
+        exact: true
       },
       {
-        href: { name: "admin.categories.index" },
-        title: "Categories",
+        href: { name: 'admin.categories.index' },
+        title: 'Categories',
         class: activeClassesRef.categories,
-        icon: "pi pi-fw pi-bars",
-        exact: true,
+        icon: 'pi pi-fw pi-bars',
+        exact: true
       },
       {
-        href: { name: "admin.questionnaires.index" },
-        title: "Questionnaires",
+        href: { name: 'admin.questionnaires.index' },
+        title: 'Questionnaires',
         class: activeClassesRef.questionnaires,
-        icon: "pi pi-fw pi-server",
-        exact: true,
+        icon: 'pi pi-fw pi-server',
+        exact: true
       },
       {
-        href: { name: "admin.questions.index" },
-        title: "Questions",
+        href: { name: 'admin.questions.index' },
+        title: 'Questions',
         class: activeClassesRef.questions,
-        icon: "pi pi-fw pi-question",
-        exact: true,
+        icon: 'pi pi-fw pi-question',
+        exact: true
       },
       {
-        href: { name: "admin.answers.index" },
-        title: "Answers",
+        href: { name: 'admin.answers.index' },
+        title: 'Answers',
         class: activeClassesRef.answers,
-        icon: "pi pi-fw pi-language",
-        exact: true,
+        icon: 'pi pi-fw pi-language',
+        exact: true
       },
       {
-        href: { name: "admin.evaluations.index" },
-        title: "Evaluations",
+        href: { name: 'admin.evaluations.index' },
+        title: 'Evaluations',
         class: activeClassesRef.evaluations,
-        icon: "pi pi-fw pi-map",
-        exact: true,
-      },
-    ]);
+        icon: 'pi pi-fw pi-map',
+        exact: true
+      }
+    ])
 
     onBeforeMount(() => {
-      let shouldSidebarCollapse = localStorage.getItem("ssc");
+      let shouldSidebarCollapse = localStorage.getItem('ssc')
 
       if (!shouldSidebarCollapse) {
-        shouldSidebarCollapse = false;
+        shouldSidebarCollapse = false
       }
 
-      sideBarCollapse.value = shouldSidebarCollapse === "true" ? true : false;
-    });
+      sideBarCollapse.value = shouldSidebarCollapse === 'true' ? true : false
+    })
 
     watch(
       route,
       (newRoute) => {
-        const routeName = newRoute.name;
+        const routeName = newRoute.name
 
-        if (routeName.includes("admin.dashboard")) {
-          activeClasses.dashboard = "vsm--link_active";
-          activeClasses.teams = "";
-          activeClasses.users = "";
-          activeClasses.answers = "";
-          activeClasses.questions = "";
-          activeClasses.categories = "";
-          activeClasses.questionnaires = "";
-          activeClasses.evaluations = "";
-        } else if (routeName.includes("admin.teams")) {
-          activeClasses.teams = "vsm--link_active";
-          activeClasses.dashboard = "";
-          activeClasses.users = "";
-          activeClasses.answers = "";
-          activeClasses.questions = "";
-          activeClasses.categories = "";
-          activeClasses.questionnaires = "";
-          activeClasses.evaluations = "";
-        } else if (routeName.includes("admin.users")) {
-          activeClasses.users = "vsm--link_active";
-          activeClasses.dashboard = "";
-          activeClasses.teams = "";
-          activeClasses.answers = "";
-          activeClasses.questions = "";
-          activeClasses.categories = "";
-          activeClasses.questionnaires = "";
-          activeClasses.evaluations = "";
-        } else if (routeName.includes("admin.categories")) {
-          activeClasses.categories = "vsm--link_active";
-          activeClasses.dashboard = "";
-          activeClasses.teams = "";
-          activeClasses.answers = "";
-          activeClasses.questions = "";
-          activeClasses.users = "";
-          activeClasses.questionnaires = "";
-          activeClasses.evaluations = "";
-        } else if (routeName.includes("admin.questionnaires")) {
-          activeClasses.questionnaires = "vsm--link_active";
-          activeClasses.dashboard = "";
-          activeClasses.teams = "";
-          activeClasses.answers = "";
-          activeClasses.questions = "";
-          activeClasses.categories = "";
-          activeClasses.users = "";
-          activeClasses.evaluations = "";
-        } else if (routeName.includes("admin.questions")) {
-          activeClasses.questions = "vsm--link_active";
-          activeClasses.dashboard = "";
-          activeClasses.teams = "";
-          activeClasses.answers = "";
-          activeClasses.questionnaires = "";
-          activeClasses.categories = "";
-          activeClasses.users = "";
-          activeClasses.evaluations = "";
-        } else if (routeName.includes("admin.answers")) {
-          activeClasses.answers = "vsm--link_active";
-          activeClasses.dashboard = "";
-          activeClasses.teams = "";
-          activeClasses.questions = "";
-          activeClasses.questionnaires = "";
-          activeClasses.categories = "";
-          activeClasses.users = "";
-          activeClasses.evaluations = "";
-        } else if (routeName.includes("admin.evaluations")) {
-          activeClasses.evaluations = "vsm--link_active";
-          activeClasses.dashboard = "";
-          activeClasses.teams = "";
-          activeClasses.answers = "";
-          activeClasses.questions = "";
-          activeClasses.questionnaires = "";
-          activeClasses.categories = "";
-          activeClasses.users = "";
+        if (routeName.includes('admin.dashboard')) {
+          activeClasses.dashboard = 'vsm--link_active'
+          activeClasses.teams = ''
+          activeClasses.users = ''
+          activeClasses.answers = ''
+          activeClasses.questions = ''
+          activeClasses.categories = ''
+          activeClasses.questionnaires = ''
+          activeClasses.evaluations = ''
+        } else if (routeName.includes('admin.teams')) {
+          activeClasses.teams = 'vsm--link_active'
+          activeClasses.dashboard = ''
+          activeClasses.users = ''
+          activeClasses.answers = ''
+          activeClasses.questions = ''
+          activeClasses.categories = ''
+          activeClasses.questionnaires = ''
+          activeClasses.evaluations = ''
+        } else if (routeName.includes('admin.users')) {
+          activeClasses.users = 'vsm--link_active'
+          activeClasses.dashboard = ''
+          activeClasses.teams = ''
+          activeClasses.answers = ''
+          activeClasses.questions = ''
+          activeClasses.categories = ''
+          activeClasses.questionnaires = ''
+          activeClasses.evaluations = ''
+        } else if (routeName.includes('admin.categories')) {
+          activeClasses.categories = 'vsm--link_active'
+          activeClasses.dashboard = ''
+          activeClasses.teams = ''
+          activeClasses.answers = ''
+          activeClasses.questions = ''
+          activeClasses.users = ''
+          activeClasses.questionnaires = ''
+          activeClasses.evaluations = ''
+        } else if (routeName.includes('admin.questionnaires')) {
+          activeClasses.questionnaires = 'vsm--link_active'
+          activeClasses.dashboard = ''
+          activeClasses.teams = ''
+          activeClasses.answers = ''
+          activeClasses.questions = ''
+          activeClasses.categories = ''
+          activeClasses.users = ''
+          activeClasses.evaluations = ''
+        } else if (routeName.includes('admin.questions')) {
+          activeClasses.questions = 'vsm--link_active'
+          activeClasses.dashboard = ''
+          activeClasses.teams = ''
+          activeClasses.answers = ''
+          activeClasses.questionnaires = ''
+          activeClasses.categories = ''
+          activeClasses.users = ''
+          activeClasses.evaluations = ''
+        } else if (routeName.includes('admin.answers')) {
+          activeClasses.answers = 'vsm--link_active'
+          activeClasses.dashboard = ''
+          activeClasses.teams = ''
+          activeClasses.questions = ''
+          activeClasses.questionnaires = ''
+          activeClasses.categories = ''
+          activeClasses.users = ''
+          activeClasses.evaluations = ''
+        } else if (routeName.includes('admin.evaluations')) {
+          activeClasses.evaluations = 'vsm--link_active'
+          activeClasses.dashboard = ''
+          activeClasses.teams = ''
+          activeClasses.answers = ''
+          activeClasses.questions = ''
+          activeClasses.questionnaires = ''
+          activeClasses.categories = ''
+          activeClasses.users = ''
         }
       },
-      { immediate: true },
-    );
+      { immediate: true }
+    )
 
     function onToggleCollapse(event) {
-      sideBarCollapse.value = event;
-      localStorage.setItem("ssc", event);
+      sideBarCollapse.value = event
+      localStorage.setItem('ssc', event)
     }
 
-    return { activeClasses, appStore, menu, onToggleCollapse, sideBarCollapse };
-  },
-};
+    return { activeClasses, appStore, menu, onToggleCollapse, sideBarCollapse }
+  }
+}
 </script>
 
 <style>

@@ -6,8 +6,7 @@
       <div>
         <DataTable
           :value="
-            teamsQuestionnairesStore.questionnaires &&
-            teamsQuestionnairesStore.questionnaires.data
+            teamsQuestionnairesStore.questionnaires && teamsQuestionnairesStore.questionnaires.data
           "
           responsive-layout="scroll"
           :loading="teamsQuestionnairesStore.loading"
@@ -28,24 +27,14 @@
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
                 <p class="mr-2">Questionnaires</p>
-                <Avatar
-                  class="hover:cursor-pointer"
-                  icon="pi pi-eye"
-                  @click="toggleColumnsMenu"
-                />
-                <MenuComponent
-                  ref="columnsMenuRef"
-                  :model="columns"
-                  :popup="true"
-                >
+                <Avatar class="hover:cursor-pointer" icon="pi pi-eye" @click="toggleColumnsMenu" />
+                <MenuComponent ref="columnsMenuRef" :model="columns" :popup="true">
                   <template #item="slotProps">
                     <div class="flex items-center p-2 hover:cursor-pointer">
                       <i
                         :class="
                           columnVisibility[
-                            snake(
-                              lowercaseFirstLetter(slotProps['item']['label'])
-                            ).toLowerCase()
+                            snake(lowercaseFirstLetter(slotProps['item']['label'])).toLowerCase()
                           ]
                             ? 'pi pi-eye'
                             : 'pi pi-eye-slash'
@@ -63,11 +52,7 @@
                   class="pi pi-align-justify hover:cursor-pointer lg:!hidden"
                   @click="toggleActionsMenu"
                 ></i>
-                <MenuComponent
-                  ref="actionsMenuRef"
-                  :model="actions"
-                  :popup="true"
-                />
+                <MenuComponent ref="actionsMenuRef" :model="actions" :popup="true" />
 
                 <div class="hidden lg:flex">
                   <PrimeButton
@@ -92,12 +77,7 @@
           <Column field="no" header="No">
             <template #body="slotProps"> {{ slotProps.index + 1 }}</template>
           </Column>
-          <Column
-            field="id"
-            header="Id"
-            :show-filter-menu="false"
-            :hidden="!columnVisibility.id"
-          >
+          <Column field="id" header="Id" :show-filter-menu="false" :hidden="!columnVisibility.id">
             <template #filter>
               <span>
                 <IconField>
@@ -136,15 +116,9 @@
               {{ slotProps.data.attributes.questionnaire_name }}</template
             >
           </Column>
-          <Column
-            field="total_users"
-            header="Total Users"
-            :hidden="!columnVisibility.total_users"
-          >
+          <Column field="total_users" header="Total Users" :hidden="!columnVisibility.total_users">
             <template #body="slotProps">
-              <Badge severity="info">{{
-                slotProps.data.attributes.total_users
-              }}</Badge>
+              <Badge severity="info">{{ slotProps.data.attributes.total_users }}</Badge>
             </template>
           </Column>
           <Column
@@ -153,26 +127,20 @@
             :hidden="!columnVisibility.attempted_users"
           >
             <template #body="slotProps">
-              <Badge severity="info">{{
-                slotProps.data.attributes.attempted_users
-              }}</Badge>
+              <Badge severity="info">{{ slotProps.data.attributes.attempted_users }}</Badge>
             </template>
           </Column>
 
           <!--Show Users-->
-          <Column
-            field="showResults"
-            header="Results"
-            :hidden="!columnVisibility.results"
-          >
+          <Column field="showResults" header="Results" :hidden="!columnVisibility.results">
             <template #body="slotProps">
               <router-link
                 class="inlne-block mx-0 flex items-center justify-start hover:bg-transparent"
                 :to="{
                   name: 'admin.teams.questionnaires.users.index',
                   params: {
-                    id: slotProps.data.attributes.team_questionnaire_id,
-                  },
+                    id: slotProps.data.attributes.team_questionnaire_id
+                  }
                 }"
               >
                 <Avatar icon="pi pi-eye" />
@@ -184,26 +152,18 @@
             <template #header>
               <div class="flex justify-between items-center w-full">
                 <p>Created at</p>
-                <SortComponent
-                  @direction-change="query.sort.created_at = $event"
-                />
+                <SortComponent @direction-change="query.sort.created_at = $event" />
               </div>
             </template>
             <template #body="slotProps">
               {{
-                moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a"
-                )
+                moment(slotProps.data.attributes.created_at).format('ddd, MMM D, yyyy, h:mm a')
               }}</template
             >
           </Column>
 
           <!--Actions-->
-          <Column
-            field="Actions"
-            header="Actions"
-            :hidden="!columnVisibility.actions"
-          >
+          <Column field="Actions" header="Actions" :hidden="!columnVisibility.actions">
             <template #body="slotProps">
               <span class="p-buttonset space-x-1">
                 <PrimeButton
@@ -216,9 +176,7 @@
                 />
                 <PrimeButton
                   v-else
-                  v-tooltip="
-                    'Cannot remove a questionnaire when there are ateempted users'
-                  "
+                  v-tooltip="'Cannot remove a questionnaire when there are ateempted users'"
                   disabled
                   class="p-button-danger p-button-sm"
                   icon="pi pi-trash "
@@ -231,13 +189,9 @@
           <template #footer>
             <Paginator
               v-if="teamsQuestionnairesStore.users && showPaginator"
-              :rows="
-                teamsQuestionnairesStore.users &&
-                teamsQuestionnairesStore.users.meta.per_page
-              "
+              :rows="teamsQuestionnairesStore.users && teamsQuestionnairesStore.users.meta.per_page"
               :total-records="
-                teamsQuestionnairesStore.users &&
-                teamsQuestionnairesStore.users.meta.total
+                teamsQuestionnairesStore.users && teamsQuestionnairesStore.users.meta.total
               "
               @page="onPage"
             >
@@ -245,11 +199,7 @@
             <p
               class="hidden sm:flex p-2 relative bottom-[-20px] w-full justify-center lg:justify-end"
             >
-              {{
-                teamsQuestionnairesStore.users
-                  ? teamsQuestionnairesStore.users.meta.total
-                  : 0
-              }}
+              {{ teamsQuestionnairesStore.users ? teamsQuestionnairesStore.users.meta.total : 0 }}
               records found.
             </p>
           </template>
@@ -260,34 +210,34 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, watch } from "vue";
-import Paginator from "@/components/PaginatorComponent.vue";
+import { onMounted, ref, reactive, watch } from 'vue'
+import Paginator from '@/components/PaginatorComponent.vue'
 
-import { useTeamsQuestionnairesStore } from "@/stores/teams/questionnaires";
-import { useAuthStore } from "@/stores/auth";
+import { useTeamsQuestionnairesStore } from '@/stores/teams/questionnaires'
+import { useAuthStore } from '@/stores/auth'
 
-import { useRouter, useRoute } from "vue-router";
+import { useRouter, useRoute } from 'vue-router'
 
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
-import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
+import AdminTableLayout from '@/views/layouts/AdminTableLayout.vue'
 
-import Avatar from "primevue/avatar";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
-import PrimeButton from "primevue/button";
-import Badge from "primevue/tag";
-import MenuComponent from "primevue/menu";
-import InputText from "primevue/inputtext";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
-import ConfirmDialog from "primevue/confirmdialog";
-import { useConfirm } from "primevue/useconfirm";
+import Avatar from 'primevue/avatar'
+import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
+import PrimeButton from 'primevue/button'
+import Badge from 'primevue/tag'
+import MenuComponent from 'primevue/menu'
+import InputText from 'primevue/inputtext'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
+import ConfirmDialog from 'primevue/confirmdialog'
+import { useConfirm } from 'primevue/useconfirm'
 
-import SortComponent from "@/components/SortComponent.vue";
+import SortComponent from '@/components/SortComponent.vue'
 
-import { ROLES } from "@/constants";
-import { lowercaseFirstLetter, snake } from "@/helpers";
+import { ROLES } from '@/constants'
+import { lowercaseFirstLetter, snake } from '@/helpers'
 
 export default {
   components: {
@@ -303,35 +253,35 @@ export default {
     MenuComponent,
     IconField,
     InputIcon,
-    ConfirmDialog,
+    ConfirmDialog
   },
   setup() {
-    const confirm = useConfirm();
+    const confirm = useConfirm()
 
-    const teamsQuestionnairesStore = useTeamsQuestionnairesStore();
-    const authStore = useAuthStore();
+    const teamsQuestionnairesStore = useTeamsQuestionnairesStore()
+    const authStore = useAuthStore()
 
-    const router = useRouter();
-    const route = useRoute();
+    const router = useRouter()
+    const route = useRoute()
 
     const query = reactive({
       sort: {},
-      pagination: { number: 1, size: 10 },
-    });
+      pagination: { number: 1, size: 10 }
+    })
 
-    const actionsMenuRef = ref();
+    const actionsMenuRef = ref()
     const actions = ref([
       {
-        label: "Refresh",
-        icon: "pi pi-refresh",
-        command: () => reset(),
+        label: 'Refresh',
+        icon: 'pi pi-refresh',
+        command: () => reset()
       },
       {
-        label: "Apply Filters",
-        icon: "pi pi-filter",
-        command: () => applyFilters(),
-      },
-    ]);
+        label: 'Apply Filters',
+        icon: 'pi pi-filter',
+        command: () => applyFilters()
+      }
+    ])
 
     const columnVisibility = reactive({
       id: true,
@@ -340,132 +290,128 @@ export default {
       attempted_users: true,
       results: true,
       created_at: true,
-      actions: true,
-    });
-    const columnsMenuRef = ref();
+      actions: true
+    })
+    const columnsMenuRef = ref()
     const columns = ref([
       {
-        label: "Id",
+        label: 'Id',
         command: () => {
-          columnVisibility.id = !columnVisibility.id;
-        },
+          columnVisibility.id = !columnVisibility.id
+        }
       },
       {
-        label: "Name",
+        label: 'Name',
         command: () => {
-          columnVisibility.name = !columnVisibility.name;
-        },
+          columnVisibility.name = !columnVisibility.name
+        }
       },
       {
-        label: "Total Users",
+        label: 'Total Users',
         command: () => {
-          columnVisibility.total_users = !columnVisibility.total_users;
-        },
+          columnVisibility.total_users = !columnVisibility.total_users
+        }
       },
       {
-        label: "Attempted Users",
+        label: 'Attempted Users',
         command: () => {
-          columnVisibility.attempted_users = !columnVisibility.attempted_users;
-        },
+          columnVisibility.attempted_users = !columnVisibility.attempted_users
+        }
       },
       {
-        label: "Results",
+        label: 'Results',
         command: () => {
-          columnVisibility.results = !columnVisibility.results;
-        },
+          columnVisibility.results = !columnVisibility.results
+        }
       },
       {
-        label: "Created at",
+        label: 'Created at',
         command: () => {
-          columnVisibility.created_at = !columnVisibility.created_at;
-        },
+          columnVisibility.created_at = !columnVisibility.created_at
+        }
       },
       {
-        label: "Actions",
+        label: 'Actions',
         command: () => {
-          columnVisibility.actions = !columnVisibility.actions;
-        },
-      },
-    ]);
+          columnVisibility.actions = !columnVisibility.actions
+        }
+      }
+    ])
 
-    const filters = ref({});
-    const showPaginator = ref(true);
+    const filters = ref({})
+    const showPaginator = ref(true)
 
     onMounted(() => {
       teamsQuestionnairesStore.getAll(route.params.id, {
-        query: { pagination: { number: 1, size: 10 } },
-      });
-    });
+        query: { pagination: { number: 1, size: 10 } }
+      })
+    })
 
     watch(query, (newQuery) => {
       teamsQuestionnairesStore.getAll(route.params.id, {
-        query: { ...newQuery, filters: filters.value },
-      });
-    });
+        query: { ...newQuery, filters: filters.value }
+      })
+    })
 
     // We need to reset show paginator if it is disabled
     watch(teamsQuestionnairesStore, (newteamsQuestionnairesStore) => {
       if (!newteamsQuestionnairesStore.loading) {
-        showPaginator.value = true;
+        showPaginator.value = true
       }
-    });
+    })
 
     function onPage(event) {
-      query.pagination.number = event.page + 1;
-      query.pagination.size = event.rows;
+      query.pagination.number = event.page + 1
+      query.pagination.size = event.rows
     }
 
     function applyFilters() {
-      query.pagination.number = 1;
-      showPaginator.value = false; // Reset the pagination
+      query.pagination.number = 1
+      showPaginator.value = false // Reset the pagination
 
       teamsQuestionnairesStore.getAll(route.params.id, {
-        query: { filters: filters.value, ...query },
-      });
+        query: { filters: filters.value, ...query }
+      })
     }
 
     function reset() {
       //Reset pagnator
-      showPaginator.value = false;
-      query.pagination = { number: 1, size: 10 };
+      showPaginator.value = false
+      query.pagination = { number: 1, size: 10 }
 
       //Reset filters
-      filters.value = {};
+      filters.value = {}
 
       //Reset sort
-      query.sort = {};
+      query.sort = {}
 
       teamsQuestionnairesStore.getAll(route.params.id, {
-        query: { pagination: { number: 1, size: 10 } },
-      });
+        query: { pagination: { number: 1, size: 10 } }
+      })
     }
 
     function toggleColumnsMenu(event) {
-      columnsMenuRef.value.toggle(event);
+      columnsMenuRef.value.toggle(event)
     }
 
     function toggleActionsMenu(event) {
-      actionsMenuRef.value.toggle(event);
+      actionsMenuRef.value.toggle(event)
     }
 
     function deleteQuestionnaire(questionnaireId) {
       confirm.require({
-        message:
-          "Do you want to delete this questionnaire? [This action cannot be undone !]",
-        header: "Delete Confirmation",
-        icon: "pi pi-info-circle",
-        iconClass: "bg-red-500",
-        acceptClass: "p-button-danger",
-        acceptLabel: "Yes Delete",
+        message: 'Do you want to delete this questionnaire? [This action cannot be undone !]',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        iconClass: 'bg-red-500',
+        acceptClass: 'p-button-danger',
+        acceptLabel: 'Yes Delete',
         accept: async () => {
-          await teamsQuestionnairesStore.detach(
-            route.params.id,
-            questionnaireId
-          );
-          reset();
+          await teamsQuestionnairesStore.detach(route.params.id, questionnaireId)
+          reset()
         },
-        reject: () => {},
-      });
+        reject: () => {}
+      })
     }
 
     return {
@@ -489,8 +435,8 @@ export default {
       actions,
       toggleActionsMenu,
       router,
-      deleteQuestionnaire,
-    };
-  },
-};
+      deleteQuestionnaire
+    }
+  }
+}
 </script>

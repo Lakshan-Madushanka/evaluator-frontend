@@ -22,7 +22,7 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Text") }}
+                {{ error.$message.replace('Value', 'Text') }}
               </p>
             </div>
           </template>
@@ -39,9 +39,7 @@
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
           :label="answersStore.status === 'creating' ? 'Creating' : 'Create'"
@@ -64,60 +62,60 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive } from 'vue'
 
-import { useAnswersStore } from "@/stores/answers";
+import { useAnswersStore } from '@/stores/answers'
 
-import { useVuelidate } from "@vuelidate/core";
-import { required, minLength } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 
-import PrimeButton from "primevue/button";
-import FormLayout from "@/views/layouts/FormLayout.vue";
-import TextEditor from "@/components/form/textEditors/DefaultTextEditor.vue";
+import PrimeButton from 'primevue/button'
+import FormLayout from '@/views/layouts/FormLayout.vue'
+import TextEditor from '@/components/form/textEditors/DefaultTextEditor.vue'
 
 export default {
   components: {
     FormLayout,
     PrimeButton,
-    TextEditor,
+    TextEditor
   },
   setup() {
-    const answersStore = useAnswersStore();
+    const answersStore = useAnswersStore()
 
     const initialState = {
-      text: "",
-    };
+      text: ''
+    }
 
     const state = reactive({
-      ...initialState,
-    });
+      ...initialState
+    })
 
-    const createAnswerButtonClicked = ref(false);
+    const createAnswerButtonClicked = ref(false)
 
     const rules = {
-      text: { required, minLength: minLength(3) },
-    };
+      text: { required, minLength: minLength(3) }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     function createAnswer() {
-      createAnswerButtonClicked.value = true;
+      createAnswerButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      answersStore.createAnswer(state);
+      answersStore.createAnswer(state)
     }
 
     function clearState() {
-      Object.assign(state, { ...initialState });
+      Object.assign(state, { ...initialState })
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      answersStore.errors = {};
+      answersStore.errors = {}
     }
 
     return {
@@ -126,8 +124,8 @@ export default {
       createAnswer,
       clearState,
       createAnswerButtonClicked,
-      answersStore,
-    };
-  },
-};
+      answersStore
+    }
+  }
+}
 </script>

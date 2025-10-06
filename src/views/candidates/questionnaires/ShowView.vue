@@ -22,12 +22,8 @@
         >
           <span class="flex space-x-2">
             <span class="p-4 bg-white text-black font-bold">{{ hours }} H</span>
-            <span class="p-4 bg-white text-black font-bold"
-              >{{ minutes }} M
-            </span>
-            <span class="p-4 bg-white text-black font-bold"
-              >{{ seconds }} S</span
-            >
+            <span class="p-4 bg-white text-black font-bold">{{ minutes }} M </span>
+            <span class="p-4 bg-white text-black font-bold">{{ seconds }} S</span>
           </span>
         </vue-countdown>
       </div>
@@ -50,7 +46,7 @@
             :href="`#${question.id}_card`"
             class="shadow-md mr-1 mb-1 p-1 hover:cursor-pointer hover:bg-gray-200 border border-solid border-1 border-gray-300"
             :class="{
-              'bg-green-200': getQuestionAnsweredStatus(question.id),
+              'bg-green-200': getQuestionAnsweredStatus(question.id)
             }"
             @click="navigate(index + 1, question.id)"
           >
@@ -82,24 +78,10 @@
         class="fixed bottom-2 left-1 z-50 hidden xl:block"
         @click="showSidebar = false"
       >
-        <PrimeButton
-          icon="pi pi-chevron-circle-left"
-          severity="info"
-          rounded
-          aria-label="Save"
-        />
+        <PrimeButton icon="pi pi-chevron-circle-left" severity="info" rounded aria-label="Save" />
       </div>
-      <div
-        v-else
-        class="fixed bottom-2 z-50 left-2"
-        @click="showSidebar = true"
-      >
-        <PrimeButton
-          icon="pi pi-chevron-circle-right"
-          severity="info"
-          rounded
-          aria-label="Save"
-        />
+      <div v-else class="fixed bottom-2 z-50 left-2" @click="showSidebar = true">
+        <PrimeButton icon="pi pi-chevron-circle-right" severity="info" rounded aria-label="Save" />
       </div>
 
       <!-- Right side -->
@@ -116,13 +98,8 @@
               <div class="text-black">
                 <div class="flex justify-between w-full">
                   <div class="flex w-[90%]">
-                    <span class="mr-2"
-                      >{{ getQuestionNo(questionIndex) }}).</span
-                    >
-                    <div
-                      v-html="question.attributes.content"
-                      class="space-y-2"
-                    ></div>
+                    <span class="mr-2">{{ getQuestionNo(questionIndex) }}).</span>
+                    <div v-html="question.attributes.content" class="space-y-2"></div>
                   </div>
                 </div>
                 <!--Question images-->
@@ -147,13 +124,8 @@
                   :key="answer.id"
                   class="mt-4"
                 >
-                  <div
-                    v-if="question.attributes.answers_type_single"
-                    class="flex items-center"
-                  >
-                    <p class="mr-4">
-                      {{ String.fromCharCode(97 + answerIndex) }}).
-                    </p>
+                  <div v-if="question.attributes.answers_type_single" class="flex items-center">
+                    <p class="mr-4">{{ String.fromCharCode(97 + answerIndex) }}).</p>
                     <RadioButton
                       v-model="userAnswers[question.id]"
                       :input-id="answer.id"
@@ -162,15 +134,11 @@
                       class="mr-2"
                     />
 
-                    <label :for="answer.id">{{
-                      answer?.attributes?.text
-                    }}</label>
+                    <label :for="answer.id">{{ answer?.attributes?.text }}</label>
                   </div>
 
                   <div v-else class="flex items-center">
-                    <p class="mr-4">
-                      {{ String.fromCharCode(97 + answerIndex) }}).
-                    </p>
+                    <p class="mr-4">{{ String.fromCharCode(97 + answerIndex) }}).</p>
                     <Checkbox
                       v-model="userAnswers[question.id]"
                       :input-id="answer.id"
@@ -179,9 +147,7 @@
                       class="mr-2"
                     />
 
-                    <label :for="answer.id">{{
-                      answer?.attributes?.text
-                    }}</label>
+                    <label :for="answer.id">{{ answer?.attributes?.text }}</label>
                   </div>
 
                   <!-- Answer images -->
@@ -218,42 +184,33 @@
 </template>
 
 <script>
-import {
-  ref,
-  onMounted,
-  watch,
-  reactive,
-  computed,
-  onUnmounted,
-  nextTick,
-  onUpdated,
-} from "vue";
+import { ref, onMounted, watch, reactive, computed, onUnmounted, nextTick, onUpdated } from 'vue'
 
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter } from 'vue-router'
 
-import { useCandidatesQuestionnairesStore } from "@/stores/candidates/questionnaires";
+import { useCandidatesQuestionnairesStore } from '@/stores/candidates/questionnaires'
 
-import Card from "primevue/card";
-import Checkbox from "primevue/checkbox";
-import ConfirmDialog from "primevue/confirmdialog";
-import Paginator from "primevue/paginator";
-import PrimeButton from "primevue/button";
-import PrimeImage from "primevue/image";
-import RadioButton from "primevue/radiobutton";
-import ScrollTop from "primevue/scrolltop";
-import Tag from "primevue/tag";
-import { useToast } from "primevue/usetoast";
-import { useConfirm } from "primevue/useconfirm";
+import Card from 'primevue/card'
+import Checkbox from 'primevue/checkbox'
+import ConfirmDialog from 'primevue/confirmdialog'
+import Paginator from 'primevue/paginator'
+import PrimeButton from 'primevue/button'
+import PrimeImage from 'primevue/image'
+import RadioButton from 'primevue/radiobutton'
+import ScrollTop from 'primevue/scrolltop'
+import Tag from 'primevue/tag'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
 
-import VueCountdown from "@chenfengyuan/vue-countdown";
-import hljs from "highlight.js";
+import VueCountdown from '@chenfengyuan/vue-countdown'
+import hljs from 'highlight.js'
 
-import QuestionnaireSkeleton from "@/components/skeletons/QuestionnaireSkeleton.vue";
-import EvaluationView from "@/views/candidates/questionnaires/EvaluationView.vue";
+import QuestionnaireSkeleton from '@/components/skeletons/QuestionnaireSkeleton.vue'
+import EvaluationView from '@/views/candidates/questionnaires/EvaluationView.vue'
 
-import { findRelations, formatMinutes } from "@/helpers";
+import { findRelations, formatMinutes } from '@/helpers'
 
-import "highlight.js/styles/stackoverflow-light.css";
+import 'highlight.js/styles/stackoverflow-light.css'
 
 export default {
   components: {
@@ -268,234 +225,226 @@ export default {
     Tag,
     QuestionnaireSkeleton,
     EvaluationView,
-    VueCountdown,
+    VueCountdown
   },
   setup() {
-    const route = useRoute();
-    const router = useRouter();
+    const route = useRoute()
+    const router = useRouter()
 
-    const toast = useToast();
-    const confirm = useConfirm();
+    const toast = useToast()
+    const confirm = useConfirm()
 
-    const candidatesQuestionnairesStore = useCandidatesQuestionnairesStore();
+    const candidatesQuestionnairesStore = useCandidatesQuestionnairesStore()
 
-    const includes = ["images", "onlyAnswers.images"];
+    const includes = ['images', 'onlyAnswers.images']
 
-    const showAnswers = ref(true);
-    const showMarks = ref(true);
-    const showSidebar = ref(true);
+    const showAnswers = ref(true)
+    const showMarks = ref(true)
+    const showSidebar = ref(true)
 
-    let questionAnswers = reactive({});
-    const userAnswers = ref({});
+    let questionAnswers = reactive({})
+    const userAnswers = ref({})
 
-    let elapsedMinutes = 0;
-    const warnMessageTime = 5;
+    let elapsedMinutes = 0
+    const warnMessageTime = 5
 
-    const currrentPageRecords = ref();
-    const paginator = { perPage: 10, page: 1, offset: 0 };
+    const currrentPageRecords = ref()
+    const paginator = { perPage: 10, page: 1, offset: 0 }
 
-    const showEvaluation = ref(false);
+    const showEvaluation = ref(false)
 
     onMounted(() => {
-      getQuestionsData();
-    });
+      getQuestionsData()
+    })
 
     onUpdated(() => {
-      highlightCodeBlock();
-      highlightInlineCode();
-    });
+      highlightCodeBlock()
+      highlightInlineCode()
+    })
 
     watch(
       () => candidatesQuestionnairesStore.questions,
       (newQuestions) => {
         if (newQuestions) {
-          setAnwers(newQuestions);
-          currrentPageRecords.value = getPaginatorRecords();
+          setAnwers(newQuestions)
+          currrentPageRecords.value = getPaginatorRecords()
         }
       },
-      { immediate: true },
-    );
+      { immediate: true }
+    )
 
     function getQuestionsData() {
       candidatesQuestionnairesStore.getAll({
-        query: { includes },
-      });
+        query: { includes }
+      })
     }
 
     const minutesCounter = setInterval(() => {
       if (candidatesQuestionnairesStore.loading) {
-        return;
+        return
       }
 
-      elapsedMinutes++;
+      elapsedMinutes++
 
       if (
-        candidatesQuestionnairesStore.questionnaireInfo?.allocated_time -
-          elapsedMinutes ===
+        candidatesQuestionnairesStore.questionnaireInfo?.allocated_time - elapsedMinutes ===
         warnMessageTime
       ) {
         toast.add({
-          severity: "warn",
+          severity: 'warn',
           summary: `You have only ${warnMessageTime} minutes left`,
-          detail: "Answewrs are auto submitted after the time limit reached",
-          life: "10000",
-        });
+          detail: 'Answewrs are auto submitted after the time limit reached',
+          life: '10000'
+        })
       }
-    }, 60000);
+    }, 60000)
 
     function getRemainingTime() {
-      return (
-        candidatesQuestionnairesStore.questionnaireInfo?.allocated_time *
-        60 *
-        Math.pow(10, 3)
-      );
+      return candidatesQuestionnairesStore.questionnaireInfo?.allocated_time * 60 * Math.pow(10, 3)
     }
 
     function setAnwers(newQuestions) {
       for (let question of newQuestions) {
-        questionAnswers[question.id] = [];
+        questionAnswers[question.id] = []
 
         for (let answer of question.relationships.onlyAnswers.data) {
           let relatedAnswer = findRelations(
             candidatesQuestionnairesStore.meta.included,
             answer.id,
-            answer.type,
-          );
-          questionAnswers[question.id].push(relatedAnswer);
+            answer.type
+          )
+          questionAnswers[question.id].push(relatedAnswer)
         }
       }
     }
 
     function onPageChange(event) {
-      paginator.page = event.page + 1; // paginator start with page 0
-      paginator.perPage = event.rows;
+      paginator.page = event.page + 1 // paginator start with page 0
+      paginator.perPage = event.rows
 
-      currrentPageRecords.value = getPaginatorRecords();
+      currrentPageRecords.value = getPaginatorRecords()
     }
 
     function getQuestionNo(index) {
-      index = parseInt(index);
+      index = parseInt(index)
 
-      return (paginator.page - 1) * paginator.perPage + index + 1;
+      return (paginator.page - 1) * paginator.perPage + index + 1
     }
 
     function getPaginatorRecords() {
-      let start_index = (paginator.page - 1) * paginator.perPage;
-      let end_index = start_index + paginator.perPage;
+      let start_index = (paginator.page - 1) * paginator.perPage
+      let end_index = start_index + paginator.perPage
 
-      return candidatesQuestionnairesStore.questions?.slice(
-        start_index,
-        end_index,
-      );
+      return candidatesQuestionnairesStore.questions?.slice(start_index, end_index)
     }
 
     async function navigate(questionNo, questionId) {
-      setPaginatorOnNavigation(questionNo);
+      setPaginatorOnNavigation(questionNo)
 
-      await nextTick(); // Await until finiish the update
+      await nextTick() // Await until finiish the update
 
       // Navigate to question
-      let offSetTop = document.getElementById(`${questionId}_card`).offsetTop;
-      window.scrollTo({ top: offSetTop - 90, behavior: "smooth" });
+      let offSetTop = document.getElementById(`${questionId}_card`).offsetTop
+      window.scrollTo({ top: offSetTop - 90, behavior: 'smooth' })
     }
 
     function setPaginatorOnNavigation(questionNo) {
-      let page = Math.ceil(parseFloat(questionNo / paginator.perPage));
+      let page = Math.ceil(parseFloat(questionNo / paginator.perPage))
 
-      paginator.page = page;
-      paginator.offset = page * paginator.perPage;
+      paginator.page = page
+      paginator.offset = page * paginator.perPage
 
-      onPageChange({ page: page - 1, rows: paginator.perPage });
+      onPageChange({ page: page - 1, rows: paginator.perPage })
     }
 
     function getQuestionAnsweredStatus(questionId) {
       if (Array.isArray(userAnswers.value[questionId])) {
-        return userAnswers.value[questionId]?.length > 0;
+        return userAnswers.value[questionId]?.length > 0
       }
-      return !!userAnswers.value[questionId];
+      return !!userAnswers.value[questionId]
     }
 
     const noOfAnsweredQuestions = computed(() => {
-      let noOfAnswers = 0;
+      let noOfAnswers = 0
 
       for (let answer in userAnswers.value) {
         if (Array.isArray(userAnswers.value[answer])) {
           if (userAnswers.value[answer].length > 0) {
-            noOfAnswers++;
+            noOfAnswers++
           }
         } else if (userAnswers.value[answer]) {
-          noOfAnswers++;
+          noOfAnswers++
         }
       }
 
-      return noOfAnswers;
-    });
+      return noOfAnswers
+    })
 
     function submit() {
-      showEvaluation.value = true;
-      candidatesQuestionnairesStore.evaluate({ answers: getUserAnswers() });
+      showEvaluation.value = true
+      candidatesQuestionnairesStore.evaluate({ answers: getUserAnswers() })
     }
 
     function showSubmitConfirmDialog() {
       confirm.require({
         message: `${noOfAnsweredQuestions.value}  out of ${candidatesQuestionnairesStore.questionnaireInfo.no_of_questions} has answered !`,
-        header: "Are you sure you want to submit? ",
-        icon: "pi pi-info-circle",
+        header: 'Are you sure you want to submit? ',
+        icon: 'pi pi-info-circle',
         accept: () => {
-          submit();
+          submit()
         },
-        reject: () => {},
-      });
+        reject: () => {}
+      })
     }
 
     function getUserAnswers() {
-      let answers = {};
+      let answers = {}
 
       for (let answer in userAnswers.value) {
         if (Array.isArray(userAnswers.value[answer])) {
-          answers[answer] = userAnswers.value[answer];
+          answers[answer] = userAnswers.value[answer]
         } else {
-          answers[answer] = [userAnswers.value[answer]];
+          answers[answer] = [userAnswers.value[answer]]
         }
       }
 
       if (Object.keys(answers).length === 0) {
-        answers[candidatesQuestionnairesStore["questions"][0]["id"]] = [];
+        answers[candidatesQuestionnairesStore['questions'][0]['id']] = []
       }
 
-      return answers;
+      return answers
     }
 
     function onTimeElapsed() {
-      showTimeElapseToast();
-      submit();
+      showTimeElapseToast()
+      submit()
     }
 
     function showTimeElapseToast() {
       toast.add({
-        severity: "warn",
-        summary: "Time elapsed",
-        detail: "Auto submitting answers ...",
-        life: 5000,
-      });
+        severity: 'warn',
+        summary: 'Time elapsed',
+        detail: 'Auto submitting answers ...',
+        life: 5000
+      })
     }
 
     onUnmounted(() => {
-      clearInterval(minutesCounter);
-    });
+      clearInterval(minutesCounter)
+    })
 
     function highlightCodeBlock() {
       hljs.configure({
-        cssSelector: "pre ",
-      });
-      hljs.highlightAll();
+        cssSelector: 'pre '
+      })
+      hljs.highlightAll()
     }
 
     function highlightInlineCode() {
       hljs.configure({
-        cssSelector: "code",
-      });
-      hljs.highlightAll();
+        cssSelector: 'code'
+      })
+      hljs.highlightAll()
     }
 
     return {
@@ -503,9 +452,7 @@ export default {
       router,
       currrentPageRecords,
       candidatesQuestionnairesStore,
-      questionnaire: computed(
-        () => candidatesQuestionnairesStore.questionnaireInfo,
-      ),
+      questionnaire: computed(() => candidatesQuestionnairesStore.questionnaireInfo),
       paginator,
       userAnswers,
       showAnswers,
@@ -523,10 +470,10 @@ export default {
       showSubmitConfirmDialog,
       submit,
       onTimeElapsed,
-      showSidebar,
-    };
-  },
-};
+      showSidebar
+    }
+  }
+}
 </script>
 
 <style>

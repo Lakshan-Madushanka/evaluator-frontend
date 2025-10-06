@@ -7,9 +7,9 @@
       <p class="hidden sm:block lg:text-2xl">👍Hi,</p>
       <p class="hidden sm:block lg:text-xl font-bold">
         {{
-          appStore.status === "loggingOut"
-            ? "Please wait until we log out you"
-            : "Please wait until app get initialized !"
+          appStore.status === 'loggingOut'
+            ? 'Please wait until we log out you'
+            : 'Please wait until app get initialized !'
         }}
       </p>
       <SpinnerOne class="!mt-[-16px] sm:!mt-[-2px]" />
@@ -18,9 +18,9 @@
 </template>
 
 <script setup>
-import SpinnerOne from "./spinners/SpinnerOne.vue";
-import BackgroundOne from "./backgrounds/BackgroundOne.vue";
-import { useAppStore } from "../stores/app";
+import SpinnerOne from './spinners/SpinnerOne.vue'
+import BackgroundOne from './backgrounds/BackgroundOne.vue'
+import { useAppStore } from '../stores/app'
 
-const appStore = useAppStore();
+const appStore = useAppStore()
 </script>

@@ -19,10 +19,7 @@
       </template>
       <div v-if="candidatesQuestionnairesStore.status === 'evaluated'">
         <div class="flex justify-center">
-          <Knob
-            v-model="evaluation.marks_percentage"
-            value-template="{value}%"
-          />
+          <Knob v-model="evaluation.marks_percentage" value-template="{value}%" />
         </div>
 
         <div class="flex justify-center">
@@ -32,8 +29,7 @@
             >
               <span>Total points</span>
               <Tag
-                >{{ evaluation.total_points_earned }} /
-                {{ evaluation.total_points_allocated }}</Tag
+                >{{ evaluation.total_points_earned }} / {{ evaluation.total_points_allocated }}</Tag
               >
             </li>
             <li
@@ -53,9 +49,7 @@
             >
               <span>Time taken</span>
               <Tag>{{
-                evaluation.time_taken < 1
-                  ? "<1min"
-                  : formatMinutes(evaluation.time_taken)
+                evaluation.time_taken < 1 ? '<1min' : formatMinutes(evaluation.time_taken)
               }}</Tag>
             </li>
           </ul>
@@ -69,40 +63,38 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed } from 'vue'
 
-import PrimeDialog from "primevue/dialog";
-import Knob from "primevue/knob";
-import ProgressSpinner from "primevue/progressspinner";
-import Tag from "primevue/tag";
+import PrimeDialog from 'primevue/dialog'
+import Knob from 'primevue/knob'
+import ProgressSpinner from 'primevue/progressspinner'
+import Tag from 'primevue/tag'
 
-import { useCandidatesQuestionnairesStore } from "@/stores/candidates/questionnaires";
+import { useCandidatesQuestionnairesStore } from '@/stores/candidates/questionnaires'
 
-import { formatMinutes } from "@/helpers";
+import { formatMinutes } from '@/helpers'
 
 export default {
   components: { PrimeDialog, Knob, ProgressSpinner, Tag },
   setup() {
-    const candidatesQuestionnairesStore = useCandidatesQuestionnairesStore();
+    const candidatesQuestionnairesStore = useCandidatesQuestionnairesStore()
 
-    const showEvaluation = ref(true);
+    const showEvaluation = ref(true)
 
-    const marks = ref(85);
+    const marks = ref(85)
 
     function onModalHide() {
-      window.location.reload();
+      window.location.reload()
     }
 
     return {
       showEvaluation,
       candidatesQuestionnairesStore,
-      evaluation: computed(
-        () => candidatesQuestionnairesStore.evaluation?.attributes,
-      ),
+      evaluation: computed(() => candidatesQuestionnairesStore.evaluation?.attributes),
       marks,
       onModalHide,
-      formatMinutes,
-    };
-  },
-};
+      formatMinutes
+    }
+  }
+}
 </script>

@@ -3,10 +3,7 @@
     <template #table>
       <div>
         <DataTable
-          :value="
-            teamsQuestionnairesStore.users &&
-            teamsQuestionnairesStore.users.data
-          "
+          :value="teamsQuestionnairesStore.users && teamsQuestionnairesStore.users.data"
           responsive-layout="scroll"
           :loading="teamsQuestionnairesStore.loading"
           striped-rows
@@ -26,24 +23,14 @@
             <div class="flex justify-between items-center text-2xl uppercase">
               <div class="flex">
                 <p class="mr-2">Users</p>
-                <Avatar
-                  class="hover:cursor-pointer"
-                  icon="pi pi-eye"
-                  @click="toggleColumnsMenu"
-                />
-                <MenuComponent
-                  ref="columnsMenuRef"
-                  :model="columns"
-                  :popup="true"
-                >
+                <Avatar class="hover:cursor-pointer" icon="pi pi-eye" @click="toggleColumnsMenu" />
+                <MenuComponent ref="columnsMenuRef" :model="columns" :popup="true">
                   <template #item="slotProps">
                     <div class="flex items-center p-2 hover:cursor-pointer">
                       <i
                         :class="
                           columnVisibility[
-                            snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
-                            )
+                            snake(lowercaseFirstLetter(slotProps['item']['label']))
                               .toLowerCase()
                               .replaceAll(' ', '')
                           ]
@@ -63,11 +50,7 @@
                   class="pi pi-align-justify hover:cursor-pointer lg:!hidden"
                   @click="toggleActionsMenu"
                 ></i>
-                <MenuComponent
-                  ref="actionsMenuRef"
-                  :model="actions"
-                  :popup="true"
-                />
+                <MenuComponent ref="actionsMenuRef" :model="actions" :popup="true" />
 
                 <div class="hidden lg:flex">
                   <PrimeButton
@@ -98,9 +81,7 @@
             :show-filter-menu="false"
             :hidden="!columnVisibility.user_id"
           >
-            <template #body="slotProps">
-              {{ slotProps.data.attributes.user_id }}</template
-            >
+            <template #body="slotProps"> {{ slotProps.data.attributes.user_id }}</template>
           </Column>
 
           <Column
@@ -128,7 +109,7 @@
                   findRelations(
                     teamsQuestionnairesStore.users.included,
                     slotProps.data.relationships.user.data.id,
-                    slotProps.data.relationships.user.data.type,
+                    slotProps.data.relationships.user.data.type
                   ).attributes.name
                 }}
               </span>
@@ -160,7 +141,7 @@
                   findRelations(
                     teamsQuestionnairesStore.users.included,
                     slotProps.data.relationships.user.data.id,
-                    slotProps.data.relationships.user.data.type,
+                    slotProps.data.relationships.user.data.type
                   ).attributes.email
                 }}
               </span>
@@ -191,18 +172,11 @@
                 v-if="slotProps.data.attributes.attempts > 0"
                 class="pi pi-check-circle !text-2xl text-green-500"
               ></i>
-              <i
-                v-else
-                class="pi pi-times-circle !text-2xl text-yellow-500"
-              ></i>
+              <i v-else class="pi pi-times-circle !text-2xl text-yellow-500"></i>
             </template>
           </Column>
 
-          <Column
-            field="marks"
-            :show-filter-menu="false"
-            :hidden="!columnVisibility.marks"
-          >
+          <Column field="marks" :show-filter-menu="false" :hidden="!columnVisibility.marks">
             <template #header>
               <div class="flex justify-between items-center w-full">
                 <p>Marks(%)</p>
@@ -219,7 +193,7 @@
                   findRelations(
                     teamsQuestionnairesStore.users.included,
                     slotProps.data.relationships.evaluation.data.id,
-                    slotProps.data.relationships.evaluation.data.type,
+                    slotProps.data.relationships.evaluation.data.type
                   ).attributes.marks_percentage
                 }}
               </Badge>
@@ -228,22 +202,18 @@
           </Column>
 
           <!--Show More Datails-->
-          <Column
-            field="showMore"
-            header="More Details"
-            :hidden="!columnVisibility.show_more"
-          >
+          <Column field="showMore" header="More Details" :hidden="!columnVisibility.show_more">
             <template #body="slotProps">
               <router-link
                 class="inlne-block mx-0 flex items-center justify-start hover:bg-transparent"
                 :to="{
                   name: 'admin.users.questionnaires.index',
                   params: {
-                    id: slotProps.data.attributes.user_id,
+                    id: slotProps.data.attributes.user_id
                   },
                   query: {
-                    uq_id: slotProps.data.attributes.user_questionnaire_id,
-                  },
+                    uq_id: slotProps.data.attributes.user_questionnaire_id
+                  }
                 }"
               >
                 <Avatar icon="pi pi-eye" />
@@ -254,13 +224,9 @@
           <template #footer>
             <Paginator
               v-if="teamsQuestionnairesStore.users && showPaginator"
-              :rows="
-                teamsQuestionnairesStore.users &&
-                teamsQuestionnairesStore.users.meta.per_page
-              "
+              :rows="teamsQuestionnairesStore.users && teamsQuestionnairesStore.users.meta.per_page"
               :total-records="
-                teamsQuestionnairesStore.users &&
-                teamsQuestionnairesStore.users.meta.total
+                teamsQuestionnairesStore.users && teamsQuestionnairesStore.users.meta.total
               "
               @page="onPage"
             >
@@ -268,11 +234,7 @@
             <p
               class="hidden sm:flex p-2 relative bottom-[-20px] w-full justify-center lg:justify-end"
             >
-              {{
-                teamsQuestionnairesStore.users
-                  ? teamsQuestionnairesStore.users.meta.total
-                  : 0
-              }}
+              {{ teamsQuestionnairesStore.users ? teamsQuestionnairesStore.users.meta.total : 0 }}
               records found.
             </p>
           </template>
@@ -283,33 +245,33 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, watch } from "vue";
-import Paginator from "@/components/PaginatorComponent.vue";
+import { onMounted, ref, reactive, watch } from 'vue'
+import Paginator from '@/components/PaginatorComponent.vue'
 
-import { useTeamsQuestionnairesStore } from "@/stores/teams/questionnaires";
-import { useAuthStore } from "@/stores/auth";
+import { useTeamsQuestionnairesStore } from '@/stores/teams/questionnaires'
+import { useAuthStore } from '@/stores/auth'
 
-import { useRouter, useRoute } from "vue-router";
+import { useRouter, useRoute } from 'vue-router'
 
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
-import AdminTableLayout from "@/views/layouts/AdminTableLayout.vue";
+import AdminTableLayout from '@/views/layouts/AdminTableLayout.vue'
 
-import Avatar from "primevue/avatar";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
-import PrimeButton from "primevue/button";
-import SelectButton from "primevue/selectbutton";
-import Badge from "primevue/tag";
-import MenuComponent from "primevue/menu";
-import InputText from "primevue/inputtext";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
+import Avatar from 'primevue/avatar'
+import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
+import PrimeButton from 'primevue/button'
+import SelectButton from 'primevue/selectbutton'
+import Badge from 'primevue/tag'
+import MenuComponent from 'primevue/menu'
+import InputText from 'primevue/inputtext'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
 
-import SortComponent from "@/components/SortComponent.vue";
+import SortComponent from '@/components/SortComponent.vue'
 
-import { ROLES } from "@/constants";
-import { lowercaseFirstLetter, snake, findRelations } from "@/helpers";
+import { ROLES } from '@/constants'
+import { lowercaseFirstLetter, snake, findRelations } from '@/helpers'
 
 export default {
   components: {
@@ -325,39 +287,39 @@ export default {
     InputText,
     MenuComponent,
     IconField,
-    InputIcon,
+    InputIcon
   },
   setup() {
-    const teamsQuestionnairesStore = useTeamsQuestionnairesStore();
-    const authStore = useAuthStore();
+    const teamsQuestionnairesStore = useTeamsQuestionnairesStore()
+    const authStore = useAuthStore()
 
-    const router = useRouter();
-    const route = useRoute();
+    const router = useRouter()
+    const route = useRoute()
 
     const attemptsOptions = [
-      { name: "All", value: "" },
-      { name: "Attempted", value: "true" },
-      { name: "Not Attempted", value: "false" },
-    ];
+      { name: 'All', value: '' },
+      { name: 'Attempted', value: 'true' },
+      { name: 'Not Attempted', value: 'false' }
+    ]
 
     const query = reactive({
       sort: {},
-      pagination: { number: 1, size: 10 },
-    });
+      pagination: { number: 1, size: 10 }
+    })
 
-    const actionsMenuRef = ref();
+    const actionsMenuRef = ref()
     const actions = ref([
       {
-        label: "Refresh",
-        icon: "pi pi-refresh",
-        command: () => reset(),
+        label: 'Refresh',
+        icon: 'pi pi-refresh',
+        command: () => reset()
       },
       {
-        label: "Apply Filters",
-        icon: "pi pi-filter",
-        command: () => applyFilters(),
-      },
-    ]);
+        label: 'Apply Filters',
+        icon: 'pi pi-filter',
+        command: () => applyFilters()
+      }
+    ])
 
     const columnVisibility = reactive({
       user_id: true,
@@ -368,128 +330,128 @@ export default {
       attempts: true,
       attempted_users: true,
       created_at: true,
-      show_more: true,
-    });
-    const columnsMenuRef = ref();
+      show_more: true
+    })
+    const columnsMenuRef = ref()
     const columns = ref([
       {
-        label: "User ID",
+        label: 'User ID',
         command: () => {
-          columnVisibility.user_id = !columnVisibility.user_id;
-        },
+          columnVisibility.user_id = !columnVisibility.user_id
+        }
       },
       {
-        label: "Name",
+        label: 'Name',
         command: () => {
-          columnVisibility.name = !columnVisibility.name;
-        },
+          columnVisibility.name = !columnVisibility.name
+        }
       },
       {
-        label: "Email",
+        label: 'Email',
         command: () => {
-          columnVisibility.email = !columnVisibility.email;
-        },
+          columnVisibility.email = !columnVisibility.email
+        }
       },
       {
-        label: "Marks",
+        label: 'Marks',
         command: () => {
-          columnVisibility.marks = !columnVisibility.marks;
-        },
+          columnVisibility.marks = !columnVisibility.marks
+        }
       },
       {
-        label: "Total Users",
+        label: 'Total Users',
         command: () => {
-          columnVisibility.total_users = !columnVisibility.total_users;
-        },
+          columnVisibility.total_users = !columnVisibility.total_users
+        }
       },
       {
-        label: "Attempts",
+        label: 'Attempts',
         command: () => {
-          columnVisibility.attempts = !columnVisibility.attempts;
-        },
+          columnVisibility.attempts = !columnVisibility.attempts
+        }
       },
       {
-        label: "Attempted Users",
+        label: 'Attempted Users',
         command: () => {
-          columnVisibility.attempted_users = !columnVisibility.attempted_users;
-        },
+          columnVisibility.attempted_users = !columnVisibility.attempted_users
+        }
       },
       {
-        label: "Created at",
+        label: 'Created at',
         command: () => {
-          columnVisibility.created_at = !columnVisibility.created_at;
-        },
+          columnVisibility.created_at = !columnVisibility.created_at
+        }
       },
       {
-        label: "Show More",
+        label: 'Show More',
         command: () => {
-          columnVisibility.show_more = !columnVisibility.show_more;
-        },
-      },
-    ]);
+          columnVisibility.show_more = !columnVisibility.show_more
+        }
+      }
+    ])
 
-    const filters = ref({});
-    const showPaginator = ref(true);
+    const filters = ref({})
+    const showPaginator = ref(true)
 
     onMounted(() => {
-      getAllUsersRequest({ pagination: { number: 1, size: 10 } });
-    });
+      getAllUsersRequest({ pagination: { number: 1, size: 10 } })
+    })
 
     watch(query, (newQuery) => {
-      getAllUsersRequest({ ...newQuery, filters: filters.value });
-    });
+      getAllUsersRequest({ ...newQuery, filters: filters.value })
+    })
 
     // We need to reset show paginator if it is disabled
     watch(teamsQuestionnairesStore, (newUsersStore) => {
       if (!newUsersStore.loading) {
-        showPaginator.value = true;
+        showPaginator.value = true
       }
-    });
+    })
 
     function getAllUsersRequest(query) {
       teamsQuestionnairesStore.getAllUsers(route.params.id, {
         query: {
           ...query,
-          includes: ["evaluation", "user"],
-        },
-      });
+          includes: ['evaluation', 'user']
+        }
+      })
     }
 
     function onPage(event) {
-      query.pagination.number = event.page + 1;
-      query.pagination.size = event.rows;
+      query.pagination.number = event.page + 1
+      query.pagination.size = event.rows
     }
 
     function applyFilters() {
-      query.pagination.number = 1;
-      showPaginator.value = false; // Reset the pagination
+      query.pagination.number = 1
+      showPaginator.value = false // Reset the pagination
 
       getAllUsersRequest({
         filters: filters.value,
-        ...query,
-      });
+        ...query
+      })
     }
 
     function reset() {
       //Reset pagnator
-      showPaginator.value = false;
-      query.pagination = { number: 1, size: 10 };
+      showPaginator.value = false
+      query.pagination = { number: 1, size: 10 }
 
       //Reset filters
-      filters.value = {};
+      filters.value = {}
 
       //Reset sort
-      query.sort = {};
+      query.sort = {}
 
-      getAllUsersRequest({ pagination: { number: 1, size: 10 } });
+      getAllUsersRequest({ pagination: { number: 1, size: 10 } })
     }
 
     function toggleColumnsMenu(event) {
-      columnsMenuRef.value.toggle(event);
+      columnsMenuRef.value.toggle(event)
     }
 
     function toggleActionsMenu(event) {
-      actionsMenuRef.value.toggle(event);
+      actionsMenuRef.value.toggle(event)
     }
 
     return {
@@ -514,8 +476,8 @@ export default {
       actions,
       toggleActionsMenu,
       router,
-      findRelations,
-    };
-  },
-};
+      findRelations
+    }
+  }
+}
 </script>

@@ -1,57 +1,57 @@
-import * as teamsUsersRequest from "@/api/requests/teams/users";
+import * as teamsUsersRequest from '@/api/requests/teams/users'
 
-import { defineStore } from "pinia";
-import { useAppStore } from "../app";
+import { defineStore } from 'pinia'
+import { useAppStore } from '../app'
 
-import { ref } from "vue";
+import { ref } from 'vue'
 
-export const useTeamsUsersStore = defineStore("teamsUsers", () => {
-  const appStore = useAppStore();
+export const useTeamsUsersStore = defineStore('teamsUsers', () => {
+  const appStore = useAppStore()
 
-  const loading = ref(false);
-  const status = ref("");
-  const errors = ref({});
-  const users = ref(null);
+  const loading = ref(false)
+  const status = ref('')
+  const errors = ref({})
+  const users = ref(null)
 
   async function getAll(teamId, payload) {
-    resetStatus(true, "", {});
+    resetStatus(true, '', {})
 
     try {
-      const results = await teamsUsersRequest.getAllRequest(teamId, payload);
-      users.value = results;
+      const results = await teamsUsersRequest.getAllRequest(teamId, payload)
+      users.value = results
     } catch (data) {
       //
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   }
 
   async function detachUsers(teamId, userIds) {
-    resetStatus(true, "deleting", {});
+    resetStatus(true, 'deleting', {})
 
     try {
-      await teamsUsersRequest.getDetachRequest(teamId, userIds);
+      await teamsUsersRequest.getDetachRequest(teamId, userIds)
 
-      status.value = "deleted";
+      status.value = 'deleted'
 
       appStore.setToast(
-        "success",
-        "Selected users of the team " + teamId + " detached successfully",
-      );
+        'success',
+        'Selected users of the team ' + teamId + ' detached successfully'
+      )
     } catch (error) {
       //
       if (error.message) {
-        appStore.setToast("error", error.message);
+        appStore.setToast('error', error.message)
       }
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   }
 
   function resetStatus(isLoading, statusValue, errorsValue) {
-    loading.value = isLoading;
-    status.value = statusValue;
-    errors.value = errorsValue;
+    loading.value = isLoading
+    status.value = statusValue
+    errors.value = errorsValue
   }
 
   return {
@@ -60,6 +60,6 @@ export const useTeamsUsersStore = defineStore("teamsUsers", () => {
     status,
     errors,
     getAll,
-    detachUsers,
-  };
-});
+    detachUsers
+  }
+})

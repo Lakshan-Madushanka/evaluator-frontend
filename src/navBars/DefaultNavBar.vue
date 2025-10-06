@@ -6,11 +6,7 @@
       </div>
     </template>
     <template #item="{ item }">
-      <router-link
-        v-slot="{ href, navigate, isActive, isExactActive }"
-        :to="item.to"
-        custom
-      >
+      <router-link v-slot="{ href, navigate, isActive, isExactActive }" :to="item.to" custom>
         <a
           :href="href"
           :class="[
@@ -18,8 +14,8 @@
             'inline-block',
             {
               'text-[var(--p-primary-color)]': isActive,
-              'text-[var(--p-primary-color)]': isExactActive,
-            },
+              'text-[var(--p-primary-color)]': isExactActive
+            }
           ]"
           @click="navigate"
           >{{ item.label }}</a
@@ -28,9 +24,7 @@
     </template>
     <template #end>
       <template v-if="!appStore.authenticated">
-        <router-link :to="{ name: 'login' }" class="md:mr-8 font-bold py-2 px-3"
-          >Login</router-link
-        >
+        <router-link :to="{ name: 'login' }" class="md:mr-8 font-bold py-2 px-3">Login</router-link>
       </template>
 
       <template v-else>
@@ -41,70 +35,70 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import Menubar from "primevue/menubar";
-import { useAppStore } from "@/stores/app";
-import { useAuthStore } from "@/stores/auth";
-import AuthUserMenu from "@/components/AuthUserMenu.vue";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import Menubar from 'primevue/menubar'
+import { useAppStore } from '@/stores/app'
+import { useAuthStore } from '@/stores/auth'
+import AuthUserMenu from '@/components/AuthUserMenu.vue'
 export default {
   components: {
     Menubar,
-    AuthUserMenu,
+    AuthUserMenu
   },
 
   setup() {
-    const router = useRouter();
-    const appStore = useAppStore();
-    const authStore = useAuthStore();
+    const router = useRouter()
+    const appStore = useAppStore()
+    const authStore = useAuthStore()
 
-    const authMenu = ref();
+    const authMenu = ref()
 
     const mainItems = [
       {
-        label: "Home",
-        icon: "pi pi-fw pi-file",
-        to: { name: "home" },
+        label: 'Home',
+        icon: 'pi pi-fw pi-file',
+        to: { name: 'home' }
       },
 
       {
-        label: "About",
-        icon: "pi pi-fw pi-file",
-        to: { name: "about" },
-      },
-    ];
+        label: 'About',
+        icon: 'pi pi-fw pi-file',
+        to: { name: 'about' }
+      }
+    ]
 
     const authItems = [
       {
-        label: "Profile",
-        icon: "pi pi-fw pi-user-edit",
-        to: { name: "home" },
+        label: 'Profile',
+        icon: 'pi pi-fw pi-user-edit',
+        to: { name: 'home' },
         command: () => {
-          router.push({ name: "profile" });
-        },
+          router.push({ name: 'profile' })
+        }
       },
       {
-        label: "Dashboard",
-        icon: "pi pi-fw pi-th-large",
-        to: { name: "admin.dashboard" },
+        label: 'Dashboard',
+        icon: 'pi pi-fw pi-th-large',
+        to: { name: 'admin.dashboard' }
       },
       { separator: true },
       {
-        label: "Sign Out",
-        icon: "pi pi-fw pi-sign-out",
+        label: 'Sign Out',
+        icon: 'pi pi-fw pi-sign-out',
         command: () => {
-          authStore.logOut();
-        },
-      },
-    ];
+          authStore.logOut()
+        }
+      }
+    ]
 
     return {
       appStore,
       authStore,
       mainItems,
       authItems,
-      authMenu,
-    };
-  },
-};
+      authMenu
+    }
+  }
+}
 </script>

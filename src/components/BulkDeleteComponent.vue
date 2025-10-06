@@ -8,8 +8,7 @@
     <template #header>
       <div class="flex justify-center items-center w-full">
         <p class="text-2xl font-bold text-red-600 text-center">
-          <i class="pi pi-exclamation-triangle !text-2xl mr-2"></i> Delete
-          Confirmation
+          <i class="pi pi-exclamation-triangle !text-2xl mr-2"></i> Delete Confirmation
         </p>
       </div>
     </template>
@@ -20,9 +19,7 @@
         </p>
       </div>
       <div class="mt-4 w-full flex flex-col justify-center items-center">
-        <p class="mb-1 text-center">
-          Please write below text to confirm deletion
-        </p>
+        <p class="mb-1 text-center">Please write below text to confirm deletion</p>
         <p class="font-bold mb-4">{{ props.value }}</p>
         <InputText v-model="confirmText" class="w-2/3" />
       </div>
@@ -49,38 +46,38 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
-import PrimeDialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
-import PrimeButton from "primevue/button";
+import PrimeDialog from 'primevue/dialog'
+import InputText from 'primevue/inputtext'
+import PrimeButton from 'primevue/button'
 
 export default {
   components: { PrimeDialog, InputText, PrimeButton },
   props: {
     displayComponent: { type: Boolean, default: false },
     value: { type: String, required: true },
-    status: { type: String, default: "" },
+    status: { type: String, default: '' }
   },
-  emits: ["onDialogHidden", "bulkDeleteConfirmed"],
+  emits: ['onDialogHidden', 'bulkDeleteConfirmed'],
   setup(props, { emit }) {
-    const display = ref(false);
-    const confirmText = ref("");
+    const display = ref(false)
+    const confirmText = ref('')
 
     watch(
       () => props.displayComponent,
       (displayComponent) => {
-        display.value = displayComponent;
-      },
-    );
+        display.value = displayComponent
+      }
+    )
 
     function afterDialogHidden() {
-      emit("onDialogHidden", display.value);
+      emit('onDialogHidden', display.value)
     }
 
     function bulkDeleteConfirmed() {
-      emit("bulkDeleteConfirmed");
-      confirmText.value = "";
+      emit('bulkDeleteConfirmed')
+      confirmText.value = ''
     }
 
     return {
@@ -88,8 +85,8 @@ export default {
       display,
       confirmText,
       afterDialogHidden,
-      bulkDeleteConfirmed,
-    };
-  },
-};
+      bulkDeleteConfirmed
+    }
+  }
+}
 </script>

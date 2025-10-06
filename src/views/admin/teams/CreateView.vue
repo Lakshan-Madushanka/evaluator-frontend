@@ -22,26 +22,20 @@
                 :key="index"
                 class="text-red-500 text-sm"
               >
-                {{ error.$message.replace("Value", "Name") }}
+                {{ error.$message.replace('Value', 'Name') }}
               </p>
             </div>
           </template>
           <!-- Server side errors -->
           <template v-if="teamsStore.errors.name">
-            <p
-              v-for="(error, index) in teamsStore.errors.name"
-              :key="index"
-              class="text-red-500"
-            >
+            <p v-for="(error, index) in teamsStore.errors.name" :key="index" class="text-red-500">
               {{ error }}
             </p>
           </template>
         </div>
       </div>
 
-      <div
-        class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8"
-      >
+      <div class="flex justify-between md:justify-start !mt-[3rem] md:!mt-[1rem] space-x-8">
         <PrimeButton
           class=""
           :label="teamsStore.status === 'creating' ? 'Creating' : 'Create'"
@@ -64,57 +58,57 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive } from 'vue'
 
-import { useTeamsStore } from "@/stores/teams";
+import { useTeamsStore } from '@/stores/teams'
 
-import PrimeButton from "primevue/button";
-import InputText from "primevue/inputtext";
+import PrimeButton from 'primevue/button'
+import InputText from 'primevue/inputtext'
 
-import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 
-import FormLayout from "@/views/layouts/FormLayout.vue";
+import FormLayout from '@/views/layouts/FormLayout.vue'
 
 export default {
   components: {
     FormLayout,
     InputText,
-    PrimeButton,
+    PrimeButton
   },
   setup() {
-    const teamsStore = useTeamsStore();
+    const teamsStore = useTeamsStore()
 
     const state = reactive({
-      name: "",
-    });
+      name: ''
+    })
 
-    const createTeamButtonClicked = ref(false);
+    const createTeamButtonClicked = ref(false)
 
     const rules = {
-      name: { required },
-    };
+      name: { required }
+    }
 
-    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true });
+    const v$ = useVuelidate(rules, state, { $autoDirty: true, $lazy: true })
 
     function createTeam() {
-      createTeamButtonClicked.value = true;
+      createTeamButtonClicked.value = true
 
-      v$.value.$touch();
+      v$.value.$touch()
 
       if (v$.value.$invalid) {
-        return;
+        return
       }
 
-      teamsStore.createTeam(state);
+      teamsStore.createTeam(state)
     }
 
     function clearState() {
-      state.name = "";
+      state.name = ''
 
-      v$.value.$reset();
+      v$.value.$reset()
 
-      teamsStore.errors = {};
+      teamsStore.errors = {}
     }
 
     return {
@@ -123,8 +117,8 @@ export default {
       createTeam,
       clearState,
       createTeamButtonClicked,
-      teamsStore,
-    };
-  },
-};
+      teamsStore
+    }
+  }
+}
 </script>

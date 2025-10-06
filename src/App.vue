@@ -11,31 +11,31 @@
 </template>
 
 <script>
-import { watch } from "vue";
-import { useAppStore } from "./stores/app";
-import Toast from "primevue/toast";
-import { useToast } from "primevue/usetoast";
+import { watch } from 'vue'
+import { useAppStore } from './stores/app'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 
-import AppInitializingComponent from "./components/AppInitializingComponent.vue";
+import AppInitializingComponent from './components/AppInitializingComponent.vue'
 export default {
   components: { AppInitializingComponent, Toast },
   setup() {
-    const appStore = useAppStore();
+    const appStore = useAppStore()
 
-    const toast = useToast();
+    const toast = useToast()
 
     watch(appStore.toast, (toastState) => {
       toast.add({
         severity: toastState.severity,
         summary: toastState.summary,
         detail: toastState.detail,
-        life: toastState.life ? toastState.life : 5000,
-      });
-    });
+        life: toastState.life ? toastState.life : 5000
+      })
+    })
 
-    return { appStore };
-  },
-};
+    return { appStore }
+  }
+}
 </script>
 
 <style>
