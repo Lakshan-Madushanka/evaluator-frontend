@@ -112,7 +112,7 @@ export const useTeamsQuestionnairesStore = defineStore(
           "success",
           "Selected questionnaire of the team " +
             teamId +
-            "removed successfully"
+            "removed successfully",
         );
       } catch (error) {
         //

@@ -32,7 +32,7 @@ export async function attach(teamId, questionnaireid) {
 
 export async function detach(teamId, questionnaireId) {
   const response = await http.delete(
-    teamQuestionnairesRoutes.get_detach_route(teamId, questionnaireId)
+    teamQuestionnairesRoutes.get_detach_route(teamId, questionnaireId),
   );
 
   return response;

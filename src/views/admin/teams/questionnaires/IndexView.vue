@@ -44,7 +44,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label'])
+                              lowercaseFirstLetter(slotProps['item']['label']),
                             ).toLowerCase()
                           ]
                             ? 'pi pi-eye'
@@ -192,7 +192,7 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a"
+                  "ddd, MMM D, yyyy, h:mm a",
                 )
               }}</template
             >
@@ -460,7 +460,7 @@ export default {
         accept: async () => {
           await teamsQuestionnairesStore.detach(
             route.params.id,
-            questionnaireId
+            questionnaireId,
           );
           reset();
         },
