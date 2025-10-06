@@ -108,7 +108,7 @@
 
           <!-- Id -->
           <Column
-            field="id"
+            field="questionnaireId"
             header="Questionnaire Id"
             :show-filter-menu="false"
             :hidden="!columnVisibility.id"
