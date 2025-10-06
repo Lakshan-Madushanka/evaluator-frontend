@@ -99,6 +99,31 @@ export const useTeamsQuestionnairesStore = defineStore(
       }
     }
 
+    async function detach(teamId, userIds) {
+      clearState();
+      status.value = "detaching";
+
+      try {
+        await teamsQuestionnairesRequests.detach(teamId, userIds);
+
+        status.value = "detached";
+
+        appStore.setToast(
+          "success",
+          "Selected questionnaire of the team " +
+            teamId +
+            "removed successfully"
+        );
+      } catch (error) {
+        //
+        if (error.message) {
+          appStore.setToast("error", error.message);
+        }
+      } finally {
+        loading.value = false;
+      }
+    }
+
     function clearState() {
       status.value = "";
       errors.questionnaireId = "";
@@ -116,6 +141,7 @@ export const useTeamsQuestionnairesStore = defineStore(
       attach,
       getAll,
       getAllUsers,
+      detach,
       clearState,
     };
   }

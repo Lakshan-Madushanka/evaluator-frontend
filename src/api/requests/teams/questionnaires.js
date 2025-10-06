@@ -29,3 +29,11 @@ export async function attach(teamId, questionnaireid) {
 
   return response;
 }
+
+export async function detach(teamId, questionnaireId) {
+  const response = await http.delete(
+    teamQuestionnairesRoutes.get_detach_route(teamId, questionnaireId)
+  );
+
+  return response;
+}

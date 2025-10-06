@@ -1,4 +1,6 @@
 <template>
+  <ConfirmDialog></ConfirmDialog>
+
   <AdminTableLayout>
     <template #table>
       <div>
@@ -42,7 +44,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             ).toLowerCase()
                           ]
                             ? 'pi pi-eye'
@@ -190,10 +192,40 @@
             <template #body="slotProps">
               {{
                 moment(slotProps.data.attributes.created_at).format(
-                  "ddd, MMM D, yyyy, h:mm a",
+                  "ddd, MMM D, yyyy, h:mm a"
                 )
               }}</template
             >
+          </Column>
+
+          <!--Actions-->
+          <Column
+            field="Actions"
+            header="Actions"
+            :hidden="!columnVisibility.actions"
+          >
+            <template #body="slotProps">
+              <span class="p-buttonset space-x-1">
+                <PrimeButton
+                  v-if="slotProps.data.attributes.attempted_users === 0"
+                  class="p-button-danger p-button-sm"
+                  icon="pi pi-trash "
+                  title="Delete"
+                  :loading="teamsQuestionnairesStore.status === 'detaching'"
+                  @click="deleteQuestionnaire(slotProps.data.id)"
+                />
+                <PrimeButton
+                  v-else
+                  v-tooltip="
+                    'Cannot remove a questionnaire when there are ateempted users'
+                  "
+                  disabled
+                  class="p-button-danger p-button-sm"
+                  icon="pi pi-trash "
+                  title="Delete"
+                />
+              </span>
+            </template>
           </Column>
 
           <template #footer>
@@ -249,6 +281,8 @@ import MenuComponent from "primevue/menu";
 import InputText from "primevue/inputtext";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
+import ConfirmDialog from "primevue/confirmdialog";
+import { useConfirm } from "primevue/useconfirm";
 
 import SortComponent from "@/components/SortComponent.vue";
 
@@ -269,8 +303,11 @@ export default {
     MenuComponent,
     IconField,
     InputIcon,
+    ConfirmDialog,
   },
   setup() {
+    const confirm = useConfirm();
+
     const teamsQuestionnairesStore = useTeamsQuestionnairesStore();
     const authStore = useAuthStore();
 
@@ -303,6 +340,7 @@ export default {
       attempted_users: true,
       results: true,
       created_at: true,
+      actions: true,
     });
     const columnsMenuRef = ref();
     const columns = ref([
@@ -342,6 +380,12 @@ export default {
           columnVisibility.created_at = !columnVisibility.created_at;
         },
       },
+      {
+        label: "Actions",
+        command: () => {
+          columnVisibility.actions = !columnVisibility.actions;
+        },
+      },
     ]);
 
     const filters = ref({});
@@ -360,8 +404,8 @@ export default {
     });
 
     // We need to reset show paginator if it is disabled
-    watch(teamsQuestionnairesStore, (newUsersStore) => {
-      if (!newUsersStore.loading) {
+    watch(teamsQuestionnairesStore, (newteamsQuestionnairesStore) => {
+      if (!newteamsQuestionnairesStore.loading) {
         showPaginator.value = true;
       }
     });
@@ -404,6 +448,26 @@ export default {
       actionsMenuRef.value.toggle(event);
     }
 
+    function deleteQuestionnaire(questionnaireId) {
+      confirm.require({
+        message:
+          "Do you want to delete this questionnaire? [This action cannot be undone !]",
+        header: "Delete Confirmation",
+        icon: "pi pi-info-circle",
+        iconClass: "bg-red-500",
+        acceptClass: "p-button-danger",
+        acceptLabel: "Yes Delete",
+        accept: async () => {
+          await teamsQuestionnairesStore.detach(
+            route.params.id,
+            questionnaireId
+          );
+          reset();
+        },
+        reject: () => {},
+      });
+    }
+
     return {
       teamsQuestionnairesStore,
       onPage,
@@ -425,6 +489,7 @@ export default {
       actions,
       toggleActionsMenu,
       router,
+      deleteQuestionnaire,
     };
   },
 };
