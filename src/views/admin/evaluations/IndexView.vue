@@ -99,7 +99,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label']),
+                              lowercaseFirstLetter(slotProps['item']['label'])
                             ).toLowerCase()
                           ]
                             ? 'pi pi-eye'
@@ -271,7 +271,7 @@
         >
           <template #header>
             <div class="flex justify-between items-center w-full">
-              <p class="mr-4">Time taken (m)</p>
+              <p class="mr-4">Time taken (H:M)</p>
               <SortComponent
                 :dir="query.sort.time_taken"
                 @direction-change="query.sort.time_taken = $event"
@@ -282,7 +282,9 @@
           <template #body="slotProps">
             <Tag severity="info">
               {{
-                formatDuration(slotProps.data.attributes.time_taken, "seconds")
+                slotProps.data.attributes.time_taken < 1
+                  ? "<1min"
+                  : formatMinutes(slotProps.data.attributes.time_taken, true)
               }}
             </Tag>
           </template>
@@ -360,6 +362,30 @@
           </template>
         </Column>
 
+        <!-- Show Evaluation -->
+        <Column
+          field="showEvaluation"
+          header="Show Evaluation"
+          :hidden="!columnVisibility.show_evaluation"
+        >
+          <template #body="slotProps">
+            <span class="p-buttonset space-x-1 flex justify-center">
+              <PrimeButton
+                class="p-button-sm"
+                icon="pi pi-eye"
+                title="Show evaluation"
+                severity="contrast"
+                @click="
+                  showEvaluation(
+                    slotProps.data.id,
+                    slotProps.data.attributes.questionnaire_id
+                  )
+                "
+              />
+            </span>
+          </template>
+        </Column>
+
         <!-- Created at -->
         <Column
           field="created at"
@@ -379,32 +405,9 @@
           <template #body="slotProps">
             {{
               moment(slotProps.data.attributes.created_at).format(
-                "ddd, MMM D, yyyy, h:mm a",
+                "ddd, MMM D, yyyy, h:mm a"
               )
             }}
-          </template>
-        </Column>
-
-        <!-- Actions -->
-        <Column
-          field="Actions"
-          header="Actions"
-          :hidden="!columnVisibility.actions"
-        >
-          <template #body="slotProps">
-            <span class="p-buttonset space-x-1">
-              <PrimeButton
-                class="p-button-sm"
-                icon="pi pi-eye"
-                title="Show evaluation"
-                @click="
-                  showEvaluation(
-                    slotProps.data.id,
-                    slotProps.data.attributes.questionnaire_id,
-                  )
-                "
-              />
-            </span>
           </template>
         </Column>
 
@@ -441,7 +444,7 @@
 <script>
 import { ref, reactive, onMounted, watch } from "vue";
 
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 import { useEvaluationsStore } from "@/stores/evaluations";
 
@@ -463,7 +466,7 @@ import InputIcon from "primevue/inputicon";
 
 import moment from "moment/moment";
 
-import { lowercaseFirstLetter, snake, formatDuration } from "@/helpers";
+import { lowercaseFirstLetter, snake, formatMinutes } from "@/helpers";
 
 export default {
   components: {
@@ -484,6 +487,7 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const route = useRoute();
 
     const evaluationsStore = useEvaluationsStore();
 
@@ -521,7 +525,7 @@ export default {
       total_points_allocated: true,
       no_of_answered_questions: true,
       created_at: true,
-      actions: true,
+      show_evaluation: true,
     });
     const columns = ref([
       {
@@ -595,15 +599,15 @@ export default {
         },
       },
       {
-        label: "Created at",
+        label: "Show Evaluation",
         command: () => {
-          columnVisibility.created_at = !columnVisibility.created_at;
+          columnVisibility.show_evaluation = !columnVisibility.show_evaluation;
         },
       },
       {
-        label: "Actions",
+        label: "Created at",
         command: () => {
-          columnVisibility.actions = !columnVisibility.actions;
+          columnVisibility.created_at = !columnVisibility.created_at;
         },
       },
     ]);
@@ -631,7 +635,12 @@ export default {
     ]);
 
     onMounted(() => {
-      loadData();
+      if (route.query.uq_id) {
+        query.filters.uq_id = route.query.uq_id;
+        loadData(true);
+      } else {
+        loadData();
+      }
     });
 
     watch(evaluationsStore, function (newStore) {
@@ -652,11 +661,19 @@ export default {
           query: { ...query },
         });
       },
-      { deep: true },
+      { deep: true }
     );
 
-    function loadData() {
-      evaluationsStore.getAll({ query: { pagination: initialPagination } });
+    function loadData(withFilters = false) {
+      if (!withFilters) {
+        evaluationsStore.getAll({
+          query: { pagination: initialPagination },
+        });
+      } else {
+        evaluationsStore.getAll({
+          query: { filters: query.filters, pagination: initialPagination },
+        });
+      }
     }
 
     function toggleColumnsMenu(event) {
@@ -761,7 +778,7 @@ export default {
       lowercaseFirstLetter,
       moment,
       showEvaluation,
-      formatDuration,
+      formatMinutes,
     };
   },
 };

@@ -28,7 +28,7 @@
             :value="
               evaluationsStore.evaluation?.time_taken < 1
                 ? '<1min'
-                : formatMinutes(evaluationsStore.evaluation?.time_taken)
+                : formatMinutes(evaluationsStore.evaluation?.time_taken, true)
             "
             severity="info"
             size="large"
@@ -271,7 +271,7 @@ export default {
           setAnwers(newQuestions);
           currrentPageRecords.value = getPaginatorRecords();
         }
-      },
+      }
     );
 
     function setAnwers(newQuestions) {
@@ -282,7 +282,7 @@ export default {
           let relatedAnswer = findRelations(
             questionnairesQuestionsStore.meta.included,
             answer.id,
-            answer.type,
+            answer.type
           );
           questionAnswers[question.id].push(relatedAnswer);
           setCorrectAnswer(question, relatedAnswer);
@@ -338,7 +338,7 @@ export default {
 
       return questionnairesQuestionsStore.questions?.slice(
         start_index,
-        end_index,
+        end_index
       );
     }
 
@@ -361,7 +361,7 @@ export default {
 
       return arraysHaveSameValues(
         correctAnswers.value[question.id],
-        evaluationsStore.evaluation.answers[question.id],
+        evaluationsStore.evaluation.answers[question.id]
       );
     }
 
@@ -385,7 +385,7 @@ export default {
       questionnairesStore,
       evaluationsStore,
       questionnaire: computed(
-        () => questionnairesStore.questionnaire?.data?.attributes,
+        () => questionnairesStore.questionnaire?.data?.attributes
       ),
       questionAnswers,
       correctAnswers,
