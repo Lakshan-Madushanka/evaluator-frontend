@@ -6,6 +6,7 @@
     :display="displayAttachQuestionnairesDialog"
     :attachable-id="selectedTeamIdToAttachQuestionnaire"
     @hide="displayAttachQuestionnairesDialog = $event"
+    @questionnaire-attached="onAttachedQuestionnaire"
   />
 
   <AdminTableLayout>
@@ -447,6 +448,11 @@ export default {
       displayAttachQuestionnairesDialog.value = true;
     }
 
+    function onAttachedQuestionnaire() {
+      displayAttachQuestionnairesDialog.value = false;
+      reset();
+    }
+
     return {
       authStore,
       teamsStore,
@@ -469,6 +475,7 @@ export default {
       toggleActionsMenu,
       displayAttachQuestionnairesDialog,
       showAttachQuestionnaireDialog,
+      onAttachedQuestionnaire,
     };
   },
 };

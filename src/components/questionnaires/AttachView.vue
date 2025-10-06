@@ -106,7 +106,7 @@ export default {
     attachableId: { type: String, default: null },
     type: { type: String, required: true },
   },
-  emits: ["hide"],
+  emits: ["hide", "questionnaireAttached"],
 
   setup(props, { emit }) {
     let questionnairesStore = null;
@@ -131,14 +131,14 @@ export default {
         if (newStatus === "attached") {
           clearState();
         }
-      },
+      }
     );
 
     watch(
       () => props.display,
       (newValue) => {
         displayComponent.value = newValue;
-      },
+      }
     );
 
     function clearState() {
@@ -188,8 +188,10 @@ export default {
         questionnairesStore.checkAvailability(questionnaireId.value);
       }
     }
-    function attach() {
-      questionnairesStore.attach(props.attachableId);
+
+    async function attach() {
+      await questionnairesStore.attach(props.attachableId);
+      emit("questionnaireAttached");
     }
 
     return {
