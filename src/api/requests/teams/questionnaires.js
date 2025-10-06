@@ -6,7 +6,7 @@ import http from "@/http";
 export async function getAllRequest(userId, payload) {
   let query = buildQueryString(payload);
   const response = await http.get(
-    teamQuestionnairesRoutes.get_all_route(userId) + query
+    teamQuestionnairesRoutes.get_all_route(userId) + query,
   );
 
   return response;
@@ -16,7 +16,7 @@ export async function getAllUsersRequest(teamQuestionnaireId, payload) {
   let query = buildQueryString(payload);
 
   const response = await http.get(
-    teamQuestionnairesRoutes.get_all_users_route(teamQuestionnaireId) + query
+    teamQuestionnairesRoutes.get_all_users_route(teamQuestionnaireId) + query,
   );
 
   return response;
@@ -24,7 +24,7 @@ export async function getAllUsersRequest(teamQuestionnaireId, payload) {
 
 export async function attach(teamId, questionnaireid) {
   const response = await http.post(
-    teamQuestionnairesRoutes.get_attach_route(teamId, questionnaireid)
+    teamQuestionnairesRoutes.get_attach_route(teamId, questionnaireid),
   );
 
   return response;

@@ -42,7 +42,7 @@
                         :class="
                           columnVisibility[
                             snake(
-                              lowercaseFirstLetter(slotProps['item']['label'])
+                              lowercaseFirstLetter(slotProps['item']['label']),
                             )
                               .toLowerCase()
                               .replaceAll(' ', '')
@@ -128,7 +128,7 @@
                   findRelations(
                     teamsQuestionnairesStore.users.included,
                     slotProps.data.relationships.user.data.id,
-                    slotProps.data.relationships.user.data.type
+                    slotProps.data.relationships.user.data.type,
                   ).attributes.name
                 }}
               </span>
@@ -160,7 +160,7 @@
                   findRelations(
                     teamsQuestionnairesStore.users.included,
                     slotProps.data.relationships.user.data.id,
-                    slotProps.data.relationships.user.data.type
+                    slotProps.data.relationships.user.data.type,
                   ).attributes.email
                 }}
               </span>
@@ -219,7 +219,7 @@
                   findRelations(
                     teamsQuestionnairesStore.users.included,
                     slotProps.data.relationships.evaluation.data.id,
-                    slotProps.data.relationships.evaluation.data.type
+                    slotProps.data.relationships.evaluation.data.type,
                   ).attributes.marks_percentage
                 }}
               </Badge>
