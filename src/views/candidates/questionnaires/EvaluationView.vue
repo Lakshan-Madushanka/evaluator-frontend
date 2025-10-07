@@ -81,17 +81,15 @@ export default {
 
     const showEvaluation = ref(true)
 
-    const marks = ref(85)
-
     function onModalHide() {
-      window.location.reload()
+      window.location.href = '/'
+      return
     }
 
     return {
       showEvaluation,
       candidatesQuestionnairesStore,
       evaluation: computed(() => candidatesQuestionnairesStore.evaluation?.attributes),
-      marks,
       onModalHide,
       formatMinutes
     }
