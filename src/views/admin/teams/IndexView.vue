@@ -34,16 +34,29 @@
 
                 <MenuComponent ref="columnsMenuRef" :model="columns" :popup="true">
                   <template #item="slotProps">
-                    <div class="flex items-center p-2 hover:cursor-pointer">
-                      <i
-                        :class="
-                          columnVisibility[snake(lowercaseFirstLetter(slotProps['item']['label']))]
-                            ? 'pi pi-eye'
-                            : 'pi pi-eye-slash'
-                        "
-                        class="mr-2"
-                      ></i>
-                      <p>{{ slotProps.item.label }}</p>
+                    <div class="flex items-center p-2 hover:cursor-pointer w-full">
+                      <div
+                        v-if="slotProps['item']['label'] === 'Bulk Controllers'"
+                        class="flex justify-between w-full text-sm text-blue-400"
+                      >
+                        <span class="hover:text-blue-800" @click="displayAllColumns"
+                          >Display All</span
+                        >
+                        <span class="hover:text-blue-800" @click="hideAllColumns">Hide All</span>
+                      </div>
+                      <template v-else>
+                        <i
+                          :class="
+                            columnVisibility[
+                              snake(lowercaseFirstLetter(slotProps['item']['label']))
+                            ]
+                              ? 'pi pi-eye'
+                              : 'pi pi-eye-slash'
+                          "
+                          class="mr-2"
+                        ></i>
+                        <p>{{ slotProps.item.label }}</p>
+                      </template>
                     </div>
                   </template>
                 </MenuComponent>
@@ -292,6 +305,10 @@ export default {
     })
     const columns = ref([
       {
+        label: 'Bulk Controllers',
+        command: () => {}
+      },
+      {
         label: 'Id',
         command: () => {
           columnVisibility.id = !columnVisibility.id
@@ -409,6 +426,18 @@ export default {
       reset()
     }
 
+    function displayAllColumns() {
+      for (let visibility in columnVisibility) {
+        columnVisibility[visibility] = true
+      }
+    }
+
+    function hideAllColumns() {
+      for (let visibility in columnVisibility) {
+        columnVisibility[visibility] = false
+      }
+    }
+
     return {
       authStore,
       teamsStore,
@@ -431,7 +460,9 @@ export default {
       toggleActionsMenu,
       displayAttachQuestionnairesDialog,
       showAttachQuestionnaireDialog,
-      onAttachedQuestionnaire
+      onAttachedQuestionnaire,
+      hideAllColumns,
+      displayAllColumns
     }
   }
 }
