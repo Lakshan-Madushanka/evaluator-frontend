@@ -115,7 +115,7 @@ function getItems() {
         {
           label: 'questionnaires',
           command: () => {
-            router.push({ name: 'admin.teams.questionnaires.index' })
+            router.back()
           }
         },
         {
