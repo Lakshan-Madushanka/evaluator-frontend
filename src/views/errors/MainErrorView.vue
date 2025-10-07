@@ -57,7 +57,6 @@
           </svg>
         </div>
       </div>
-
       <!-- Handling messages -->
 
       <!-- Handling client side errors -->

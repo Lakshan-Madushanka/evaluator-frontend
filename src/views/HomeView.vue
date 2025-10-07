@@ -9,7 +9,9 @@
           @keyup.enter="searchQuestionnaire"
         />
         <p
-          v-if="searchButtonClicked && secretCode === ''"
+          v-if="
+            searchButtonClicked && secretCode === '' && !candidatesQuestionnairesStore.errors.code
+          "
           class="text-red-600 mt-2 text-center absolute w-full"
         >
           Questionnaire code is required !
@@ -17,17 +19,18 @@
 
         <p
           v-if="candidatesQuestionnairesStore.errors.code"
-          class="text-red-600 mt-2 text-center absolute w-full"
+          class="text-red-600 mt-2 text-center lg:absolute w-full"
         >
           {{ candidatesQuestionnairesStore.errors.code }}
         </p>
       </div>
+
       <PrimeButton
         type="button"
         :label="candidatesQuestionnairesStore.status === 'searching' ? 'Searching' : 'Search'"
         icon="pi pi-search"
         icon-pos="right"
-        class="!ml-[-2px] self-center !mt-10 lg:!mt-0 w-2/3 lg:w-auto"
+        class="!ml-[-2px] self-center !mt-2 lg:!mt-0 w-2/3 lg:w-auto"
         :loading="candidatesQuestionnairesStore.status === 'searching'"
         @click="searchQuestionnaire"
       />

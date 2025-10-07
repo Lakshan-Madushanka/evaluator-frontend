@@ -1,5 +1,5 @@
 import * as answersRoutes from '@/api/routes/answers'
-import { sanitizeParam } from '@/api/helpers.'
+import { sanitizeParam } from '@/api/helpers'
 
 import { buildQueryString } from '@/api/queryStringBuilder'
 import http from '@/http'
