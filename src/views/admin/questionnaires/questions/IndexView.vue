@@ -363,8 +363,9 @@
       </Card>
     </div>
 
-    <div v-if="showEligibleQuestionList" class="mt-16">
+    <div class="mt-16">
       <EligibleQuestionsList
+        v-if="isVisible"
         :questionnaire-id="route.params.id"
         :refresh="shouldRefreshEligibleQuestionList"
         @selection-change="onSelectionChange"
@@ -372,13 +373,7 @@
       />
     </div>
 
-    <div
-      v-observe-visibility="{
-        callback: onEligibleQuestionListVisible,
-        once: true
-      }"
-      class="invisible"
-    ></div>
+    <div ref="el" class="invisible mt-16"></div>
   </div>
 </template>
 
@@ -402,6 +397,8 @@ import { useConfirm } from 'primevue/useconfirm'
 
 import EligibleQuestionsList from '@/views/admin/questionnaires/questions/components/EligibleQuestionsList.vue'
 
+import useIntersectionObserver from '@/composables/useIntersectionObserver'
+
 export default {
   components: {
     Card,
@@ -419,6 +416,10 @@ export default {
     const confirm = useConfirm()
 
     const route = useRoute()
+
+    const el = ref(null)
+
+    const { isVisible } = useIntersectionObserver(el)
 
     const questionnairesQuestionsStore = useQuestionnairesQuestionsStore()
 
@@ -801,6 +802,8 @@ export default {
     }
 
     return {
+      isVisible,
+      el,
       data,
       selectedDiffculty,
       difficultyFilterOptions,
