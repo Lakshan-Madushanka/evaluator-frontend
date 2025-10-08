@@ -23,8 +23,6 @@ import ToastService from 'primevue/toastservice'
 import Tooltip from 'primevue/tooltip'
 import ConfirmationService from 'primevue/confirmationservice'
 
-import VueObserveVisibility from 'vue3-observe-visibility'
-
 // Custom directives
 import copyToClipboard from './directives/copyToClipboard'
 
@@ -42,5 +40,4 @@ app.use(PrimeVue, {
 })
 app.use(ToastService)
 app.use(ConfirmationService)
-app.use(VueObserveVisibility)
 app.mount('#app')
