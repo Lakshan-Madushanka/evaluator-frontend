@@ -1,6 +1,6 @@
 <template>
   <ConfirmDialog />
-  <div class="shadow-lg bg-white p-4 pb-8">
+  <div class="shadow-lg bg-white dark:bg-inherit p-4 pb-8">
     <div class="flex flex-wrap items-center justify-center sm:justify-between">
       <h1 class="text-2xl font-bold uppercase mb-2">
         Manage answers of question
@@ -15,22 +15,22 @@
 
       <div v-else id="answersList" ref="answersListElm" class="shadow">
         <div
-          class="flex justify-between px-4 items-center w-full py-8 bg-gray-100 border-y-2 border-neutral-200"
+          class="flex justify-between px-4 items-center w-full py-8 bg-gray-100 border-y-2 dark:bg-black border-neutral-200 dark:border-neutral-800"
         >
           <div class="text-lg font-bold">
             <p>List of Answers ({{ data.answers.length }} / {{ route.query.total_answers }})</p>
           </div>
         </div>
 
-        <TransitionGroup name="list" tag="ul" class="h-[25rem] overflow-y-auto">
+        <TransitionGroup name="list" tag="ul" class="h-[25rem] overflow-y-auto dark:bg-black">
           <li
             v-for="(answer, index) of data.answers"
             :key="answer.id"
-            :class="{ 'bg-blue-200': isAnswerSelected(answer) }"
+            :class="{ 'bg-blue-200 dark:bg-gray-900': isAnswerSelected(answer) }"
             @click="selectAnswer($event, answer)"
           >
             <div
-              class="flex justify-between border-b-2 border-neutral-200 p-4 hover:cursor-pointer"
+              class="flex justify-between border-b-2 border-neutral-200 dark:border-neutral-700 p-4 hover:cursor-pointer"
             >
               <div class="flex w-[75%]">
                 <span class="mr-2">{{ index + 1 }}).</span>
@@ -156,7 +156,7 @@
         <template #footer> </template>
       </Card>
     </div>
-    <div v-if="showAnswerList" class="mt-16">
+    <div v-if="isVisible" class="mt-16">
       <AnswerList
         :questionnaire-id="route.params.id"
         :refresh="shouldRefreshAnswerList"
@@ -164,13 +164,7 @@
         @add="onSelectionChange"
       />
     </div>
-    <div
-      v-observe-visibility="{
-        callback: onAnswerListVisible,
-        once: true
-      }"
-      class="invisible"
-    ></div>
+    <div ref="answerListEl" class="invisible mt-16"></div>
   </div>
 </template>
 
@@ -192,6 +186,8 @@ import { useConfirm } from 'primevue/useconfirm'
 
 import AnswerList from '@/views/admin/questions/answers/components/AnswerList.vue'
 
+import useIntersectionObserver from '@/composables/useIntersectionObserver'
+
 export default {
   components: {
     Card,
@@ -211,6 +207,10 @@ export default {
     const questionsAnswersStore = useQuestionsAnswersStore()
 
     const showAnswerList = ref(false)
+
+    const answerListEl = ref(null)
+
+    const { isVisible } = useIntersectionObserver(answerListEl)
 
     const shouldRefreshAnswerList = ref(false)
 
@@ -369,12 +369,6 @@ export default {
       })
     }
 
-    function onAnswerListVisible(isVisible) {
-      if (isVisible) {
-        showAnswerList.value = true
-      }
-    }
-
     function onSelectionChange(answers) {
       if (!Array.isArray(answers)) {
         answers = [answers]
@@ -435,6 +429,8 @@ export default {
     return {
       showAnswerList,
       shouldRefreshAnswerList,
+      answerListEl,
+      isVisible,
       data,
       selectedAnswers,
       addToListError,
@@ -453,7 +449,6 @@ export default {
       selectAllAnswers,
       deselectAllAnswers,
       syncAnswers,
-      onAnswerListVisible,
       onSelectionChange
     }
   }
