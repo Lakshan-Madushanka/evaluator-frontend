@@ -1,5 +1,5 @@
 <template>
-  <main class="bg-gradient-to-r from-rose-100 to-teal-100 h-[calc(100vh-3.7rem)]">
+  <main class="h-[calc(100vh-3.7rem)]">
     <div class="h-full flex flex-col lg:flex-row justify-center items-center w-full">
       <div class="w-2/3 lg:w-2/5 relative">
         <InputText
@@ -25,15 +25,28 @@
         </p>
       </div>
 
-      <PrimeButton
-        type="button"
-        :label="candidatesQuestionnairesStore.status === 'searching' ? 'Searching' : 'Search'"
-        icon="pi pi-search"
-        icon-pos="right"
-        class="!ml-[-2px] self-center !mt-2 lg:!mt-0 w-2/3 lg:w-auto"
-        :loading="candidatesQuestionnairesStore.status === 'searching'"
-        @click="searchQuestionnaire"
-      />
+      <div class="flex lg:hidden self-stretch w-full justify-center">
+        <PrimeButton
+          type="button"
+          :label="candidatesQuestionnairesStore.status === 'searching' ? 'Searching' : 'Search'"
+          icon-pos="right"
+          class="!ml-[-2px] self-center !mt-2 lg:!mt-0 w-2/3"
+          :loading="candidatesQuestionnairesStore.status === 'searching'"
+          @click="searchQuestionnaire"
+        />
+      </div>
+
+      <div class="hidden lg:inline-block">
+        <PrimeButton
+          type="button"
+          :label="candidatesQuestionnairesStore.status === 'searching' ? 'Searching' : 'Search'"
+          icon="pi pi-search"
+          icon-pos="right"
+          class="!ml-[-2px] self-center !mt-2 lg:!mt-0 lg:w-auto"
+          :loading="candidatesQuestionnairesStore.status === 'searching'"
+          @click="searchQuestionnaire"
+        />
+      </div>
     </div>
   </main>
 </template>

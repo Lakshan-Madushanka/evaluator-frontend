@@ -1,12 +1,12 @@
 <template>
-  <Card class="mt-4 mx-8 xl:max-w-4xl xl:mx-auto border mb-4">
+  <Card class="mt-4 mx-2 md:mx-8 xl:max-w-4xl xl:mx-auto border mb-4">
     <template #title>
       <p class="text-center uppercase">
         {{ candidatesQuestionnairesStore.questionnaireInfo.name }}
       </p>
     </template>
     <template #content>
-      <div class="p-4 space-y-8">
+      <div class="py-4 px-2 space-y-8">
         <div>
           <p class="text-xl font-bold mb-4">Summary</p>
           <table class="table-auto border">

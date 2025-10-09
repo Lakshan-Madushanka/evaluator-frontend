@@ -7,7 +7,7 @@
     </h1>
   </div>
   <div class="p-4 space-y-8 pb-4">
-    <div class="bg-white shadow p-8">
+    <div class="bg-white dark:bg-inherit shadow p-8">
       <p class="text-xl text-bold text-center mb-4">All uploaded images</p>
       <Skeleton v-if="imagesStore.loading" class="mb-2 !h-72"></Skeleton>
       <PrimeGalleria
@@ -42,7 +42,7 @@
         0 images has been uploaded
       </p>
     </div>
-    <div class="bg-white shadow p-8">
+    <div class="bg-white dark:bg-black shadow p-8">
       <p class="text-xl font-bold mb-4">Upload image</p>
       <FileUpload
         name="images[]"
@@ -60,7 +60,7 @@
         </template>
       </FileUpload>
     </div>
-    <div class="bg-white shadow p-8">
+    <div class="bg-white dark:bg-black shadow p-8">
       <p class="text-xl font-bold mb-4">Change order</p>
       <Skeleton v-if="imagesStore.loading" class="mb-2 !h-72"></Skeleton>
       <div v-if="!imagesStore.loading && imagesStore.images.length > 0">

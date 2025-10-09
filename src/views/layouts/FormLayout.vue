@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow-md bg-white p-4">
+  <div class="shadow-md bg-white dark:bg-black p-4">
     <div class="text-2xl font-bold uppercase px-4 text-center sm:text-left">
       <slot name="header"></slot>
     </div>

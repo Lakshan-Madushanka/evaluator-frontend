@@ -52,4 +52,8 @@ a.router-link-exact-active:hover,
 .p-datatable-header {
   background: white !important;
 }
+
+.dark .p-datatable-header {
+  background: black !important;
+}
 </style>

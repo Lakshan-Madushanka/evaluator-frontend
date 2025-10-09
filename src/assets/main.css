@@ -23,7 +23,18 @@ a,
   }
 }
 
+/* override / cancel when dark mode is active */
+.dark a:hover,
+a {
+  background-color: transparent;
+  color: #ffffff;
+}
+
 .ql-code-block-container {
   background-color: #f0f0f0;
   padding: 2px 4px;
+}
+
+.v-sidebar-menu .vsm--mobile-bg {
+  background-color: rgb(44, 44, 44) !important;
 }

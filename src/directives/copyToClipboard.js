@@ -1,3 +1,5 @@
+import { isDarkMode } from '@/helpers'
+
 function createElm(el, targetElmId) {
   let container = document.createElement('div')
   let icon = document.createElement('i')
@@ -7,7 +9,7 @@ function createElm(el, targetElmId) {
   icon.className = 'pi pi-copy hover:cursor-pointer'
 
   icon.style.padding = '0'
-  icon.style.backgroundColor = 'white'
+  icon.style.backgroundColor = isDarkMode() ? 'black' : 'white'
   icon.style.fontSize = '16px'
 
   container.style.position = 'absolute'
@@ -29,7 +31,7 @@ function createToast(element) {
   span.style.left = '2rem'
   span.style.bottom = '1px'
   span.style.padding = '2px'
-  span.style.backgroundColor = 'white'
+  span.style.backgroundColor = isDarkMode() ? 'black' : 'white'
 
   span.textContent = 'copied'
 

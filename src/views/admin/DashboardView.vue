@@ -80,8 +80,16 @@
 
     <!-- Charts -->
     <div v-if="categoryQuestionnairesChartData" class="flex flex-wrap justify-between space-y-4">
-      <Chart type="bar" class="w-full lg:w-[48%]" :data="categoryQuestionnairesChartData" />
-      <Chart type="bar" class="w-full lg:w-[48%]" :data="categoryQuestionsChartData" />
+      <Chart
+        type="bar"
+        class="w-full lg:w-[48%] dark:shadow dark:shadow-white"
+        :data="categoryQuestionnairesChartData"
+      />
+      <Chart
+        type="bar"
+        class="w-full lg:w-[48%] dark:shadow dark:shadow-white"
+        :data="categoryQuestionsChartData"
+      />
     </div>
 
     <!-- Table -->
@@ -92,7 +100,6 @@
         :loading="dashboardStore.loading"
         striped-rows
         data-key="id"
-        filter-display="row"
       >
         <template #header>
           <p class="text-2xl font-bold">Latest Evaluations</p>

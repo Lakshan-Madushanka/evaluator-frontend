@@ -99,3 +99,7 @@ export function arraysHaveSameValues(a, b) {
 
   return sortedA.every((val, i) => val === sortedB[i])
 }
+
+export function isDarkMode() {
+  return document.documentElement.classList.contains('dark')
+}

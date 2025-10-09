@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="py-4 px-4 flex justify-between text-[#495057] bg-[white] border border-solid rounded items-center"
+    class="py-4 px-4 flex justify-between text-[#495057] dark:text-white bg-white dark:bg-gray-800 border border-solid dark:border-black rounded items-center"
   >
     <div>
       <Breadcrumb :home="home" :model="getItems()" />

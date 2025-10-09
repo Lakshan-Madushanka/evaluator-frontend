@@ -1,7 +1,7 @@
 <template>
   <ConfirmDialog />
 
-  <div class="shadow-lg bg-white p-4 pb-8">
+  <div class="shadow-lg bg-white dark:bg-inherit p-4 pb-8">
     <div class="flex flex-wrap items-center justify-center sm:justify-between">
       <h1 class="text-2xl font-bold uppercase mb-2">
         Manage questions of questionnaire
@@ -55,7 +55,7 @@
 
       <div v-else class="shadow">
         <div
-          class="flex justify-between px-4 items-center w-full py-8 bg-gray-100 border-y-2 border-neutral-200"
+          class="flex justify-between px-4 items-center w-full py-8 bg-gray-100 dark:bg-black border-y-2 border-neutral-200 dark:border-neutral-700"
         >
           <div class="text-lg font-bold flex items-centenr gap-4">
             <p>List of Questions ({{ getListQuestionsCount() }})</p>
@@ -77,16 +77,16 @@
         </div>
 
         <!--Question List-->
-        <TransitionGroup name="list" tag="ul" class="h-[25rem] overflow-y-auto">
+        <TransitionGroup name="list" tag="ul" class="h-[25rem] bg-black overflow-y-auto">
           <li
             v-for="(question, index) of data.questions"
             :key="question.id"
-            :class="{ 'bg-blue-200': isQuestionSelected(question) }"
+            :class="{ 'bg-blue-200 dark:bg-gray-900': isQuestionSelected(question) }"
             @click="selectQuestion($event, question)"
           >
             <div
               v-if="question.show"
-              class="flex justify-between border-b-2 border-neutral-200 p-4 hover:cursor-pointer"
+              class="flex justify-between border-b-2 border-neutral-200 dark:border-neutral-600 p-4 hover:cursor-pointer"
             >
               <div class="flex w-[75%]">
                 <span class="mr-2">{{ index + 1 }}).</span>

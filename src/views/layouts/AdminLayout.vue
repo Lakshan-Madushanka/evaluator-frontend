@@ -1,11 +1,13 @@
 <template>
-  <div class="relative flex bg-gray-100 min-h-screen">
+  <div
+    class="relative flex bg-gray-100 min-h-screen dark:bg-[#1e1e1e] dark:bg-[linear-gradient(to_right,#8080801a_1px,transparent_1px),linear-gradient(to_bottom,#8080801a_1px,transparent_1px)] dark:bg-[size:14px_24px]"
+  >
     <div>
       <sidebar-menu
         :collapsed="sideBarCollapse"
         :menu="menu"
         class="shadow-2xl"
-        theme="white-theme"
+        :theme="theme"
         @update:collapsed="onToggleCollapse"
       >
       </sidebar-menu>
@@ -40,6 +42,8 @@ import { useAuthStore } from '@/stores/auth'
 import Divider from 'primevue/divider'
 import SessionTimeoutMessage from '@/components/SessionTimeoutMessage.vue'
 
+import { isDarkMode } from '@/helpers'
+
 export default {
   components: { SidebarMenu, NavBar, SessionTimeoutMessage },
   setup() {
@@ -49,6 +53,8 @@ export default {
     const authStore = useAuthStore()
 
     const sideBarCollapse = ref(false)
+
+    const theme = ref('white-theme')
 
     const activeClasses = reactive({
       dashboard: '',
@@ -147,6 +153,10 @@ export default {
       }
 
       sideBarCollapse.value = shouldSidebarCollapse === 'true' ? true : false
+
+      if (isDarkMode) {
+        theme.value = ''
+      }
     })
 
     watch(
@@ -236,7 +246,7 @@ export default {
       localStorage.setItem('ssc', event)
     }
 
-    return { activeClasses, appStore, menu, onToggleCollapse, sideBarCollapse }
+    return { theme, activeClasses, appStore, menu, onToggleCollapse, sideBarCollapse }
   }
 }
 </script>
