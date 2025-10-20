@@ -23,13 +23,17 @@
       </router-link>
     </template>
     <template #end>
-      <template v-if="!appStore.authenticated">
-        <router-link :to="{ name: 'login' }" class="md:mr-8 font-bold py-2 px-3">Login</router-link>
-      </template>
+      <div class="flex items-center justify-center space-x-6 me-4">
+        <template v-if="!appStore.authenticated">
+          <router-link :to="{ name: 'login' }" class="font-bold py-2 px-3">Login</router-link>
+        </template>
 
-      <template v-else>
-        <AuthUserMenu />
-      </template>
+        <template v-else>
+          <AuthUserMenu />
+        </template>
+
+        <DarkModeSwitch />
+      </div>
     </template>
   </Menubar>
 </template>
@@ -41,10 +45,13 @@ import Menubar from 'primevue/menubar'
 import { useAppStore } from '@/stores/app'
 import { useAuthStore } from '@/stores/auth'
 import AuthUserMenu from '@/components/AuthUserMenu.vue'
+import DarkModeSwitch from '@/components/DarkModeSwitch.vue'
+
 export default {
   components: {
     Menubar,
-    AuthUserMenu
+    AuthUserMenu,
+    DarkModeSwitch
   },
 
   setup() {

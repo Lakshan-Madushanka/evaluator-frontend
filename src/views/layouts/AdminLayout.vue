@@ -54,7 +54,7 @@ export default {
 
     const sideBarCollapse = ref(false)
 
-    const theme = ref('white-theme')
+    const theme = ref(appStore.isDarkMode ? '' : 'white-theme')
 
     const activeClasses = reactive({
       dashboard: '',
@@ -153,11 +153,14 @@ export default {
       }
 
       sideBarCollapse.value = shouldSidebarCollapse === 'true' ? true : false
-
-      if (isDarkMode) {
-        theme.value = ''
-      }
     })
+
+    watch(
+      () => appStore.isDarkMode,
+      (newVal) => {
+        theme.value = newVal ? '' : 'white-theme'
+      }
+    )
 
     watch(
       route,

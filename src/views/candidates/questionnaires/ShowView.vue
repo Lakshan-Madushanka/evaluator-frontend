@@ -7,7 +7,7 @@
   <template v-else>
     <!-- Header -->
     <header
-      class="bg-gray-100 shadow border p-4 text-black flex flex-col items-center space-y-2 sm:space-y-0 sm:flex-row sm:justify-between sticky top-0 z-10"
+      class="bg-gray-100 shadow border p-4 text-black dark:text-white dark:bg-gray-900 flex flex-col items-center space-y-2 sm:space-y-0 sm:flex-row sm:justify-between sticky top-0 z-10"
     >
       <div class="flex items-center justify-center">
         <p class="text-xl font-bold mr-2">
@@ -44,16 +44,16 @@
             v-for="(question, index) in candidatesQuestionnairesStore.questions"
             :key="question.id"
             :href="`#${question.id}_card`"
-            class="shadow-md mr-1 mb-1 p-1 hover:cursor-pointer hover:bg-gray-200 border border-solid border-1 border-gray-300"
+            class="shadow-md mr-1 mb-1 p-1 hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 border border-solid border-1 border-gray-300"
             :class="{
-              'bg-green-200': getQuestionAnsweredStatus(question.id)
+              'bg-green-200 dark:bg-gray-600': getQuestionAnsweredStatus(question.id)
             }"
             @click="navigate(index + 1, question.id)"
           >
             {{ index + 1 }}
           </div>
         </div>
-        <div class="mt-8 xl:sticky xl:top-[22rem]">
+        <div class="mt-8 xl:fixed">
           <div class="flex justify-between items-center space-x-4 mb-2">
             <PrimeButton
               class="!w-44 !px-2"
@@ -95,7 +95,7 @@
           <template #content>
             <div>
               <!-- Questions -->
-              <div class="text-black">
+              <div class="text-black dark:text-white">
                 <div class="flex justify-between w-full">
                   <div class="flex w-[90%]">
                     <span class="mr-2">{{ getQuestionNo(questionIndex) }}).</span>

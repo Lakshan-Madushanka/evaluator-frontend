@@ -4,13 +4,16 @@
     class="w-[210mm] h-[297mm] mx-auto"
   >
     <Skeleton height="8rem" class="mb-6" />
-    <div class="bg-white flex flex-col items-center justify-center">
+    <div class="bg-white dark:bg-black flex flex-col items-center justify-center">
       <Skeleton v-for="n in 10" :key="n" class="m-4" height="16rem" width="95%" />
     </div>
   </div>
-  <div v-else class="w-[210mm] h-[297mm] mx-auto">
+  <div v-else class="w-[210mm] mx-auto">
     <!-- Header -->
-    <header class="p-4 mb-4 text-black border-b-2 border-black" @click="test">
+    <header
+      class="p-4 mb-4 text-black dark:text-white border-b-2 border-black dark:border-white"
+      @click="test"
+    >
       <div class="flex flex-col items-center justify-center space-y-2">
         <div class="flex items-center justify-center mb-4">
           <p class="text-2xl font-bold mr-4 uppercase">
@@ -42,7 +45,7 @@
         :key="question.id"
       >
         <!-- Questions -->
-        <div class="text-black">
+        <div class="text-black dark:text-white">
           <div class="flex justify-between w-full">
             <div class="flex w-[90%]">
               <p class="mr-2">{{ getQuestionNo(questionIndex) }}).</p>

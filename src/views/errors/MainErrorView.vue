@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center p-5 bg-white w-full mt-8">
+  <div class="flex items-center justify-center p-5 bg-white dark:bg-transparent w-full pt-8">
     <div class="text-center border-1">
       <!-- Handling icon -->
       <div
@@ -62,23 +62,27 @@
       <!-- Handling client side errors -->
       <template v-if="query.type === 'client'">
         <template v-if="parseInt(query.status) === 404 && query.type === 'client'">
-          <h1 class="mt-5 text-[36px] text-slate-800 font-bold lg:text-[50px]">
+          <h1 class="mt-5 text-[36px] text-slate-800 dark:text-white font-bold lg:text-[50px]">
             404 - Page not found
           </h1>
-          <p class="text-slate-600 mt-5 lg:text-lg">
+          <p class="text-slate-600 dark:text-white mt-5 lg:text-lg">
             The page you are looking for doesn't exist or <br />has been removed.
           </p>
         </template>
         <template v-else-if="query.status === 'ECONNABORTED'">
-          <h1 class="mt-5 text-[36px] text-slate-800 font-bold lg:text-[50px]">Request timeout</h1>
-          <p class="text-slate-600 mt-5 lg:text-lg">
+          <h1 class="mt-5 text-[36px] text-slate-800 dark:text-white font-bold lg:text-[50px]">
+            Request timeout
+          </h1>
+          <p class="text-slate-600 dark:text-white mt-5 lg:text-lg">
             {{ uppercaseFirstLetter(query.message) }} <br />try again !
           </p>
         </template>
 
         <template v-else>
-          <h1 class="mt-5 text-[36px] text-slate-800 font-bold lg:text-[50px]">Network Error</h1>
-          <p class="text-slate-600 mt-5 lg:text-lg">
+          <h1 class="mt-5 text-[36px] text-slate-800 dark:text-white font-bold lg:text-[50px]">
+            Network Error
+          </h1>
+          <p class="text-slate-600 dark:text-white mt-5 lg:text-lg">
             Please check your internet connecton and try again !
           </p>
         </template>
@@ -87,39 +91,33 @@
       <!-- Handling server side errors -->
       <template v-if="query.type === 'server'">
         <template v-if="parseInt(query.status) === 503">
-          <h1 class="mt-5 text-[36px] text-slate-800 font-bold lg:text-[50px]">
+          <h1 class="mt-5 text-[36px] text-slate-800 dark:text-white font-bold lg:text-[50px]">
             We are under maintenance
           </h1>
-          <p class="text-slate-600 mt-5 lg:text-lg">Please try agian later !</p>
+          <p class="text-slate-600 dark:text-white mt-5 lg:text-lg">Please try agian later !</p>
         </template>
         <template v-else-if="parseInt(query.status) === 429">
-          <h1 class="mt-5 text-[36px] text-slate-800 font-bold lg:text-[50px]">
+          <h1 class="mt-5 text-[36px] text-slate-800 dark:text-white font-bold lg:text-[50px]">
             429 - Too many attempts
           </h1>
-          <p class="text-slate-600 mt-5 lg:text-lg">Please try agian after</p>
+          <p class="text-slate-600 dark:text-white mt-5 lg:text-lg">Please try agian after</p>
           <vue-countdown
             v-slot="{ minutes, seconds }"
             :time="getRemainingTime()"
             class="flex justify-center"
           >
             <div class="flex space-x-4 mt-4">
-              <!-- <span class="p-4 bg-white text-black font-bold"
-                >{{ minutes }} M
-              </span>
-              <span class="p-4 bg-white text-black font-bold"
-                >{{ seconds }} S</span
-              > -->
               <Badge severity="info" size="xlarge">{{ minutes }} minutes</Badge>
               <Badge severity="info" size="xlarge">{{ seconds }} seconds </Badge>
             </div>
           </vue-countdown>
         </template>
         <template v-else>
-          <h1 class="mt-5 text-[36px] text-slate-800 font-bold lg:text-[50px]">
+          <h1 class="mt-5 text-[36px] text-slate-800 dark:text-white font-bold lg:text-[50px]">
             {{ query.status }}
             {{ query.statusText ? ' - ' + query.statusText : '' }}
           </h1>
-          <p class="text-slate-600 mt-5 lg:text-lg">
+          <p class="text-slate-600 dark:text-white mt-5 lg:text-lg">
             {{ query.message }}
           </p>
         </template>

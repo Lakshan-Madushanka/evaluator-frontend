@@ -132,7 +132,7 @@
                   :feedback="false"
                   toggleMask
                   disabled
-                  inputClass="min-w-[21rem] !border-none !bg-gray-100/60"
+                  inputClass="min-w-[21rem] !border-none !bg-gray-100/60 dark:!bg-gray-800"
                   :inputId="slotProps.data.id"
                 />
               </div>

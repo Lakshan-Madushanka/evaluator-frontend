@@ -1,6 +1,6 @@
 <template>
   <Toast />
-
+  <DarkModeSwitch class="hidden" />
   <template v-if="!appStore.initialized || appStore.status === 'loggingOut'">
     <AppInitializingComponent />
   </template>
@@ -17,8 +17,10 @@ import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 
 import AppInitializingComponent from './components/AppInitializingComponent.vue'
+import DarkModeSwitch from './components/DarkModeSwitch.vue'
+
 export default {
-  components: { AppInitializingComponent, Toast },
+  components: { AppInitializingComponent, Toast, DarkModeSwitch },
   setup() {
     const appStore = useAppStore()
 

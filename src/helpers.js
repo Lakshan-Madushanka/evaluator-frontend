@@ -101,5 +101,13 @@ export function arraysHaveSameValues(a, b) {
 }
 
 export function isDarkMode() {
-  return document.documentElement.classList.contains('dark')
+  const saved = localStorage.getItem('theme')
+  if (saved === 'dark') {
+    return true
+  } else if (saved === 'light') {
+    return false
+  } else {
+    // Check system preference
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
 }

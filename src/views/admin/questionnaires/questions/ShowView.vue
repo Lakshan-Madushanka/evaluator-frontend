@@ -5,7 +5,7 @@
 
   <template v-else>
     <!-- Header -->
-    <header class="bg-gray-400 mt-[-1rem] p-4 mb-2 text-white">
+    <header class="bg-gray-400 mt-[-1rem] p-4 mb-2 text-white dark:bg-gray-900">
       <div class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between">
         <div class="flex items-center justify-center">
           <p class="text-xl font-bold mr-4">
@@ -30,7 +30,7 @@
     <!-- Body -->
     <div v-if="questionnairesQuestionsStore.questions" class="xl:grid grid-cols-[18%_82%]">
       <!-- Left side -->
-      <div class="shadow p-4 bg-white mt-4">
+      <div class="shadow p-4 bg-white dark:bg-gray-900 mt-4">
         <!-- Navigation map -->
         <div
           class="grid grid-cols-6 sm:grid-cols-10 xl:grid-cols-5 2xl:grid-cols-6 text-black dark:text-gray-400 text-center xl:sticky top-[10px]"
@@ -39,7 +39,7 @@
             v-for="(question, index) in questionnairesQuestionsStore.questions"
             :key="question.id"
             :href="`#${question.id}_card`"
-            class="shadow-md mr-1 mb-1 p-1 hover:cursor-pointer hover:bg-gray-200 border border-solid border-1 border-gray-300"
+            class="shadow-md mr-1 mb-1 p-1 hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 border border-solid border-1 border-gray-300"
             @click="navigate(index + 1)"
           >
             {{ index + 1 }}
@@ -68,7 +68,7 @@
           <template #content>
             <div>
               <!-- Questions -->
-              <div class="text-black">
+              <div class="text-black dark:text-white">
                 <div class="flex justify-between w-full">
                   <div class="flex w-[90%]">
                     <p class="mr-2">{{ getQuestionNo(questionIndex) }}).</p>

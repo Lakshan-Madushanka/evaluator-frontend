@@ -1,7 +1,7 @@
 <template>
   <i
-    class="pi pi-user hover:cursor-pointer md:mr-8"
-    style="font-size: 1.5rem"
+    class="pi pi-user hover:cursor-pointer"
+    style="font-size: 1rem"
     aria-haspopup="true"
     aria-controls="overlay_menu"
     @click="toggle"

@@ -5,7 +5,7 @@
     <div>
       <Breadcrumb :home="home" :model="getItems()" />
     </div>
-    <div><AuthUserMenu /></div>
+    <div class="flex justify-center items-center gap-x-4"><AuthUserMenu /><DarkModeSwitch /></div>
   </nav>
 </template>
 
@@ -14,6 +14,8 @@ import Breadcrumb from 'primevue/breadcrumb'
 import AuthUserMenu from '@/components/AuthUserMenu.vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
+
+import DarkModeSwitch from '@/components/DarkModeSwitch.vue'
 
 const route = useRoute()
 const router = useRouter()

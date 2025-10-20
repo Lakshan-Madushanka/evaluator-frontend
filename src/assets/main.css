@@ -25,7 +25,7 @@ a,
 
 /* override / cancel when dark mode is active */
 .dark a:hover,
-a {
+.dark a {
   background-color: transparent;
   color: #ffffff;
 }
