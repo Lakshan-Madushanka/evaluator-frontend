@@ -1,5 +1,3 @@
-// Tailwind styles
-import './assets/tailwind.css'
 // Prime Vue styles
 import 'nprogress/nprogress.css'
 import 'primeicons/primeicons.css' //icons
