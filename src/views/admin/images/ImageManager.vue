@@ -232,7 +232,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 import { useRoute } from 'vue-router'
 
@@ -254,7 +254,7 @@ import { Cropper } from 'vue-advanced-cropper'
 
 import { get_route_to_upload_images as imageUploadRoute } from '@/api/routes/images/manager'
 
-import { getCookie, formatFileSize } from '@/helpers'
+import { formatFileSize, getCookie } from '@/helpers'
 
 import moment from 'moment/moment'
 
