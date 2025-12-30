@@ -9,7 +9,7 @@
 
   <template v-else>
     <!-- Header -->
-    <header class="bg-gray-400 mt-[-1rem] p-4 mb-2 text-white dark:text-white dark:bg-gray-900">
+    <header class="bg-gray-900 mt-[-1rem] p-4 mb-2 text-white dark:text-white dark:bg-gray-900">
       <div class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between">
         <div class="flex items-center justify-center">
           <p class="text-xl font-bold mr-4">
@@ -45,12 +45,12 @@
         >
           <a
             v-for="(question, index) in questionnairesQuestionsStore.questions"
-            :key="question.id"
+            :key="`navigation-index-${question.id}`"
             :href="`#${question.id}_card`"
             class="shadow-md mr-1 mb-1 p-1 hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 border border-solid border-1 border-gray-300"
             :class="{
-              'bg-green-200': userHasCorrectAnswer(question),
-              'bg-red-200': !userHasCorrectAnswer(question)
+              'bg-green-500': userHasCorrectAnswer(question),
+              'bg-red-500': !userHasCorrectAnswer(question)
             }"
             @click="navigate(index + 1)"
           >
@@ -63,9 +63,9 @@
       <div class="p-4 space-y-4">
         <!-- Questionnaire -->
         <Card
-          v-for="(question, questionIndex) in currrentPageRecords"
+          v-for="(question, questionIndex) in currentPageRecords"
           :id="`${question.id}_card`"
-          :key="question.id"
+          :key="`card-${question.id}`"
         >
           <template #content>
             <div>
@@ -86,14 +86,26 @@
                 </div>
                 <!--Question images-->
                 <div
-                  v-if="question.relationships.images.data.length > 0"
-                  class="mt-4 flex flex-wrap justify-center space-y-2"
+                  v-if="question.relationships?.images?.data?.length > 0"
+                  class="mt-4 flex flex-wrap justify-start space-y-2"
                 >
                   <PrimeImage
                     v-for="questionImage in question.relationships.images.data"
-                    :key="questionImage.id"
-                    :src="questionImage.attributes.original_url"
-                    :alt="questionImage.attributes.file_name"
+                    :key="`question-image-${questionImage.id}`"
+                    :src="
+                      findRelations(
+                        questionnairesQuestionsStore.meta.included,
+                        questionImage.id,
+                        questionImage.type
+                      ).attributes.original_url
+                    "
+                    :alt="
+                      findRelations(
+                        questionnairesQuestionsStore.meta.included,
+                        questionImage.id,
+                        questionImage.type
+                      ).attributes.file_name
+                    "
                     preview
                   />
                 </div>
@@ -103,7 +115,7 @@
               <div class="ml-8 mt-2">
                 <div
                   v-for="(answer, answerIndex) in questionAnswers[question.id]"
-                  :key="answer.id"
+                  :key="`question${question.id}-answer-${answer.id}`"
                   class="mt-4"
                 >
                   <div v-if="question.attributes.answers_type_single" class="flex items-center">
@@ -126,7 +138,7 @@
                       disabled
                     />
 
-                    <label :for="answer.id">{{ answer?.attributes?.text }} </label>
+                    <label :for="answer.id" v-html="answer?.attributes?.text"> </label>
 
                     <i
                       v-if="answer.id === correctAnswers[question.id]"
@@ -145,8 +157,7 @@
                       disabled
                     />
 
-                    <label :for="answer.id">{{ answer?.attributes?.text }}</label>
-
+                    <label :for="answer.id" v-html="answer?.attributes?.text"></label>
                     <i
                       v-if="correctAnswers[question.id].includes(answer.id)"
                       class="ml-4 text-green-500 pi pi-check"
@@ -156,13 +167,25 @@
                   <!-- Answer images -->
                   <div
                     v-if="answer.relationships.images.data.length > 0"
-                    class="mt-4 flex flex-wrap justify-center space-y-2"
+                    class="mt-4 gap-2 flex flex-wrap justify-center"
                   >
                     <PrimeImage
                       v-for="answerImage in answer.relationships.images.data"
-                      :key="answerImage.id"
-                      :src="answerImage.attributes.original_url"
-                      :alt="answerImage.attributes.file_name"
+                      :key="`answer-${answer.id}-image-${answerImage.id}`"
+                      :src="
+                        findRelations(
+                          questionnairesQuestionsStore.meta.included,
+                          answerImage.id,
+                          answerImage.type
+                        ).attributes.original_url
+                      "
+                      :alt="
+                        findRelations(
+                          questionnairesQuestionsStore.meta.included,
+                          answerImage.id,
+                          answerImage.type
+                        ).attributes.file_name
+                      "
                       preview
                     />
                   </div>
@@ -187,7 +210,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch, reactive, computed } from 'vue'
+import { computed, onMounted, onUpdated, reactive, ref, watch } from 'vue'
 
 import { useRoute, useRouter } from 'vue-router'
 
@@ -205,7 +228,7 @@ import ScrollTop from 'primevue/scrolltop'
 
 import QuestionnaireSkeleton from '@/components/skeletons/QuestionnaireSkeleton.vue'
 
-import { findRelations, formatMinutes, arraysHaveSameValues } from '@/helpers'
+import { arraysHaveSameValues, findRelations, formatMinutes, highlightSyntax } from '@/helpers'
 
 export default {
   components: {
@@ -231,7 +254,7 @@ export default {
     let questionAnswers = reactive({})
     let correctAnswers = ref({})
 
-    const currrentPageRecords = ref()
+    const currentPageRecords = ref()
     const paginator = { perPage: 10, page: 1, offset: 0 }
 
     onMounted(() => {
@@ -240,17 +263,21 @@ export default {
       getEvaluationData()
     })
 
+    onUpdated(() => {
+      highlightSyntax()
+    })
+
     watch(
       () => questionnairesQuestionsStore.questions,
       (newQuestions) => {
         if (newQuestions) {
-          setAnwers(newQuestions)
-          currrentPageRecords.value = getPaginatorRecords()
+          setAnswers(newQuestions)
+          currentPageRecords.value = getPaginatorRecords()
         }
       }
     )
 
-    function setAnwers(newQuestions) {
+    function setAnswers(newQuestions) {
       for (let question of newQuestions) {
         questionAnswers[question.id] = []
 
@@ -299,7 +326,7 @@ export default {
       paginator.page = event.page + 1 // paginator start with page 0
       paginator.perPage = event.rows
 
-      currrentPageRecords.value = getPaginatorRecords()
+      currentPageRecords.value = getPaginatorRecords()
     }
 
     function getQuestionNo(index) {
@@ -332,6 +359,10 @@ export default {
         )
       }
 
+      if (!evaluationsStore.evaluation.answers[question.id]) {
+        return false
+      }
+
       return arraysHaveSameValues(
         correctAnswers.value[question.id],
         evaluationsStore.evaluation.answers[question.id]
@@ -353,7 +384,7 @@ export default {
     return {
       route,
       router,
-      currrentPageRecords,
+      currentPageRecords,
       questionnairesQuestionsStore,
       questionnairesStore,
       evaluationsStore,
@@ -367,7 +398,6 @@ export default {
       showPrintView,
       paginator,
       formatMinutes,
-      arraysHaveSameValues,
       userHasCorrectAnswer
     }
   }

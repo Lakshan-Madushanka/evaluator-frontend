@@ -41,12 +41,13 @@
         container-style="width: 640px; padding: 4px"
       >
         <template #item="slotProps">
-          <img
+          <Image
             :src="slotProps.item.attributes.original_url"
             :alt="slotProps.item.attributes.alt"
             :title="slotProps.item.attributes.name"
-            style="max-width: 100%"
-            class="object-fill"
+            preview
+            imageStyle="max-width: 100%"
+            imageClass="object-fill"
           />
         </template>
         <template #thumbnail="slotProps">
@@ -175,7 +176,7 @@
     </div>
 
     <div class="bg-white dark:bg-black shadow p-8">
-      <p class="text-xl font-bold mb-4">Change order</p>
+      <p class="text-xl font-bold mb-4">Change order / Remove Image</p>
       <Skeleton v-if="imagesStore.loading" class="mb-2 !h-72"></Skeleton>
       <div v-if="!imagesStore.loading && imagesStore.images.length > 0">
         <OrderList
@@ -350,7 +351,7 @@ export default {
     }
 
     function changeOrder() {
-      imagesStore.chageOrderOfImages(route.params.type, {
+      imagesStore.changeOrderOfImages(route.params.type, {
         order: prepareDataToChangeOrder()
       })
     }

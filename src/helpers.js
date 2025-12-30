@@ -1,6 +1,33 @@
 import moment from 'moment'
 import { usePrimeVue } from 'primevue/config'
 
+import { $t } from '@primeuix/themes'
+import Aura from '@primeuix/themes/aura'
+import Lara from '@primeuix/themes/lara'
+import Nora from '@primeuix/themes/nora'
+import Material from '@primeuix/themes/material'
+
+import { useAppStore } from '@/stores/app'
+
+import ColorSchemes from '@/themes/colorSchemes'
+
+import hljs from 'highlight.js'
+
+export function getBaseUrl() {
+  const appStore = useAppStore()
+  return appStore.info.base_url
+}
+
+export function getApiUrl() {
+  const appStore = useAppStore()
+  return appStore.info.api_url
+}
+
+export function getApiV1Url() {
+  const appStore = useAppStore()
+  return appStore.info.api_v1_url
+}
+
 export function uppercaseFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
@@ -127,4 +154,46 @@ export function formatFileSize(bytes) {
   const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm))
 
   return `${formattedSize} ${sizes[i]}`
+}
+
+export function getTheme(theme = '') {
+  switch (theme) {
+    case 'aura':
+      return Aura
+    case 'lara':
+      return Lara
+    case 'nora':
+      return Nora
+    case 'material':
+      return Material
+    default:
+      return Aura
+  }
+}
+
+export function setTheme() {
+  const appStore = useAppStore()
+
+  const colorScheme = ColorSchemes[appStore.info.color_scheme]
+  const preset = getTheme(appStore.info.preset)
+
+  $t().preset(preset).preset(colorScheme).use({ useDefaultOptions: true })
+}
+
+function highlightCodeBlock() {
+  hljs.configure({
+    cssSelector: 'pre '
+  })
+  hljs.highlightAll()
+}
+
+function highlightInlineCode() {
+  hljs.configure({
+    cssSelector: 'code'
+  })
+  hljs.highlightAll()
+}
+export function highlightSyntax() {
+  highlightCodeBlock()
+  highlightInlineCode()
 }

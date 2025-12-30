@@ -5,15 +5,12 @@
   >
     <Skeleton height="8rem" class="mb-6" />
     <div class="bg-white dark:bg-black flex flex-col items-center justify-center">
-      <Skeleton v-for="n in 10" :key="n" class="m-4" height="16rem" width="95%" />
+      <Skeleton v-for="n in 10" :key="`skeleton-${n}`" class="m-4" height="16rem" width="95%" />
     </div>
   </div>
   <div v-else class="w-[210mm] mx-auto">
     <!-- Header -->
-    <header
-      class="p-4 mb-4 text-black dark:text-white border-b-2 border-black dark:border-white"
-      @click="test"
-    >
+    <header class="p-4 mb-4 text-black dark:text-white border-b-2 border-black dark:border-white">
       <div class="flex flex-col items-center justify-center space-y-2">
         <div class="flex items-center justify-center mb-4">
           <p class="text-2xl font-bold mr-4 uppercase">
@@ -40,9 +37,9 @@
     <!-- Questionnaire -->
     <div class="p-4 space-y-8">
       <div
-        v-for="(question, questionIndex) in currrentPageRecords"
+        v-for="(question, questionIndex) in currentPageRecords"
         :id="`${question.id}_card`"
-        :key="question.id"
+        :key="`question-card-${question.id}`"
       >
         <!-- Questions -->
         <div class="text-black dark:text-white">
@@ -57,14 +54,26 @@
           </div>
           <!--Question images-->
           <div
-            v-if="question.relationships.images?.length > 0"
+            v-if="question.relationships.images?.data?.length > 0"
             class="mt-4 flex flex-wrap justify-center space-y-2"
           >
             <PrimeImage
-              v-for="questionImage in question.relationships.images"
-              :key="questionImage.id"
-              :src="questionImage.original_url"
-              :alt="questionImage.file_name"
+              v-for="questionImage in question.relationships.images.data"
+              :key="`question-${question.id}-image-${questionImage.id}`"
+              :src="
+                findRelations(
+                  questionnairesQuestionsStore.meta.included,
+                  questionImage.id,
+                  questionImage.type
+                ).attributes.original_url
+              "
+              :alt="
+                findRelations(
+                  questionnairesQuestionsStore.meta.included,
+                  questionImage.id,
+                  questionImage.type
+                ).attributes.file_name
+              "
               preview
             />
           </div>
@@ -74,7 +83,7 @@
         <div class="ml-8 mt-2">
           <div
             v-for="(answer, answerIndex) in questionAnswers[question.id]"
-            :key="answer.id"
+            :key="`question-${question.id}-answer-${answer.id}`"
             class="mt-4"
           >
             <div v-if="question.attributes.answers_type_single" class="flex items-center">
@@ -88,7 +97,7 @@
                 disabled
               />
 
-              <label :for="answer.id">{{ answer?.attributes?.text }}</label>
+              <label :for="answer.id" v-html="answer?.attributes?.text"></label>
             </div>
 
             <div v-else class="flex items-center">
@@ -102,19 +111,31 @@
                 disabled
               />
 
-              <label :for="answer.id">{{ answer?.attributes?.text }}</label>
+              <label :for="answer.id" v-html="answer?.attributes?.text"></label>
             </div>
 
             <!-- Answer images -->
             <div
-              v-if="answer.relationships.images?.length > 0"
-              class="mt-4 flex flex-wrap justify-center space-y-2"
+              v-if="answer.relationships.images?.data?.length > 0"
+              class="mt-4 gap-2 flex flex-wrap justify-center"
             >
               <PrimeImage
-                v-for="answerImage in answer.relationships.images"
-                :key="answerImage.id"
-                :src="answerImage.original_url"
-                :alt="answerImage.file_name"
+                v-for="answerImage in answer.relationships.images.data"
+                :key="`answer-${answer.id}-image-${answerImage.id}`"
+                :src="
+                  findRelations(
+                    questionnairesQuestionsStore.meta.included,
+                    answerImage.id,
+                    answerImage.type
+                  ).attributes.original_url
+                "
+                :alt="
+                  findRelations(
+                    questionnairesQuestionsStore.meta.included,
+                    answerImage.id,
+                    answerImage.type
+                  ).attributes.file_name
+                "
                 preview
               />
             </div>
@@ -126,7 +147,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch, reactive, computed } from 'vue'
+import { computed, onMounted, onUpdated, reactive, ref, watch } from 'vue'
 
 import { useRoute } from 'vue-router'
 
@@ -138,7 +159,7 @@ import PrimeImage from 'primevue/image'
 import RadioButton from 'primevue/radiobutton'
 import Skeleton from 'primevue/skeleton'
 
-import { findRelations, formatMinutes } from '@/helpers'
+import { findRelations, formatMinutes, highlightSyntax } from '@/helpers'
 
 export default {
   components: {
@@ -158,25 +179,29 @@ export default {
     let questionAnswers = reactive({})
     const correctAnswers = reactive({})
 
-    const currrentPageRecords = ref()
-    const paginator = { perPage: 10, page: 1, offset: 0 }
+    const currentPageRecords = ref()
+    const paginator = { perPage: Math.pow(10, 10), page: 1, offset: 0 }
 
     onMounted(() => {
       getQuestionsData()
       getQuestionnaireData()
     })
 
+    onUpdated(() => {
+      highlightSyntax()
+    })
+
     watch(
       () => questionnairesQuestionsStore.questions,
       (newQuestions) => {
         if (newQuestions) {
-          setAnwers(newQuestions)
-          currrentPageRecords.value = getPaginatorRecords()
+          setAnswers(newQuestions)
+          currentPageRecords.value = getPaginatorRecords()
         }
       }
     )
 
-    function setAnwers(newQuestions) {
+    function setAnswers(newQuestions) {
       for (let question of newQuestions) {
         questionAnswers[question.id] = []
 
@@ -223,7 +248,7 @@ export default {
       paginator.page = event.page + 1 // paginator start with page 0
       paginator.perPage = event.rows
 
-      currrentPageRecords.value = getPaginatorRecords()
+      currentPageRecords.value = getPaginatorRecords()
     }
 
     function getQuestionNo(index) {
@@ -254,7 +279,7 @@ export default {
 
     return {
       route,
-      currrentPageRecords,
+      currentPageRecords,
       questionnairesStore,
       questionnairesQuestionsStore,
       questionnaire: computed(() => questionnairesStore.questionnaire?.data?.attributes),

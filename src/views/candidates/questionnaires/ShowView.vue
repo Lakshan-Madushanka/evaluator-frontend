@@ -1,5 +1,9 @@
 <template>
-  <EvaluationView v-if="showEvaluation" />
+  <EvaluationView
+    :totalQuestions="candidatesQuestionnairesStore?.questions?.length"
+    :submissionType="submissionType"
+    v-if="showEvaluation"
+  />
 
   <ConfirmDialog />
 
@@ -7,7 +11,7 @@
   <template v-else>
     <!-- Header -->
     <header
-      class="bg-gray-100 shadow border p-4 text-black dark:text-white dark:bg-gray-900 flex flex-col items-center space-y-2 sm:space-y-0 sm:flex-row sm:justify-between sticky top-0 z-10"
+      class="bg-gray-900 shadow border p-4 text-white dark:text-white dark:bg-gray-900 flex flex-col items-center space-y-2 sm:space-y-0 sm:flex-row sm:justify-between sticky top-0 z-10"
     >
       <div class="flex items-center justify-center">
         <p class="text-xl font-bold mr-2">
@@ -42,7 +46,7 @@
         >
           <div
             v-for="(question, index) in candidatesQuestionnairesStore.questions"
-            :key="question.id"
+            :key="`navigation-index-${question.id}`"
             :href="`#${question.id}_card`"
             class="shadow-md mr-1 mb-1 p-1 hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 border border-solid border-1 border-gray-300"
             :class="{
@@ -88,9 +92,9 @@
       <div class="p-4 space-y-4">
         <!-- Questionnaire -->
         <Card
-          v-for="(question, questionIndex) in currrentPageRecords"
+          v-for="(question, questionIndex) in currentPageRecords"
           :id="`${question.id}_card`"
-          :key="question.id"
+          :key="`question-${question.id}-card`"
         >
           <template #content>
             <div>
@@ -105,13 +109,25 @@
                 <!--Question images-->
                 <div
                   v-if="question.relationships.images.data.length > 0"
-                  class="mt-4 flex flex-wrap justify-center space-y-2"
+                  class="mt-4 gap-2 flex flex-wrap justify-center"
                 >
                   <PrimeImage
                     v-for="questionImage in question.relationships.images.data"
-                    :key="questionImage.id"
-                    :src="questionImage.attributes.original_url"
-                    :alt="questionImage.attributes.file_name"
+                    :key="`question-${question.id}-image-${questionImage.id}`"
+                    :src="
+                      findRelations(
+                        candidatesQuestionnairesStore.meta.included,
+                        questionImage.id,
+                        questionImage.type
+                      ).attributes.original_url
+                    "
+                    :alt="
+                      findRelations(
+                        candidatesQuestionnairesStore.meta.included,
+                        questionImage.id,
+                        questionImage.type
+                      ).attributes.file_name
+                    "
                     preview
                   />
                 </div>
@@ -121,7 +137,7 @@
               <div class="ml-8 mt-8">
                 <div
                   v-for="(answer, answerIndex) in questionAnswers[question.id]"
-                  :key="answer.id"
+                  :key="`question-${question.id}-answer-${answer.id}`"
                   class="mt-4"
                 >
                   <div v-if="question.attributes.answers_type_single" class="flex items-center">
@@ -134,7 +150,7 @@
                       class="mr-2"
                     />
 
-                    <label :for="answer.id">{{ answer?.attributes?.text }}</label>
+                    <label :for="answer.id" v-html="answer?.attributes?.text"></label>
                   </div>
 
                   <div v-else class="flex items-center">
@@ -147,19 +163,31 @@
                       class="mr-2"
                     />
 
-                    <label :for="answer.id">{{ answer?.attributes?.text }}</label>
+                    <label :for="answer.id" v-html="answer?.attributes?.text"></label>
                   </div>
 
                   <!-- Answer images -->
                   <div
-                    v-if="answer.relationships.images?.length > 0"
-                    class="mt-4 flex flex-wrap justify-center space-y-2"
+                    v-if="answer.relationships.images?.data?.length > 0"
+                    class="mt-4 gap-x-2 flex flex-wrap justify-start items-start gap-y-2"
                   >
                     <PrimeImage
-                      v-for="answerImage in answer.relationships.images"
-                      :key="answerImage.id"
-                      :src="answerImage.attributes.original_url"
-                      :alt="answerImage.attributes.file_name"
+                      v-for="answerImage in answer.relationships.images.data"
+                      :key="`answer-${answer.id}-image-${answerImage.id}`"
+                      :src="
+                        findRelations(
+                          candidatesQuestionnairesStore.meta.included,
+                          answerImage.id,
+                          answerImage.type
+                        ).attributes.original_url
+                      "
+                      :alt="
+                        findRelations(
+                          candidatesQuestionnairesStore.meta.included,
+                          answerImage.id,
+                          answerImage.type
+                        ).attributes.file_name
+                      "
                       preview
                     />
                   </div>
@@ -184,7 +212,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch, reactive, computed, onUnmounted, nextTick, onUpdated } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, onUpdated, reactive, ref, watch } from 'vue'
 
 import { useRoute, useRouter } from 'vue-router'
 
@@ -210,8 +238,6 @@ import EvaluationView from '@/views/candidates/questionnaires/EvaluationView.vue
 
 import { findRelations, formatMinutes } from '@/helpers'
 
-import 'highlight.js/styles/stackoverflow-light.css'
-
 export default {
   components: {
     Card,
@@ -234,6 +260,8 @@ export default {
     const toast = useToast()
     const confirm = useConfirm()
 
+    const submissionType = ref('USER_SUBMISSION')
+
     const candidatesQuestionnairesStore = useCandidatesQuestionnairesStore()
 
     const includes = ['images', 'onlyAnswers.images']
@@ -248,7 +276,7 @@ export default {
     let elapsedMinutes = 0
     const warnMessageTime = 5
 
-    const currrentPageRecords = ref()
+    const currentPageRecords = ref()
     const paginator = { perPage: 10, page: 1, offset: 0 }
 
     const showEvaluation = ref(false)
@@ -262,12 +290,21 @@ export default {
       highlightInlineCode()
     })
 
+    onMounted(() => {
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+          submissionType.value = 'AUTO_SUBMISSION (navigated away)'
+          submit()
+        }
+      })
+    })
+
     watch(
       () => candidatesQuestionnairesStore.questions,
       (newQuestions) => {
         if (newQuestions) {
-          setAnwers(newQuestions)
-          currrentPageRecords.value = getPaginatorRecords()
+          setAnswers(newQuestions)
+          currentPageRecords.value = getPaginatorRecords()
         }
       },
       { immediate: true }
@@ -293,7 +330,7 @@ export default {
         toast.add({
           severity: 'warn',
           summary: `You have only ${warnMessageTime} minutes left`,
-          detail: 'Answewrs are auto submitted after the time limit reached',
+          detail: 'Answers are auto submitted after the time limit reached',
           life: '10000'
         })
       }
@@ -303,7 +340,7 @@ export default {
       return candidatesQuestionnairesStore.questionnaireInfo?.allocated_time * 60 * Math.pow(10, 3)
     }
 
-    function setAnwers(newQuestions) {
+    function setAnswers(newQuestions) {
       for (let question of newQuestions) {
         questionAnswers[question.id] = []
 
@@ -313,6 +350,7 @@ export default {
             answer.id,
             answer.type
           )
+
           questionAnswers[question.id].push(relatedAnswer)
         }
       }
@@ -322,7 +360,7 @@ export default {
       paginator.page = event.page + 1 // paginator start with page 0
       paginator.perPage = event.rows
 
-      currrentPageRecords.value = getPaginatorRecords()
+      currentPageRecords.value = getPaginatorRecords()
     }
 
     function getQuestionNo(index) {
@@ -341,7 +379,7 @@ export default {
     async function navigate(questionNo, questionId) {
       setPaginatorOnNavigation(questionNo)
 
-      await nextTick() // Await until finiish the update
+      await nextTick() // Await until finish the update
 
       // Navigate to question
       let offSetTop = document.getElementById(`${questionId}_card`).offsetTop
@@ -417,6 +455,7 @@ export default {
 
     function onTimeElapsed() {
       showTimeElapseToast()
+      submissionType.value = 'AUTO_SUBMISSION (time elapsed)'
       submit()
     }
 
@@ -450,9 +489,10 @@ export default {
     return {
       route,
       router,
-      currrentPageRecords,
+      currentPageRecords,
       candidatesQuestionnairesStore,
       questionnaire: computed(() => candidatesQuestionnairesStore.questionnaireInfo),
+      submissionType,
       paginator,
       userAnswers,
       showAnswers,
@@ -468,7 +508,6 @@ export default {
       getQuestionAnsweredStatus,
       noOfAnsweredQuestions,
       showSubmitConfirmDialog,
-      submit,
       onTimeElapsed,
       showSidebar
     }

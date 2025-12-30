@@ -39,7 +39,6 @@
       <PrimeButton
         type="button"
         label="Attach"
-        severity="warn"
         :disabled="selectedTeams.length === 0"
         :loading="usersTeamsStore.status === 'attaching'"
         @click="onConfirmTeamAttach"
@@ -86,7 +85,7 @@
           </Column>
 
           <template #empty>
-            <p v-if="!usersStore.loading" class="p-4 text-center text-2xl bg-blue-200">
+            <p v-if="!usersStore.loading" class="p-4 text-center text-2xl bg-gray-800 text-white">
               No records found.
             </p>
           </template>
@@ -216,7 +215,7 @@
             :hidden="!columnVisibility.role"
           >
             <template #filter
-              ><Dropdown v-model="filters.role" :options="roles" option-label="name" />
+              ><Select v-model="filters.role" :options="roles" option-label="name" />
             </template>
             <template #header>
               <div class="flex justify-between w-full items-center">
@@ -318,12 +317,12 @@
                 </span>
                 <span v-else class="p-buttonset space-x-1">
                   <PrimeButton
-                    v-tooltip="'Use profile section to edit super admin.'"
+                    v-tooltip.left="'Use profile section to edit super admin.'"
                     class="p-button-sm opacity-60"
                     icon="pi pi-info-circle"
                   />
                   <PrimeButton
-                    v-tooltip="'Super admin cannot be deleted !'"
+                    v-tooltip.left="'Super admin cannot be deleted !'"
                     class="p-button-sm p-button-danger opacity-60"
                     icon="pi pi-info-circle"
                   />
@@ -353,7 +352,7 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import Paginator from '@/components/PaginatorComponent.vue'
 
 import { useAuthStore } from '@/stores/auth'
@@ -376,7 +375,7 @@ import Tag from 'primevue/tag'
 import MenuComponent from 'primevue/menu'
 import MultiSelect from 'primevue/multiselect'
 import InputText from 'primevue/inputtext'
-import Dropdown from 'primevue/dropdown'
+import Select from 'primevue/select'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
@@ -402,7 +401,7 @@ export default {
     Paginator,
     SortComponent,
     InputText,
-    Dropdown,
+    Select,
     MenuComponent,
     MultiSelect,
     ConfirmDialog,
@@ -718,8 +717,7 @@ export default {
           outlined: true
         },
         acceptProps: {
-          label: 'Yes Attach',
-          severity: 'warn'
+          label: 'Yes Attach'
         },
         accept: () => {
           usersTeamsStore.attachTeams(selectedUserIdToAttachTeams, selectedTeams.value)

@@ -6,6 +6,9 @@ import colorSchemes from './themes/colorSchemes'
 // Main styles
 import './assets/main.css'
 
+// Other styles
+import 'highlight.js/styles/stackoverflow-light.css'
+
 // Vue
 import App from './App.vue'
 import { createApp } from 'vue'
@@ -19,18 +22,15 @@ import { createPinia } from 'pinia'
 // Prime vue
 import { definePreset } from '@primeuix/themes'
 import PrimeVue from 'primevue/config'
-import Aura from '@primeuix/themes/aura'
 import ToastService from 'primevue/toastservice'
 import Tooltip from 'primevue/tooltip'
 import ConfirmationService from 'primevue/confirmationservice'
 
 // Custom directives
 import copyToClipboard from './directives/copyToClipboard'
+import { getTheme } from '@/helpers'
 
-const preset = definePreset(
-  Aura,
-  colorSchemes[import.meta.env.VITE_COLOR_SCHEME] ?? colorSchemes['purple']
-)
+const preset = definePreset(getTheme('aura'), colorSchemes['purple'])
 
 const app = createApp(App)
 

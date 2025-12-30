@@ -1,33 +1,41 @@
 <template>
   <div>
-    <FinishedDialog :visible="showFinishedDialog" />
     <div>
-      <p class="text-xl mb-6 font-bold flex items-center gap-4">
-        <span>Create Super Admin Account</span>
-        <i
-          v-if="setupStore.data.account.loading"
-          class="pi pi-spin pi-spinner text-green-600 !text-2xl"
-        ></i>
-        <i
-          v-else-if="setupStore.data.account.is_passed"
-          class="pi pi-check-circle text-green-600 !text-2xl"
-        ></i>
-        <i v-else class="pi pi-times-circle text-red-600 !text-2xl"></i>
-      </p>
+      <div class="flex justify-between items-start">
+        <p class="text-xl mb-6 font-bold flex items-center gap-4">
+          <span>Create Super Admin Account</span>
+          <i
+            v-if="setupStore.data.account.loading"
+            class="pi pi-spin pi-spinner text-green-600 !text-2xl"
+          ></i>
+          <i
+            v-else-if="setupStore.data.account.is_passed"
+            class="pi pi-check-circle text-green-600 !text-2xl"
+          ></i>
+          <i v-else class="pi pi-times-circle text-red-600 !text-2xl"></i>
+        </p>
+
+        <PrimeButton
+          @click="checkAccountExists()"
+          icon="pi pi-refresh"
+          title="Refresh"
+          :disabled="setupStore.data.account.loading"
+        />
+      </div>
       <ProgressSpinner v-if="setupStore.data.account.loading" />
       <div class="space-y-6">
         <div v-if="setupStore.data.account.status.checkingExistence">
           <span>Checking account </span>
           <i class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
         </div>
-
-        <div v-if="setupStore.data.account.exists" class="space-y-8">
+        <div
+          v-if="setupStore.data.account.exists && !setupStore.data.account.status.created"
+          class="space-y-8"
+        >
           <Message severity="success">Super admin account already exists 🗹</Message>
-          <PrimeButton
-            @click="showFinishedDialog = true"
-            label="Finish Setup 🗹"
-            severity="success"
-          />
+        </div>
+        <div v-if="setupStore.data.account.status.created" class="space-y-8">
+          <Message severity="success">Super admin account created successfully 🗹</Message>
         </div>
       </div>
 
@@ -202,7 +210,6 @@ import { reactive, ref, toRef, watch } from 'vue'
 
 import { useSetupStore } from '@/stores/setup'
 import ProgressSpinner from 'primevue/progressspinner'
-import Message from 'primevue/message'
 import InputText from 'primevue/inputtext'
 import Divider from 'primevue/divider'
 import Password from 'primevue/password'
@@ -212,7 +219,7 @@ import PrimeButton from 'primevue/button'
 import { useVuelidate } from '@vuelidate/core'
 import { email, required, requiredIf, sameAs } from '@vuelidate/validators'
 import * as customRules from '@/validationRules'
-import FinishedDialog from '@/components/setup/FinishedDialog.vue'
+import Message from 'primevue/message'
 
 const props = defineProps({
   isPreviousStepsPassed: {
@@ -229,8 +236,6 @@ const form = reactive({
   password: '',
   password_confirmation: ''
 })
-
-const showFinishedDialog = ref(false)
 
 const passwordRef = toRef(form, 'password')
 

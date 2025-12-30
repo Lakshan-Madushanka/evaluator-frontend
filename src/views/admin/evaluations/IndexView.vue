@@ -48,7 +48,10 @@
         filter-display="row"
       >
         <template #empty>
-          <p v-if="!evaluationsStore.loading" class="p-4 text-center text-2xl bg-blue-200">
+          <p
+            v-if="!evaluationsStore.loading"
+            class="p-4 text-center text-2xl bg-gray-800 text-white"
+          >
             No records found.
           </p>
         </template>
@@ -258,6 +261,19 @@
           </template>
         </Column>
 
+        <!-- No of answered questions -->
+        <Column
+          field="time taken"
+          :show-filter-menu="false"
+          :hidden="!columnVisibility.no_of_answered_questions"
+          header="No of answered questions"
+          class="!text-center"
+        >
+          <template #body="slotProps">
+            {{ slotProps.data.attributes.no_of_answered_questions }}
+          </template>
+        </Column>
+
         <!-- No of correct answers -->
         <Column
           field="no of correct answers"
@@ -383,9 +399,9 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useEvaluationsStore } from '@/stores/evaluations'
 
@@ -407,7 +423,7 @@ import InputIcon from 'primevue/inputicon'
 
 import moment from 'moment/moment'
 
-import { lowercaseFirstLetter, snake, formatMinutes } from '@/helpers'
+import { formatMinutes, lowercaseFirstLetter, snake } from '@/helpers'
 
 export default {
   components: {
@@ -452,7 +468,7 @@ export default {
       pagination: { ...initialPagination }
     })
 
-    // Set coulmns visibility
+    // Set colulmns visibility
     const columnsMenuRef = ref()
     const columnVisibility = reactive({
       no: true,

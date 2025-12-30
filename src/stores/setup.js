@@ -42,7 +42,7 @@ export const useSetupStore = defineStore('setup', () => {
       is_passed: false
     },
     account: {
-      status: { checkingExistence: false, creating: false },
+      status: { checkingExistence: false, creating: false, created: false },
       errors: {},
       exists: false,
       loading: false,
@@ -50,6 +50,11 @@ export const useSetupStore = defineStore('setup', () => {
       is_passed: false
     },
     optimize: {
+      status: '',
+      isLoaded: false,
+      is_passed: false
+    },
+    symlink: {
       status: '',
       isLoaded: false,
       is_passed: false
@@ -125,7 +130,7 @@ export const useSetupStore = defineStore('setup', () => {
     try {
       const response = await setupRequests.checkEnv()
       data.env.is_exists = response.is_exists
-      data.env.is_passed = response.is_passed
+      data.env.is_passed = import.meta.env.MODE === 'development' || response.is_passed
       data.env.app = response.app
       data.env.isLoaded = true
     } catch (data) {
@@ -227,6 +232,7 @@ export const useSetupStore = defineStore('setup', () => {
 
     try {
       const response = await setupRequests.createAccount(payload)
+      data.account.status.created = true
       data.account.exists = true
       data.account.is_passed = true
       data.account.isLoaded = true
@@ -257,6 +263,27 @@ export const useSetupStore = defineStore('setup', () => {
     } finally {
     }
   }
+
+  /**
+   * Optimize
+   */
+  async function createSymlink() {
+    data.symlink.status = 'creating'
+
+    try {
+      const response = await setupRequests.createSymlink()
+      if (response.status) {
+        data.symlink.status = 'created'
+      } else {
+        data.symlink.status = 'error'
+      }
+    } catch (data) {
+      data.symlink.status = 'error'
+      console.error(data)
+    } finally {
+    }
+  }
+
   return {
     status,
     data,
@@ -271,6 +298,7 @@ export const useSetupStore = defineStore('setup', () => {
     migrateDB,
     checkAccountExists,
     createAccount,
-    optimize
+    optimize,
+    createSymlink
   }
 })
